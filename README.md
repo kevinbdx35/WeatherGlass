@@ -26,7 +26,7 @@ Insert gif or link to demo
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/kevinbdx35/weather-react-node-app.git
 ```
 
 Go to the project directory
