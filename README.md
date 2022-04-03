@@ -34,6 +34,11 @@ Go to the project directory
 ```bash
   cd weather-react-node-app
 ```
+Install dependencies for server
+
+```bash
+   yarn install
+```
 
 Install dependencies for client
 
@@ -42,7 +47,12 @@ Install dependencies for client
 ```
 
 ```bash
-  npm install
+  yarn install
+```
+Build the clien
+
+```bash
+  yarn build
 ```
 
 Quit client directory
