@@ -35,12 +35,6 @@ Go to the project directory
   cd weather-react-node-app
 ```
 
-Install dependencies for server
-
-```bash
-  npm install
-```
-
 Install dependencies for client
 
 ```bash
