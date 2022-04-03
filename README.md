@@ -54,7 +54,7 @@ Install dependencies for client
 Quit client directory
 
 ```bash
-  npm install
+  cd ..
 ```
 
 Start the server
