@@ -49,7 +49,7 @@ Install dependencies for client
 ```bash
   yarn install
 ```
-Build the clien
+Build the client
 
 ```bash
   yarn build
