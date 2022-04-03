@@ -11,7 +11,7 @@ This is a simple Weather Application
 
 ## Demo
 
-Insert gif or link to demo
+![Gif Capture](https://github.com/kevinbdx35/weather-react-node-app/blob/main/gif-capture.gif?raw=true)
 
 
 ## Tech Stack
