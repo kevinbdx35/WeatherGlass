@@ -55,7 +55,7 @@ Start the server
 
 ## Authors
 
-- [@katherinepeterson](https://www.github.com/octokatherine)
+- [@kevin b.](https://github.com/kevinbdx35)
 
 
 ## License
