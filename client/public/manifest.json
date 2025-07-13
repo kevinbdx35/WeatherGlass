@@ -1,7 +1,7 @@
 {
-  "name": "Weather App",
-  "short_name": "Weather",
-  "description": "Beautiful weather app with glassmorphism design and bilingual support",
+  "name": "WeatherGlass",
+  "short_name": "WeatherGlass",
+  "description": "Modern weather PWA with stunning glassmorphism design and bilingual support",
   "version": "1.0.0",
   "manifest_version": 3,
   "start_url": "/",
@@ -47,9 +47,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Get Current Location Weather",
+      "name": "Current Location Weather",
       "short_name": "My Location",
-      "description": "Get weather for your current location",
+      "description": "Get weather for your current location with WeatherGlass",
       "url": "/?geolocation=true",
       "icons": [
         {

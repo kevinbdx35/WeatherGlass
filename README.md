@@ -1,7 +1,7 @@
 
-# Application Météo Progressive Web App
+# WeatherGlass ⚡
 
-Une application météo moderne avec design glassmorphisme, support bilingue (FR/EN) et fonctionnalités PWA complètes.
+**WeatherGlass** est une application météo progressive moderne alliant design glassmorphisme élégant, support bilingue (FR/EN) et fonctionnalités PWA complètes.
 
 ## ✨ Fonctionnalités
 
@@ -53,8 +53,8 @@ Une application météo moderne avec design glassmorphisme, support bilingue (FR
 
 1. **Cloner le projet**
 ```bash
-git clone https://github.com/kevinbdx35/weather-react-node-app.git
-cd weather-react-node-app
+git clone https://github.com/kevinbdx35/WeatherGlass.git
+cd WeatherGlass
 ```
 
 2. **Configuration du serveur**
@@ -135,7 +135,7 @@ L'application sera accessible sur `http://localhost:3000`
 ## 📊 Structure du Projet
 
 ```
-weather-react-node-app/
+WeatherGlass/
 ├── client/                     # Application React
 │   ├── public/
 │   │   ├── manifest.json      # Configuration PWA

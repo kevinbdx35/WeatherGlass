@@ -80,7 +80,7 @@
     "weatherCondition": "Condition météorologique"
   },
   "pwa": {
-    "installTitle": "Installer l'App Météo",
+    "installTitle": "Installer WeatherGlass",
     "installDescription": "Accédez rapidement aux prévisions météo depuis votre écran d'accueil",
     "install": "Installer",
     "offline": "Vous êtes hors ligne",

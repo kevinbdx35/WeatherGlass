@@ -1,8 +1,8 @@
-# Configuration Unsplash API
+# Configuration Unsplash API - WeatherGlass
 
 ## 🖼️ Background Dynamique selon la Météo
 
-Cette application utilise l'API Unsplash pour afficher des images de fond qui changent selon les conditions météorologiques actuelles.
+WeatherGlass utilise l'API Unsplash pour afficher des images de fond qui changent selon les conditions météorologiques actuelles.
 
 ## 📝 Obtenir une clé API Unsplash
 

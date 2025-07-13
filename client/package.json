@@ -1,8 +1,8 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "weatherglass",
+  "version": "1.0.0",
   "private": true,
-  "homepage": "https://kevinbdx35.github.io/weather-react-node-app",
+  "homepage": "https://kevinbdx35.github.io/WeatherGlass",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",

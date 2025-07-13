@@ -4,8 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Weather React & Node.js application with a client-server architecture:
-- **Frontend**: React app (Create React App) that fetches weather data from OpenWeatherMap API
+**WeatherGlass** is a modern Progressive Web App (PWA) built with React & Node.js featuring glassmorphism design:
+- **Frontend**: Modern React PWA with glassmorphism UI, 7-day forecasts, and bilingual support (FR/EN)
 - **Backend**: Express.js server that serves the built React app as static files
 
 ## Architecture

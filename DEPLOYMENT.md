@@ -1,4 +1,4 @@
-# Guide de Déploiement - Weather App
+# Guide de Déploiement - WeatherGlass
 
 ## Déploiement Automatique GitHub Pages
 
@@ -32,7 +32,7 @@ Le workflow `.github/workflows/deploy.yml` se déclenche automatiquement :
 
 ### URLs de Déploiement
 
-- **Production** : https://kevinbdx35.github.io/weather-react-node-app
+- **Production** : https://kevinbdx35.github.io/WeatherGlass
 - **Statut des deployments** : Onglet `Actions` du repository
 
 ### Vérifications Pré-Déploiement

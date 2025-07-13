@@ -1,14 +1,16 @@
 {
-  "name": "weather",
+  "name": "weatherglass",
   "version": "1.0.0",
-  "description": "",
+  "description": "WeatherGlass - A modern weather PWA with glassmorphism design",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["weather", "pwa", "glassmorphism", "react", "forecast"],
+  "author": "kevin b.",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.3",
     "path": "^0.12.7"

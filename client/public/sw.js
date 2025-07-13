@@ -141,7 +141,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('Weather App', options)
+    self.registration.showNotification('WeatherGlass', options)
   );
 });
 
