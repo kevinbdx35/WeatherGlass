@@ -102,5 +102,15 @@
     "retry": "Réessayer",
     "close": "Fermer",
     "locale": "fr-FR"
+  },
+  "charts": {
+    "title": "Tendances Météorologiques",
+    "temperature": "Température",
+    "humidity": "Humidité",
+    "wind": "Vent",
+    "maxTemperature": "Température Max",
+    "minTemperature": "Température Min",
+    "windSpeed": "Vitesse du Vent",
+    "noData": "Aucune donnée de prévision disponible"
   }
 }

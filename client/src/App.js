@@ -10,6 +10,7 @@ import DynamicBackground from './components/DynamicBackground';
 import InstallPrompt from './components/InstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import WeeklyForecast from './components/WeeklyForecast';
+import WeatherChart from './components/WeatherChart';
 import WeatherCache from './utils/weatherCache';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
@@ -251,6 +252,7 @@ function App() {
           <>
             <WeatherDisplay data={data} />
             <WeeklyForecast forecastData={forecastData} />
+            <WeatherChart forecastData={forecastData} currentData={data} />
           </>
         )}
       </div>

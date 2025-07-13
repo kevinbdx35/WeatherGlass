@@ -102,5 +102,15 @@
     "retry": "Retry",
     "close": "Close",
     "locale": "en-US"
+  },
+  "charts": {
+    "title": "Weather Trends",
+    "temperature": "Temperature",
+    "humidity": "Humidity", 
+    "wind": "Wind",
+    "maxTemperature": "Max Temperature",
+    "minTemperature": "Min Temperature",
+    "windSpeed": "Wind Speed",
+    "noData": "No forecast data available"
   }
 }
