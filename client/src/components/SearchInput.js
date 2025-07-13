@@ -1,5 +1,6 @@
 import React from 'react';
 import LocationButton from './LocationButton';
+import useTranslation from '../hooks/useTranslation';
 
 const SearchInput = React.memo(({ 
   location, 
@@ -11,6 +12,8 @@ const SearchInput = React.memo(({
   locationLoading,
   isLocationSupported
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="search">
       <div className="search-container">
@@ -18,7 +21,7 @@ const SearchInput = React.memo(({
           value={location}
           onChange={(event) => setLocation(event.target.value)}
           onKeyPress={onKeyPress}
-          placeholder="Entrez une ville"
+          placeholder={t('search.placeholder')}
           type="text"
           disabled={loading}
           className="search-input"
@@ -32,7 +35,7 @@ const SearchInput = React.memo(({
       </div>
       {(loading || locationLoading) && (
         <p className="loading">
-          {locationLoading ? 'Géolocalisation...' : 'Recherche en cours...'}
+          {locationLoading ? t('search.locationLoading') : t('search.searchInProgress')}
         </p>
       )}
       {error && <p className="error">{error}</p>}

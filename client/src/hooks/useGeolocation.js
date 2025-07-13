@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 
-const useGeolocation = () => {
+const useGeolocation = (t) => {
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
-      setError('La géolocalisation n\'est pas supportée par ce navigateur');
+      setError(t ? t('search.errors.locationError') : 'Geolocation not supported');
       return;
     }
 
@@ -23,23 +23,23 @@ const useGeolocation = () => {
         setLoading(false);
       },
       (error) => {
-        let errorMessage = 'Impossible d\'obtenir votre position';
+        let errorKey = 'search.errors.locationError';
         
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = 'Accès à la géolocalisation refusé';
+            errorKey = 'search.errors.locationDenied';
             break;
           case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Position non disponible';
+            errorKey = 'search.errors.locationUnavailable';
             break;
           case error.TIMEOUT:
-            errorMessage = 'Délai de géolocalisation dépassé';
+            errorKey = 'search.errors.locationTimeout';
             break;
           default:
-            errorMessage = 'Erreur de géolocalisation inconnue';
+            errorKey = 'search.errors.locationError';
         }
         
-        setError(errorMessage);
+        setError(t ? t(errorKey) : 'Location error');
         setLoading(false);
       },
       {

@@ -1,4 +1,5 @@
 import React from 'react';
+import useTranslation from '../hooks/useTranslation';
 
 const LocationButton = React.memo(({ 
   onLocationClick, 
@@ -6,6 +7,8 @@ const LocationButton = React.memo(({
   disabled,
   isSupported 
 }) => {
+  const { t } = useTranslation();
+  
   if (!isSupported) return null;
 
   return (
@@ -13,8 +16,8 @@ const LocationButton = React.memo(({
       className={`location-btn ${loading ? 'loading' : ''}`}
       onClick={onLocationClick}
       disabled={disabled || loading}
-      title="Utiliser ma position actuelle"
-      aria-label="Détecter ma position automatiquement"
+      title={t('search.locationButton')}
+      aria-label={t('accessibility.locationButton')}
     >
       <svg 
         className="location-icon" 
@@ -27,7 +30,7 @@ const LocationButton = React.memo(({
         <path d="M12 8L12 16"/>
         <path d="M8 12L16 12"/>
       </svg>
-      {loading && <span className="loading-text">Localisation...</span>}
+      {loading && <span className="loading-text">{t('search.locationLoading')}</span>}
     </button>
   );
 });

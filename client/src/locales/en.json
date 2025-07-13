@@ -1,0 +1,95 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close"
+  },
+  "search": {
+    "placeholder": "Enter a city",
+    "locationButton": "Use my current location",
+    "locationLoading": "Getting location...",
+    "searchInProgress": "Searching...",
+    "errors": {
+      "emptyInput": "Please enter a city",
+      "cityNotFound": "City not found",
+      "networkError": "Network error",
+      "authError": "API authentication error",
+      "locationDenied": "Location access denied",
+      "locationUnavailable": "Location unavailable",
+      "locationTimeout": "Location timeout",
+      "locationError": "Unknown location error",
+      "backgroundImageError": "Failed to load background image"
+    }
+  },
+  "weather": {
+    "conditions": {
+      "Clear": "Clear",
+      "Clouds": "Cloudy",
+      "Rain": "Rainy",
+      "Drizzle": "Drizzle",
+      "Thunderstorm": "Thunderstorm",
+      "Snow": "Snowy",
+      "Mist": "Misty",
+      "Fog": "Foggy",
+      "Haze": "Hazy",
+      "Dust": "Dusty",
+      "Sand": "Sandstorm",
+      "Ash": "Volcanic ash",
+      "Squall": "Squall",
+      "Tornado": "Tornado"
+    },
+    "metrics": {
+      "feelsLike": "Feels like",
+      "humidity": "Humidity",
+      "wind": "Wind",
+      "pressure": "Pressure",
+      "visibility": "Visibility",
+      "clouds": "Cloud cover",
+      "windDirection": {
+        "N": "N",
+        "NE": "NE", 
+        "E": "E",
+        "SE": "SE",
+        "S": "S",
+        "SW": "SW",
+        "W": "W",
+        "NW": "NW"
+      }
+    },
+    "units": {
+      "temperature": "°C",
+      "speed": "km/h",
+      "pressure": "hPa",
+      "distance": "km",
+      "percentage": "%"
+    }
+  },
+  "theme": {
+    "toggleLight": "Switch to light theme",
+    "toggleDark": "Switch to dark theme"
+  },
+  "language": {
+    "toggle": "Passer au français",
+    "current": "English"
+  },
+  "attribution": {
+    "photoBy": "Photo by",
+    "onUnsplash": "on Unsplash"
+  },
+  "accessibility": {
+    "themeToggle": "Toggle theme",
+    "languageToggle": "Change language",
+    "locationButton": "Detect my location automatically",
+    "weatherIcon": "Weather icon for",
+    "temperatureReading": "Current temperature",
+    "weatherCondition": "Weather condition"
+  },
+  "pwa": {
+    "installTitle": "Install Weather App",
+    "installDescription": "Get quick access to weather updates right from your home screen",
+    "install": "Install",
+    "offline": "You are offline",
+    "offlineDescription": "Some features may be limited"
+  }
+}

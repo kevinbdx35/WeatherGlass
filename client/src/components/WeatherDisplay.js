@@ -1,12 +1,16 @@
 import React from 'react';
 import WeatherIcon from './WeatherIcon';
+import useTranslation from '../hooks/useTranslation';
 
 const WeatherDisplay = React.memo(({ data }) => {
+  const { t } = useTranslation();
+  
   if (!data.name) return null;
 
   const getWindDirection = (degrees) => {
     const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-    return directions[Math.round(degrees / 45) % 8];
+    const direction = directions[Math.round(degrees / 45) % 8];
+    return t(`weather.metrics.windDirection.${direction}`);
   };
 
   const getTimeOfDay = () => {
@@ -46,7 +50,9 @@ const WeatherDisplay = React.memo(({ data }) => {
             <div className="weather-description">
               {data.weather && (
                 <>
-                  <p className="weather-main-desc">{data.weather[0].main}</p>
+                  <p className="weather-main-desc">
+                    {t(`weather.conditions.${data.weather[0].main}`) || data.weather[0].main}
+                  </p>
                   <p className="weather-detail-desc">{data.weather[0].description}</p>
                 </>
               )}
@@ -60,9 +66,11 @@ const WeatherDisplay = React.memo(({ data }) => {
           <div className="card-icon">🌡️</div>
           <div className="card-content">
             {data.main && (
-              <span className="card-value">{data.main.feels_like.toFixed()}°C</span>
+              <span className="card-value">
+                {data.main.feels_like.toFixed()}{t('weather.units.temperature')}
+              </span>
             )}
-            <span className="card-label">Ressenti</span>
+            <span className="card-label">{t('weather.metrics.feelsLike')}</span>
           </div>
         </div>
         
@@ -70,9 +78,11 @@ const WeatherDisplay = React.memo(({ data }) => {
           <div className="card-icon">💧</div>
           <div className="card-content">
             {data.main && (
-              <span className="card-value">{data.main.humidity}%</span>
+              <span className="card-value">
+                {data.main.humidity}{t('weather.units.percentage')}
+              </span>
             )}
-            <span className="card-label">Humidité</span>
+            <span className="card-label">{t('weather.metrics.humidity')}</span>
           </div>
         </div>
         
@@ -82,7 +92,7 @@ const WeatherDisplay = React.memo(({ data }) => {
             {data.wind && (
               <>
                 <span className="card-value">
-                  {data.wind.speed.toFixed()} km/h
+                  {data.wind.speed.toFixed()} {t('weather.units.speed')}
                 </span>
                 {data.wind.deg && (
                   <span className="wind-direction">
@@ -91,7 +101,7 @@ const WeatherDisplay = React.memo(({ data }) => {
                 )}
               </>
             )}
-            <span className="card-label">Vent</span>
+            <span className="card-label">{t('weather.metrics.wind')}</span>
           </div>
         </div>
 
@@ -99,8 +109,10 @@ const WeatherDisplay = React.memo(({ data }) => {
           <div className="detail-card pressure">
             <div className="card-icon">🌊</div>
             <div className="card-content">
-              <span className="card-value">{data.main.pressure} hPa</span>
-              <span className="card-label">Pression</span>
+              <span className="card-value">
+                {data.main.pressure} {t('weather.units.pressure')}
+              </span>
+              <span className="card-label">{t('weather.metrics.pressure')}</span>
             </div>
           </div>
         )}
@@ -109,8 +121,10 @@ const WeatherDisplay = React.memo(({ data }) => {
           <div className="detail-card visibility">
             <div className="card-icon">👁️</div>
             <div className="card-content">
-              <span className="card-value">{(data.visibility / 1000).toFixed(1)} km</span>
-              <span className="card-label">Visibilité</span>
+              <span className="card-value">
+                {(data.visibility / 1000).toFixed(1)} {t('weather.units.distance')}
+              </span>
+              <span className="card-label">{t('weather.metrics.visibility')}</span>
             </div>
           </div>
         )}
@@ -119,8 +133,10 @@ const WeatherDisplay = React.memo(({ data }) => {
           <div className="detail-card clouds">
             <div className="card-icon">☁️</div>
             <div className="card-content">
-              <span className="card-value">{data.clouds.all}%</span>
-              <span className="card-label">Couverture nuageuse</span>
+              <span className="card-value">
+                {data.clouds.all}{t('weather.units.percentage')}
+              </span>
+              <span className="card-label">{t('weather.metrics.clouds')}</span>
             </div>
           </div>
         )}

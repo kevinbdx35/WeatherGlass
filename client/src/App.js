@@ -3,13 +3,17 @@ import axios from 'axios';
 import SearchInput from './components/SearchInput';
 import WeatherDisplay from './components/WeatherDisplay';
 import ThemeToggle from './components/ThemeToggle';
+import LanguageToggle from './components/LanguageToggle';
 import LoadingSkeleton from './components/LoadingSkeleton';
 import BackgroundParticles from './components/BackgroundParticles';
 import DynamicBackground from './components/DynamicBackground';
+import InstallPrompt from './components/InstallPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
 import WeatherCache from './utils/weatherCache';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
 import useWeatherBackground from './hooks/useWeatherBackground';
+import useTranslation from './hooks/useTranslation';
 
 function App() {
   const [data, setData] = useState({});
@@ -21,13 +25,14 @@ function App() {
   const debounceTimer = useRef(null);
   
   const { theme, toggleTheme } = useTheme();
+  const { t, language } = useTranslation();
   const { 
     location: geoLocation, 
     loading: geoLoading, 
     error: geoError, 
     getCurrentLocation,
     isSupported: isGeoSupported 
-  } = useGeolocation();
+  } = useGeolocation(t);
   
   const {
     currentBackground,
@@ -36,7 +41,7 @@ function App() {
   } = useWeatherBackground();
 
   const fetchWeatherByCoords = useCallback(async (lat, lon) => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=fr&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
 
     try {
       const response = await axios.get(url);
@@ -47,17 +52,17 @@ function App() {
       setError('');
     } catch (err) {
       if (err.response?.status === 404) {
-        setError('Position non trouvée');
+        setError(t('search.errors.cityNotFound'));
       } else if (err.response?.status === 401) {
-        setError('Erreur d\'authentification API');
+        setError(t('search.errors.authError'));
       } else if (err.code === 'NETWORK_ERROR') {
-        setError('Erreur de connexion');
+        setError(t('search.errors.networkError'));
       } else {
-        setError('Une erreur est survenue');
+        setError(t('common.error'));
       }
       setData({});
     }
-  }, []);
+  }, [language, t]);
 
   const fetchWeatherData = useCallback(async (cityName) => {
     const cachedData = cache.current.get(cityName);
@@ -68,7 +73,7 @@ function App() {
       return;
     }
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName.trim()}&lang=fr&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
 
     try {
       const response = await axios.get(url);
@@ -79,17 +84,17 @@ function App() {
       setError('');
     } catch (err) {
       if (err.response?.status === 404) {
-        setError('Ville non trouvée');
+        setError(t('search.errors.cityNotFound'));
       } else if (err.response?.status === 401) {
-        setError('Erreur d\'authentification API');
+        setError(t('search.errors.authError'));
       } else if (err.code === 'NETWORK_ERROR') {
-        setError('Erreur de connexion');
+        setError(t('search.errors.networkError'));
       } else {
-        setError('Une erreur est survenue');
+        setError(t('common.error'));
       }
       setData({});
     }
-  }, []);
+  }, [language, t]);
 
 
   const searchLocation = (event) => {
@@ -99,7 +104,7 @@ function App() {
       }
       
       if (!location.trim()) {
-        setError('Veuillez entrer une ville');
+        setError(t('search.errors.emptyInput'));
         return;
       }
 
@@ -148,8 +153,14 @@ function App() {
       />
       <BackgroundParticles theme={theme} />
       
+      <OfflineIndicator />
+      <InstallPrompt />
+      
       <div className="app-header">
-        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        <div className="header-controls">
+          <LanguageToggle />
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        </div>
       </div>
       
       <SearchInput

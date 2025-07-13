@@ -1,0 +1,95 @@
+{
+  "common": {
+    "loading": "Chargement en cours...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "close": "Fermer"
+  },
+  "search": {
+    "placeholder": "Entrez une ville",
+    "locationButton": "Utiliser ma position actuelle",
+    "locationLoading": "Géolocalisation...",
+    "searchInProgress": "Recherche en cours...",
+    "errors": {
+      "emptyInput": "Veuillez entrer une ville",
+      "cityNotFound": "Ville non trouvée",
+      "networkError": "Erreur de connexion",
+      "authError": "Erreur d'authentification API",
+      "locationDenied": "Accès à la géolocalisation refusé",
+      "locationUnavailable": "Position non disponible",
+      "locationTimeout": "Délai de géolocalisation dépassé",
+      "locationError": "Erreur de géolocalisation inconnue",
+      "backgroundImageError": "Impossible de charger l'image de fond"
+    }
+  },
+  "weather": {
+    "conditions": {
+      "Clear": "Ensoleillé",
+      "Clouds": "Nuageux",
+      "Rain": "Pluvieux",
+      "Drizzle": "Bruine",
+      "Thunderstorm": "Orage",
+      "Snow": "Neigeux",
+      "Mist": "Brumeux",
+      "Fog": "Brouillard",
+      "Haze": "Brume",
+      "Dust": "Poussière",
+      "Sand": "Tempête de sable",
+      "Ash": "Cendres volcaniques",
+      "Squall": "Bourrasque",
+      "Tornado": "Tornade"
+    },
+    "metrics": {
+      "feelsLike": "Ressenti",
+      "humidity": "Humidité",
+      "wind": "Vent",
+      "pressure": "Pression",
+      "visibility": "Visibilité",
+      "clouds": "Couverture nuageuse",
+      "windDirection": {
+        "N": "N",
+        "NE": "NE", 
+        "E": "E",
+        "SE": "SE",
+        "S": "S",
+        "SW": "SO",
+        "W": "O",
+        "NW": "NO"
+      }
+    },
+    "units": {
+      "temperature": "°C",
+      "speed": "km/h",
+      "pressure": "hPa",
+      "distance": "km",
+      "percentage": "%"
+    }
+  },
+  "theme": {
+    "toggleLight": "Passer au thème clair",
+    "toggleDark": "Passer au thème sombre"
+  },
+  "language": {
+    "toggle": "Switch to English",
+    "current": "Français"
+  },
+  "attribution": {
+    "photoBy": "Photo par",
+    "onUnsplash": "sur Unsplash"
+  },
+  "accessibility": {
+    "themeToggle": "Basculer le thème",
+    "languageToggle": "Changer de langue",
+    "locationButton": "Détecter ma position automatiquement",
+    "weatherIcon": "Icône météo pour",
+    "temperatureReading": "Température actuelle",
+    "weatherCondition": "Condition météorologique"
+  },
+  "pwa": {
+    "installTitle": "Installer l'App Météo",
+    "installDescription": "Accédez rapidement aux prévisions météo depuis votre écran d'accueil",
+    "install": "Installer",
+    "offline": "Vous êtes hors ligne",
+    "offlineDescription": "Certaines fonctionnalités peuvent être limitées"
+  }
+}

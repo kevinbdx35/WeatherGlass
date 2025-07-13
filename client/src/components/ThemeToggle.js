@@ -1,12 +1,15 @@
 import React from 'react';
+import useTranslation from '../hooks/useTranslation';
 
 const ThemeToggle = React.memo(({ theme, onToggle }) => {
+  const { t } = useTranslation();
+  
   return (
     <button
       className="theme-toggle"
       onClick={onToggle}
-      title={`Passer au thème ${theme === 'light' ? 'sombre' : 'clair'}`}
-      aria-label={`Activer le thème ${theme === 'light' ? 'sombre' : 'clair'}`}
+      title={theme === 'light' ? t('theme.toggleDark') : t('theme.toggleLight')}
+      aria-label={t('accessibility.themeToggle')}
     >
       {theme === 'light' ? (
         <svg className="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
