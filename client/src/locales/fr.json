@@ -84,6 +84,8 @@
     "installTitle": "Installer WeatherGlass",
     "installDescription": "Accédez rapidement aux prévisions météo depuis votre écran d'accueil",
     "install": "Installer",
+    "notNow": "Plus tard",
+    "dismiss": "Fermer cette invitation",
     "offline": "Vous êtes hors ligne",
     "offlineDescription": "Certaines fonctionnalités peuvent être limitées"
   },

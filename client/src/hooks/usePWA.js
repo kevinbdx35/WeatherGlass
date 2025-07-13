@@ -5,8 +5,15 @@ const usePWA = () => {
   const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
+    // Check if user has dismissed the prompt before
+    const dismissed = localStorage.getItem('pwa-install-dismissed');
+    if (dismissed === 'true') {
+      setIsDismissed(true);
+    }
+
     // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
       setIsInstalled(true);
@@ -16,7 +23,10 @@ const usePWA = () => {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setIsInstallable(true);
+      // Only show if not previously dismissed
+      if (!isDismissed) {
+        setIsInstallable(true);
+      }
     };
 
     // Listen for the appinstalled event
@@ -93,11 +103,19 @@ const usePWA = () => {
     return null;
   };
 
+  const dismissInstallPrompt = () => {
+    setIsInstallable(false);
+    setIsDismissed(true);
+    localStorage.setItem('pwa-install-dismissed', 'true');
+  };
+
   return {
     isInstallable,
     isInstalled,
     isOnline,
+    isDismissed,
     installApp,
+    dismissInstallPrompt,
     requestPersistentStorage,
     getStorageEstimate
   };

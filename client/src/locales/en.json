@@ -84,6 +84,8 @@
     "installTitle": "Install WeatherGlass",
     "installDescription": "Get quick access to weather updates right from your home screen",
     "install": "Install",
+    "notNow": "Not now",
+    "dismiss": "Dismiss install prompt",
     "offline": "You are offline",
     "offlineDescription": "Some features may be limited"
   },

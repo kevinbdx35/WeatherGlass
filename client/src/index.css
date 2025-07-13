@@ -1399,6 +1399,7 @@ h1{
   align-items: center;
   gap: 16px;
   padding: 16px;
+  position: relative;
 }
 
 .install-icon {
@@ -1424,12 +1425,38 @@ h1{
   line-height: 1.4;
 }
 
+.install-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.install-close-button:hover {
+  background: var(--glass-bg);
+  color: var(--text-color);
+  transform: scale(1.1);
+}
+
 .install-actions {
   flex-shrink: 0;
+  display: flex;
+  gap: 8px;
 }
 
 .install-button {
-  background: var(--gradient-accent);
   border: 1px solid var(--glass-border);
   color: var(--text-color);
   padding: 8px 16px;
@@ -1439,11 +1466,27 @@ h1{
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  min-width: 80px;
+}
+
+.install-button.primary {
+  background: var(--gradient-accent);
+}
+
+.install-button.secondary {
+  background: var(--glass-bg);
 }
 
 .install-button:hover {
   transform: translateY(-1px);
+}
+
+.install-button.primary:hover {
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+}
+
+.install-button.secondary:hover {
+  background: var(--glass-bg-strong);
 }
 
 .offline-indicator {
@@ -1507,6 +1550,7 @@ h1{
     flex-direction: column;
     text-align: center;
     gap: 12px;
+    padding-top: 24px;
   }
   
   .install-text {
@@ -1519,6 +1563,12 @@ h1{
   
   .install-actions {
     order: 2;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .install-button {
+    width: 100%;
   }
 }
 
