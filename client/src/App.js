@@ -9,6 +9,7 @@ import BackgroundParticles from './components/BackgroundParticles';
 import DynamicBackground from './components/DynamicBackground';
 import InstallPrompt from './components/InstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
+import WeeklyForecast from './components/WeeklyForecast';
 import WeatherCache from './utils/weatherCache';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
@@ -17,6 +18,7 @@ import useTranslation from './hooks/useTranslation';
 
 function App() {
   const [data, setData] = useState({});
+  const [forecastData, setForecastData] = useState([]);
   const [location, setLocation] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -41,14 +43,26 @@ function App() {
   } = useWeatherBackground();
 
   const fetchWeatherByCoords = useCallback(async (lat, lon) => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
 
     try {
-      const response = await axios.get(url);
-      const weatherData = response.data;
+      const [currentResponse, forecastResponse] = await Promise.all([
+        axios.get(currentWeatherUrl),
+        axios.get(forecastUrl)
+      ]);
+      
+      const weatherData = currentResponse.data;
+      const forecast = forecastResponse.data;
+      
+      // Process forecast data to get daily forecasts
+      const dailyForecasts = processForecastData(forecast.list);
       
       cache.current.set(`${lat},${lon}`, weatherData);
+      cache.current.set(`forecast_${lat},${lon}`, dailyForecasts);
+      
       setData(weatherData);
+      setForecastData(dailyForecasts);
       setError('');
     } catch (err) {
       if (err.response?.status === 404) {
@@ -61,26 +75,41 @@ function App() {
         setError(t('common.error'));
       }
       setData({});
+      setForecastData([]);
     }
   }, [language, t]);
 
   const fetchWeatherData = useCallback(async (cityName) => {
     const cachedData = cache.current.get(cityName);
+    const cachedForecast = cache.current.get(`forecast_${cityName}`);
     
-    if (cachedData) {
+    if (cachedData && cachedForecast) {
       setData(cachedData);
+      setForecastData(cachedForecast);
       setError('');
       return;
     }
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
 
     try {
-      const response = await axios.get(url);
-      const weatherData = response.data;
+      const [currentResponse, forecastResponse] = await Promise.all([
+        axios.get(currentWeatherUrl),
+        axios.get(forecastUrl)
+      ]);
+      
+      const weatherData = currentResponse.data;
+      const forecast = forecastResponse.data;
+      
+      // Process forecast data to get daily forecasts
+      const dailyForecasts = processForecastData(forecast.list);
       
       cache.current.set(cityName, weatherData);
+      cache.current.set(`forecast_${cityName}`, dailyForecasts);
+      
       setData(weatherData);
+      setForecastData(dailyForecasts);
       setError('');
     } catch (err) {
       if (err.response?.status === 404) {
@@ -93,9 +122,50 @@ function App() {
         setError(t('common.error'));
       }
       setData({});
+      setForecastData([]);
     }
   }, [language, t]);
 
+  // Utility function to process forecast data
+  const processForecastData = (forecastList) => {
+    const dailyData = {};
+    
+    forecastList.forEach(item => {
+      const date = new Date(item.dt * 1000);
+      const dayKey = date.toDateString();
+      
+      if (!dailyData[dayKey]) {
+        dailyData[dayKey] = {
+          date: date,
+          temps: [],
+          conditions: [],
+          humidity: [],
+          wind: [],
+          icon: item.weather[0].icon,
+          description: item.weather[0].description,
+          main: item.weather[0].main
+        };
+      }
+      
+      dailyData[dayKey].temps.push(item.main.temp);
+      dailyData[dayKey].conditions.push(item.weather[0]);
+      dailyData[dayKey].humidity.push(item.main.humidity);
+      dailyData[dayKey].wind.push(item.wind.speed);
+    });
+    
+    // Convert to array and calculate daily averages
+    return Object.values(dailyData).slice(0, 7).map(day => ({
+      date: day.date,
+      maxTemp: Math.round(Math.max(...day.temps)),
+      minTemp: Math.round(Math.min(...day.temps)),
+      avgTemp: Math.round(day.temps.reduce((a, b) => a + b, 0) / day.temps.length),
+      humidity: Math.round(day.humidity.reduce((a, b) => a + b, 0) / day.humidity.length),
+      windSpeed: Math.round(day.wind.reduce((a, b) => a + b, 0) / day.wind.length),
+      icon: day.icon,
+      description: day.description,
+      main: day.main
+    }));
+  };
 
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
@@ -178,7 +248,10 @@ function App() {
         {(loading || geoLoading) ? (
           <LoadingSkeleton />
         ) : (
-          <WeatherDisplay data={data} />
+          <>
+            <WeatherDisplay data={data} />
+            <WeeklyForecast forecastData={forecastData} />
+          </>
         )}
       </div>
     </div>
