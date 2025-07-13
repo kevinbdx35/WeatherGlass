@@ -1,3 +1,57 @@
-# https://www.robotstxt.org/robotstxt.html
+# Robots.txt for WeatherGlass - Europe's #1 Weather PWA
+# Optimized for maximum SEO visibility
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Allow all major search engine bots
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Disallow unnecessary paths to focus crawl budget
+Disallow: /static/js/
+Disallow: /static/css/
+Disallow: /.well-known/
+Disallow: /manifest.json
+Disallow: /service-worker.js
+Disallow: /sw.js
+
+# Allow important assets for rich snippets
+Allow: /static/media/
+Allow: /logo*.png
+Allow: /icon*.svg
+Allow: /og-image.jpg
+Allow: /twitter-card.jpg
+
+# Sitemap location
+Sitemap: https://yourdomain.com/WeatherGlass/sitemap.xml

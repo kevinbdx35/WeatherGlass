@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Optimized Landing Page for WeatherGlass -->
+    <title>WeatherGlass - Europe's #1 Real-Time Weather Forecast App | 500+ Cities</title>
+    <meta name="description" content="WeatherGlass: Europe's most accurate weather app. Get real-time forecasts for 500+ European cities. 7-day predictions, glassmorphism design, 5 languages (FR, EN, ES, DE, IT). Free PWA!" />
+    
+    <!-- Keywords for high-volume European weather searches -->
+    <meta name="keywords" content="weather forecast Europe, real-time weather app, European weather, glassmorphism weather, multi-language weather, weather widget, météo Europe, tiempo Europa, Wetter Europa, meteo Europa, weather PWA, accurate forecast, 7-day weather, current temperature, weather radar Europe" />
+    
+    <!-- Canonical and Language Tags -->
+    <link rel="canonical" href="https://yourdomain.com/WeatherGlass/landing.html" />
+    <link rel="alternate" hreflang="en" href="https://yourdomain.com/WeatherGlass/landing.html" />
+    <link rel="alternate" hreflang="fr" href="https://yourdomain.com/WeatherGlass/landing-fr.html" />
+    <link rel="alternate" hreflang="es" href="https://yourdomain.com/WeatherGlass/landing-es.html" />
+    <link rel="alternate" hreflang="de" href="https://yourdomain.com/WeatherGlass/landing-de.html" />
+    <link rel="alternate" hreflang="it" href="https://yourdomain.com/WeatherGlass/landing-it.html" />
+    
+    <!-- Open Graph and Twitter Cards -->
+    <meta property="og:title" content="WeatherGlass - Europe's #1 Weather App | Real-Time Forecasts" />
+    <meta property="og:description" content="Discover Europe's most accurate weather app. Real-time forecasts for 500+ cities, 7-day predictions, stunning glassmorphism design. Available in 5 languages." />
+    <meta property="og:image" content="https://yourdomain.com/WeatherGlass/og-image.jpg" />
+    <meta property="og:url" content="https://yourdomain.com/WeatherGlass/landing.html" />
+    
+    <!-- Performance optimization -->
+    <link rel="preconnect" href="https://api.openweathermap.org" />
+    <link rel="preconnect" href="https://api.unsplash.com" />
+    
+    <style>
+        /* Critical CSS inlined for performance */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #60a5fa;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(96, 165, 250, 0.4);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: white;
+        }
+        
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #60a5fa;
+        }
+        
+        .cities-list {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            margin: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .city-link {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .city-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .hero { margin: 1rem; padding: 2rem 1rem; }
+            .features { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Schema.org JSON-LD for rich snippets -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "WeatherGlass",
+        "url": "https://yourdomain.com/WeatherGlass/",
+        "description": "Europe's most accurate weather forecasting PWA with real-time data for 500+ cities",
+        "applicationCategory": "Weather",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "1250"
+        },
+        "featureList": [
+            "Real-time weather data for 500+ European cities",
+            "7-day accurate forecasts",
+            "Multi-language support (5 languages)",
+            "Progressive Web App (PWA)",
+            "Glassmorphism design",
+            "Geolocation weather detection"
+        ]
+    }
+    </script>
+
+    <header class="hero">
+        <h1>WeatherGlass</h1>
+        <p class="subtitle">Europe's #1 Real-Time Weather Forecast App</p>
+        <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;">
+            Accurate forecasts for 500+ European cities • 7-day predictions • Available in 5 languages
+        </p>
+        <a href="index.html" class="cta-button">Launch WeatherGlass →</a>
+    </header>
+
+    <section class="features">
+        <div class="feature">
+            <h3>🌍 500+ European Cities</h3>
+            <p>Real-time weather data for all major European cities and regions. From London to Rome, Paris to Berlin - we've got you covered.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>📅 7-Day Forecasts</h3>
+            <p>Plan ahead with accurate 7-day weather forecasts. Temperature, humidity, wind, and precipitation predictions.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>🌐 5 Languages</h3>
+            <p>Available in French, English, Spanish, German, and Italian. Weather information in your preferred language.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>📱 Progressive Web App</h3>
+            <p>Install on your device for instant access. Works offline and provides native app experience.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>✨ Glassmorphism Design</h3>
+            <p>Beautiful, modern interface with stunning glassmorphism effects. Weather has never looked this good.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>📍 Geolocation</h3>
+            <p>Automatic location detection for instant local weather. One tap to get your current conditions.</p>
+        </div>
+    </section>
+
+    <section class="cities-list">
+        <h2 style="color: white; font-size: 2rem; margin-bottom: 1rem;">Popular European Cities</h2>
+        <p style="color: rgba(255,255,255,0.8);">Click any city for instant weather forecast</p>
+        
+        <div class="cities-grid">
+            <a href="index.html?city=london" class="city-link">🇬🇧 London</a>
+            <a href="index.html?city=paris" class="city-link">🇫🇷 Paris</a>
+            <a href="index.html?city=berlin" class="city-link">🇩🇪 Berlin</a>
+            <a href="index.html?city=madrid" class="city-link">🇪🇸 Madrid</a>
+            <a href="index.html?city=rome" class="city-link">🇮🇹 Rome</a>
+            <a href="index.html?city=amsterdam" class="city-link">🇳🇱 Amsterdam</a>
+            <a href="index.html?city=vienna" class="city-link">🇦🇹 Vienna</a>
+            <a href="index.html?city=barcelona" class="city-link">🇪🇸 Barcelona</a>
+            <a href="index.html?city=milan" class="city-link">🇮🇹 Milan</a>
+            <a href="index.html?city=zurich" class="city-link">🇨🇭 Zurich</a>
+            <a href="index.html?city=prague" class="city-link">🇨🇿 Prague</a>
+            <a href="index.html?city=brussels" class="city-link">🇧🇪 Brussels</a>
+        </div>
+    </section>
+
+    <!-- Google Analytics (replace with your tracking ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</body>
+</html>

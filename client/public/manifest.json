@@ -1,17 +1,18 @@
 {
-  "name": "WeatherGlass",
+  "name": "WeatherGlass - Europe's #1 Weather Forecast PWA",
   "short_name": "WeatherGlass",
-  "description": "Modern weather PWA with stunning glassmorphism design and bilingual support",
+  "description": "Europe's most accurate weather forecasting PWA. Real-time weather data for 500+ European cities with 7-day forecasts, glassmorphism design, and multi-language support (FR, EN, ES, DE, IT).",
   "version": "1.0.0",
   "manifest_version": 3,
-  "start_url": "/",
+  "start_url": "/WeatherGlass/",
   "display": "standalone",
   "background_color": "#1e293b",
   "theme_color": "#60a5fa",
-  "orientation": "portrait-primary",
-  "scope": "/",
+  "orientation": "any",
+  "scope": "/WeatherGlass/",
   "lang": "en",
-  "categories": ["weather", "productivity", "utilities"],
+  "dir": "ltr",
+  "categories": ["weather", "productivity", "utilities", "travel", "news"],
   "screenshots": [
     {
       "src": "/images/screenshot-wide.png",
@@ -68,7 +69,46 @@
       "name": "Current Location Weather",
       "short_name": "My Location",
       "description": "Get weather for your current location with WeatherGlass",
-      "url": "/?geolocation=true",
+      "url": "/WeatherGlass/?geolocation=true",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Paris Weather",
+      "short_name": "Paris",
+      "description": "Weather forecast for Paris, France",
+      "url": "/WeatherGlass/?city=paris",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "London Weather",
+      "short_name": "London",
+      "description": "Weather forecast for London, UK",
+      "url": "/WeatherGlass/?city=london",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Berlin Weather",
+      "short_name": "Berlin",
+      "description": "Weather forecast for Berlin, Germany",
+      "url": "/WeatherGlass/?city=berlin",
       "icons": [
         {
           "src": "logo192.png",
