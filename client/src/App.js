@@ -12,6 +12,7 @@ import OfflineIndicator from './components/OfflineIndicator';
 import WeeklyForecast from './components/WeeklyForecast';
 import WeatherChart from './components/WeatherChart';
 import Footer from './components/Footer';
+import AutoThemeIndicator from './components/AutoThemeIndicator';
 import WeatherCache from './utils/weatherCache';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
@@ -29,7 +30,7 @@ function App() {
   const cache = useRef(new WeatherCache());
   const debounceTimer = useRef(null);
   
-  const { theme, toggleTheme } = useTheme();
+  const { themeMode, theme, toggleTheme } = useTheme();
   const { t, language } = useTranslation();
   const { 
     location: geoLocation, 
@@ -246,11 +247,12 @@ function App() {
       
       <OfflineIndicator />
       <InstallPrompt />
+      <AutoThemeIndicator themeMode={themeMode} theme={theme} />
       
       <div className="app-header">
         <div className="header-controls">
           <LanguageToggle />
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          <ThemeToggle themeMode={themeMode} theme={theme} onToggle={toggleTheme} />
           {(data.name || geoLocation) && (
             <div 
               className="auto-refresh-indicator"

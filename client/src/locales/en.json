@@ -62,7 +62,10 @@
   },
   "theme": {
     "toggleLight": "Switch to light theme",
-    "toggleDark": "Switch to dark theme"
+    "toggleDark": "Switch to dark theme",
+    "autoMode": "Auto mode",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode"
   },
   "language": {
     "toggle": "Passer au français",

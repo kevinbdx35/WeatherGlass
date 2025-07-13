@@ -62,7 +62,10 @@
   },
   "theme": {
     "toggleLight": "Passer au thème clair",
-    "toggleDark": "Passer au thème sombre"
+    "toggleDark": "Passer au thème sombre",
+    "autoMode": "Mode automatique",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre"
   },
   "language": {
     "toggle": "Switch to English",
