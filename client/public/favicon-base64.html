@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WeatherGlass Favicon Generator</title>
+</head>
+<body>
+    <canvas id="faviconCanvas" width="32" height="32" style="border: 1px solid #ccc;"></canvas>
+    <br><br>
+    <button onclick="generateFavicon()">Generate Favicon</button>
+    <br><br>
+    <div id="result"></div>
+
+    <script>
+        function generateFavicon() {
+            const canvas = document.getElementById('faviconCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, 32, 32);
+            
+            // Background circle with gradient
+            const gradient = ctx.createRadialGradient(10, 10, 0, 16, 16, 15);
+            gradient.addColorStop(0, '#60A5FA');
+            gradient.addColorStop(1, '#1E293B');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(16, 16, 15, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Border
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            // Sun
+            ctx.fillStyle = '#FCD34D';
+            ctx.beginPath();
+            ctx.arc(14, 12, 4, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Sun rays
+            ctx.strokeStyle = '#FCD34D';
+            ctx.lineWidth = 1;
+            ctx.lineCap = 'round';
+            
+            // Ray lines
+            const rays = [
+                [14, 5, 14, 7],      // top
+                [20, 8, 18.5, 9.5],  // top-right
+                [23, 12, 21, 12],    // right
+                [20, 16, 18.5, 14.5], // bottom-right
+                [8, 8, 9.5, 9.5],    // top-left
+                [5, 12, 7, 12],      // left
+                [8, 16, 9.5, 14.5]   // bottom-left
+            ];
+            
+            rays.forEach(ray => {
+                ctx.beginPath();
+                ctx.moveTo(ray[0], ray[1]);
+                ctx.lineTo(ray[2], ray[3]);
+                ctx.stroke();
+            });
+            
+            // Cloud
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.beginPath();
+            
+            // Simple cloud shape using arcs
+            ctx.arc(12, 20, 3, 0, 2 * Math.PI, false);
+            ctx.arc(16, 18, 4, 0, 2 * Math.PI, false);
+            ctx.arc(20, 20, 3, 0, 2 * Math.PI, false);
+            ctx.arc(16, 22, 5, 0, Math.PI, false);
+            
+            ctx.fill();
+            
+            // Glass shine effect
+            const shineGradient = ctx.createLinearGradient(8, 8, 15, 18);
+            shineGradient.addColorStop(0, 'rgba(255,255,255,0.4)');
+            shineGradient.addColorStop(1, 'rgba(255,255,255,0)');
+            
+            ctx.fillStyle = shineGradient;
+            ctx.beginPath();
+            ctx.ellipse(11, 10, 2, 6, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Convert to data URL
+            const dataURL = canvas.toDataURL('image/png');
+            
+            // Show result
+            document.getElementById('result').innerHTML = `
+                <h3>Generated Favicon:</h3>
+                <img src="${dataURL}" style="width: 64px; height: 64px; image-rendering: pixelated;">
+                <br><br>
+                <a href="${dataURL}" download="weatherglass-favicon.png">Download PNG</a>
+                <br><br>
+                <p>Right-click the image above and save as favicon.ico</p>
+            `;
+        }
+        
+        // Generate on page load
+        window.onload = generateFavicon;
+    </script>
+</body>
+</html>
