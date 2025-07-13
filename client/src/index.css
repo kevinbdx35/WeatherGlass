@@ -799,11 +799,15 @@ h1{
   }
   
   .background-attribution {
-    bottom: 1rem;
+    top: 1rem;
     left: 1rem;
+    bottom: auto;
+    right: auto;
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
     border-radius: 12px;
+    max-width: 250px;
+    z-index: 999;
   }
   
   .app-header {
