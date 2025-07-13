@@ -54,4 +54,4 @@ Allow: /og-image.jpg
 Allow: /twitter-card.jpg
 
 # Sitemap location
-Sitemap: https://yourdomain.com/WeatherGlass/sitemap.xml
+Sitemap: https://kevinbdx35.github.io/weather-react-node-app/sitemap.xml
