@@ -1,7 +1,7 @@
 import React from 'react';
 import useTranslation from '../hooks/useTranslation';
 
-const ThemeToggle = React.memo(({ theme, onToggle }) => {
+const ThemeToggle = ({ theme, onToggle }) => {
   const { t } = useTranslation();
   
   return (
@@ -30,8 +30,6 @@ const ThemeToggle = React.memo(({ theme, onToggle }) => {
       )}
     </button>
   );
-});
-
-ThemeToggle.displayName = 'ThemeToggle';
+};
 
 export default ThemeToggle;

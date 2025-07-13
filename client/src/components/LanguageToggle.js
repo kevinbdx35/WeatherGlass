@@ -1,7 +1,7 @@
 import React from 'react';
 import useTranslation from '../hooks/useTranslation';
 
-const LanguageToggle = React.memo(() => {
+const LanguageToggle = () => {
   const { language, toggleLanguage, t } = useTranslation();
 
   return (
@@ -27,8 +27,6 @@ const LanguageToggle = React.memo(() => {
       </svg>
     </button>
   );
-});
-
-LanguageToggle.displayName = 'LanguageToggle';
+};
 
 export default LanguageToggle;

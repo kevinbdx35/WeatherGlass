@@ -2,7 +2,7 @@ import React from 'react';
 import LocationButton from './LocationButton';
 import useTranslation from '../hooks/useTranslation';
 
-const SearchInput = React.memo(({ 
+const SearchInput = ({ 
   location, 
   setLocation, 
   onKeyPress, 
@@ -41,8 +41,6 @@ const SearchInput = React.memo(({
       {error && <p className="error">{error}</p>}
     </div>
   );
-});
-
-SearchInput.displayName = 'SearchInput';
+};
 
 export default SearchInput;

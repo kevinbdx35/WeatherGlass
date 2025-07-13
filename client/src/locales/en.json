@@ -4,6 +4,7 @@
     "locationButton": "Use my current location",
     "locationLoading": "Getting location...",
     "searchInProgress": "Searching...",
+    "autoRefreshActive": "Auto-refresh enabled (every 20 min)",
     "errors": {
       "emptyInput": "Please enter a city",
       "cityNotFound": "City not found",

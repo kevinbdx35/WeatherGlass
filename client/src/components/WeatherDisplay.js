@@ -2,7 +2,7 @@ import React from 'react';
 import WeatherIcon from './WeatherIcon';
 import useTranslation from '../hooks/useTranslation';
 
-const WeatherDisplay = React.memo(({ data }) => {
+const WeatherDisplay = ({ data }) => {
   const { t } = useTranslation();
   
   if (!data.name) return null;
@@ -143,8 +143,6 @@ const WeatherDisplay = React.memo(({ data }) => {
       </div>
     </div>
   );
-});
-
-WeatherDisplay.displayName = 'WeatherDisplay';
+};
 
 export default WeatherDisplay;

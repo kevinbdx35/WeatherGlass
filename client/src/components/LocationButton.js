@@ -1,7 +1,7 @@
 import React from 'react';
 import useTranslation from '../hooks/useTranslation';
 
-const LocationButton = React.memo(({ 
+const LocationButton = ({ 
   onLocationClick, 
   loading, 
   disabled,
@@ -33,8 +33,6 @@ const LocationButton = React.memo(({
       {loading && <span className="loading-text">{t('search.locationLoading')}</span>}
     </button>
   );
-});
-
-LocationButton.displayName = 'LocationButton';
+};
 
 export default LocationButton;

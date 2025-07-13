@@ -16,6 +16,7 @@ import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
 import useWeatherBackground from './hooks/useWeatherBackground';
 import useTranslation from './hooks/useTranslation';
+import useAutoRefresh from './hooks/useAutoRefresh';
 
 function App() {
   const [data, setData] = useState({});
@@ -216,6 +217,25 @@ function App() {
     }
   }, [data.weather, data.name, updateBackground]);
 
+  // Fonction de rafraîchissement automatique
+  const autoRefreshWeather = useCallback(() => {
+    if (geoLocation) {
+      // Actualiser avec la géolocalisation
+      fetchWeatherByCoords(geoLocation.latitude, geoLocation.longitude);
+    } else if (data.name) {
+      // Actualiser avec la dernière ville recherchée
+      fetchWeatherData(data.name);
+    }
+  }, [geoLocation, data.name, fetchWeatherByCoords, fetchWeatherData]);
+
+  // Auto-refresh toutes les 20 minutes si on a des données météo
+  const { forceRefresh } = useAutoRefresh({
+    refreshFunction: autoRefreshWeather,
+    interval: 20 * 60 * 1000, // 20 minutes
+    enabled: !!(data.name || geoLocation),
+    dependencies: [data.name, geoLocation]
+  });
+
   return (
     <div className="app">
       <DynamicBackground
@@ -231,6 +251,15 @@ function App() {
         <div className="header-controls">
           <LanguageToggle />
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          {(data.name || geoLocation) && (
+            <div 
+              className="auto-refresh-indicator"
+              title={t('search.autoRefreshActive')}
+              onClick={forceRefresh}
+            >
+              🔄
+            </div>
+          )}
         </div>
       </div>
       

@@ -4,6 +4,7 @@
     "locationButton": "Utiliser ma position actuelle",
     "locationLoading": "Géolocalisation...",
     "searchInProgress": "Recherche en cours...",
+    "autoRefreshActive": "Mise à jour automatique activée (toutes les 20 min)",
     "errors": {
       "emptyInput": "Veuillez entrer une ville",
       "cityNotFound": "Ville non trouvée",
