@@ -443,6 +443,12 @@ h1{
   border-color: var(--accent-color);
 }
 
+.language-flag {
+  font-size: 1.2rem;
+  position: relative;
+  z-index: 1;
+}
+
 .language-text {
   font-weight: 600;
   font-size: 0.9rem;

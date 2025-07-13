@@ -1,14 +1,34 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import frTranslations from '../locales/fr.json';
 import enTranslations from '../locales/en.json';
+import esTranslations from '../locales/es.json';
+import deTranslations from '../locales/de.json';
+import itTranslations from '../locales/it.json';
 
 const translations = {
   fr: frTranslations,
-  en: enTranslations
+  en: enTranslations,
+  es: esTranslations,
+  de: deTranslations,
+  it: itTranslations
 };
+
+// Configuration des langues disponibles
+export const LANGUAGES = [
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' }
+];
 
 const useTranslation = () => {
   const [language, setLanguage] = useState(() => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return 'en'; // Default for SSR
+    }
+    
     // Récupérer la langue sauvegardée ou détecter la langue du navigateur
     const savedLanguage = localStorage.getItem('weather-app-language');
     if (savedLanguage && translations[savedLanguage]) {
@@ -21,12 +41,18 @@ const useTranslation = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem('weather-app-language', language);
-    document.documentElement.setAttribute('lang', language);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('weather-app-language', language);
+      document.documentElement.setAttribute('lang', language);
+    }
   }, [language]);
 
   const toggleLanguage = useCallback(() => {
-    setLanguage(prevLang => prevLang === 'fr' ? 'en' : 'fr');
+    setLanguage(prevLang => {
+      const currentIndex = LANGUAGES.findIndex(lang => lang.code === prevLang);
+      const nextIndex = (currentIndex + 1) % LANGUAGES.length;
+      return LANGUAGES[nextIndex].code;
+    });
   }, []);
 
   const t = useCallback((key, interpolations = {}) => {

@@ -1,0 +1,118 @@
+{
+  "search": {
+    "placeholder": "Inserisci una città",
+    "locationButton": "Usa la mia posizione attuale",
+    "locationLoading": "Rilevamento posizione...",
+    "searchInProgress": "Ricerca in corso...",
+    "autoRefreshActive": "Aggiornamento automatico attivato (ogni 20 min)",
+    "errors": {
+      "emptyInput": "Per favore inserisci una città",
+      "cityNotFound": "Città non trovata",
+      "networkError": "Errore di connessione",
+      "authError": "Errore di autenticazione API",
+      "locationDenied": "Accesso alla geolocalizzazione negato",
+      "locationUnavailable": "Posizione non disponibile",
+      "locationTimeout": "Timeout geolocalizzazione",
+      "locationError": "Errore di geolocalizzazione sconosciuto",
+      "backgroundImageError": "Impossibile caricare l'immagine di sfondo"
+    }
+  },
+  "weather": {
+    "conditions": {
+      "Clear": "Sereno",
+      "Clouds": "Nuvoloso",
+      "Rain": "Pioggia",
+      "Snow": "Neve",
+      "Drizzle": "Pioggerella",
+      "Thunderstorm": "Temporale",
+      "Mist": "Foschia",
+      "Smoke": "Fumo",
+      "Haze": "Nebbia",
+      "Dust": "Polvere",
+      "Fog": "Nebbia",
+      "Sand": "Sabbia",
+      "Ash": "Cenere",
+      "Squall": "Raffica",
+      "Tornado": "Tornado"
+    },
+    "metrics": {
+      "feelsLike": "Percepita",
+      "humidity": "Umidità",
+      "wind": "Vento",
+      "pressure": "Pressione",
+      "visibility": "Visibilità",
+      "clouds": "Copertura nuvolosa",
+      "windDirection": {
+        "N": "N",
+        "NE": "NE", 
+        "E": "E",
+        "SE": "SE",
+        "S": "S",
+        "SW": "SO",
+        "W": "O",
+        "NW": "NO"
+      }
+    },
+    "units": {
+      "temperature": "°C",
+      "wind": "m/s",
+      "pressure": "hPa",
+      "distance": "km",
+      "percentage": "%"
+    }
+  },
+  "theme": {
+    "toggleLight": "Passa al tema chiaro",
+    "toggleDark": "Passa al tema scuro",
+    "autoMode": "Modalità automatica",
+    "lightMode": "Modalità chiara",
+    "darkMode": "Modalità scura"
+  },
+  "language": {
+    "toggle": "Cambia lingua",
+    "current": "Italiano"
+  },
+  "attribution": {
+    "photoBy": "Foto di",
+    "onUnsplash": "su Unsplash"
+  },
+  "accessibility": {
+    "themeToggle": "Cambia tema",
+    "languageToggle": "Cambia lingua",
+    "locationButton": "Rileva automaticamente la mia posizione",
+    "weatherIcon": "Icona meteo per",
+    "temperatureReading": "Temperatura attuale",
+    "weatherCondition": "Condizione meteorologica"
+  },
+  "pwa": {
+    "installTitle": "Installa WeatherGlass",
+    "installDescription": "Ottieni accesso rapido agli aggiornamenti meteo direttamente dalla tua schermata iniziale",
+    "install": "Installa",
+    "notNow": "Non ora",
+    "dismiss": "Rifiuta invito di installazione",
+    "offline": "Sei offline",
+    "offlineDescription": "Alcune funzionalità potrebbero essere limitate"
+  },
+  "forecast": {
+    "weeklyTitle": "Previsioni a 7 giorni",
+    "today": "Oggi",
+    "tomorrow": "Domani",
+    "maxTemp": "Max",
+    "minTemp": "Min",
+    "humidity": "Umidità",
+    "wind": "Vento",
+    "noData": "Nessuna previsione disponibile"
+  },
+  "charts": {
+    "title": "Tendenze meteorologiche",
+    "temperature": "Temperatura",
+    "humidity": "Umidità",
+    "wind": "Velocità del vento",
+    "temperatureChart": "Grafico temperatura",
+    "humidityChart": "Grafico umidità",
+    "windChart": "Grafico vento",
+    "minTemp": "Temp. minima",
+    "maxTemp": "Temp. massima",
+    "noData": "Nessun dato disponibile per mostrare i grafici"
+  }
+}
