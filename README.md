@@ -3,7 +3,7 @@
 
 <div align="center">
 
-![WeatherGlass Logo](./client/public/favicon.ico)
+![WeatherGlass Logo](./client/public/logo192.png)
 
 **Une application météo progressive moderne avec design glassmorphisme élégant**
 
@@ -24,14 +24,17 @@
 
 - 🌤️ **Données météo en temps réel** via l'API OpenWeatherMap
 - 📅 **Prévisions sur 7 jours** avec températures min/max et conditions détaillées
+- 📊 **Graphiques de tendances météo** avec Chart.js (température, humidité, vent)
+- 🔄 **Mise à jour automatique** toutes les 20 minutes avec indicateur visuel
 - 🌍 **Support bilingue** français/anglais avec traductions complètes
 - 📍 **Géolocalisation automatique** pour la météo locale
 - 🎨 **Design glassmorphisme** avec thèmes clair/sombre adaptatifs
 - 🖼️ **Arrière-plans dynamiques** adaptés à la météo (Unsplash)
-- 📱 **Progressive Web App** installable et utilisable hors ligne
+- 📱 **Progressive Web App** installable avec icônes personnalisées
 - ⚡ **Cache intelligent** pour les performances optimales
 - 🎭 **Animations fluides** et interface responsive
 - 📊 **Métriques détaillées** (humidité, vent, pression, visibilité)
+- ✕ **Prompt PWA dismissible** avec mémorisation des préférences
 
 ## 🎥 **Aperçu**
 
@@ -59,10 +62,11 @@
 ## 🛠️ Technologies
 
 **Frontend:**
-- React 18 avec hooks personnalisés
+- React 18 avec hooks personnalisés avancés
+- Chart.js 4.5.0 pour les graphiques de tendances
 - CSS3 avec variables et glassmorphisme
 - Service Worker pour le cache offline
-- Manifest PWA complet
+- Manifest PWA complet avec icônes personnalisées
 
 **Backend:**
 - Node.js & Express
@@ -141,6 +145,38 @@ node index.js
 
 L'application sera accessible sur `http://localhost:3000`
 
+## 🆕 Nouveautés v1.1.0
+
+### 📊 **Graphiques de Tendances Météo**
+- **Chart.js intégré** avec 3 types de visualisations
+- **Température** : graphique en aires avec min/max
+- **Humidité** : graphique en barres colorées
+- **Vent** : graphique linéaire avec vitesse
+- **Contrôles interactifs** pour basculer entre les vues
+
+### 🔄 **Mise à Jour Automatique**
+- **Actualisation automatique** toutes les 20 minutes
+- **Indicateur visuel** 🔄 avec animation de pulsation
+- **Clic pour actualiser** manuellement
+- **Pause intelligente** quand l'onglet n'est pas visible
+- **Reprise automatique** au retour sur l'onglet
+
+### 🌐 **Changement de Langue Amélioré**
+- **Bug React.memo corrigé** - changement instantané FR/EN
+- **Toutes les traductions** mises à jour immédiatement
+- **Composants non-memo** pour éviter les blocages de re-rendu
+
+### 📱 **PWA Optimisée**
+- **Icônes personnalisées WeatherGlass** (192px, 512px, Apple 180px)
+- **Design glassmorphisme** cohérent sur toutes les plateformes
+- **Prompt d'installation amélioré** avec bouton de refus
+- **Mémorisation des préférences** - ne se réaffiche plus après refus
+
+### 📍 **Positionnement Mobile Amélioré**
+- **Crédit Unsplash repositionné** en haut à gauche sur mobile
+- **Évite la superposition** avec les graphiques
+- **Meilleure lisibilité** sur tous les écrans
+
 ## 🌍 **Demo en Ligne**
 
 🔗 **URL de Production** : [https://kevinbdx35.github.io/WeatherGlass](https://kevinbdx35.github.io/WeatherGlass)
@@ -149,16 +185,21 @@ L'application sera accessible sur `http://localhost:3000`
 - ✅ Recherche de villes par nom
 - ✅ Géolocalisation automatique  
 - ✅ Basculement thème clair/sombre
-- ✅ Changement de langue FR/EN
-- ✅ Installation PWA (bouton dans le navigateur)
+- ✅ Changement de langue FR/EN instantané
+- ✅ Installation PWA avec icônes personnalisées WeatherGlass
 - ✅ Mode hors ligne (coupez votre connexion)
 - ✅ Prévisions sur 7 jours avec animations
+- ✅ Graphiques de tendances météo interactifs
+- ✅ Mise à jour automatique avec indicateur 🔄
+- ✅ Prompt PWA dismissible (avec croix et "Plus tard")
 
 ## 🌟 Fonctionnalités Avancées
 
-### Prévisions Météo
+### Prévisions Météo et Graphiques
 - **Données 7 jours** avec températures min/max quotidiennes
-- **Conditions détaillées** : humidité, vent, pression
+- **Graphiques de tendances** : température (min/max), humidité, vitesse du vent
+- **Chart.js interactif** avec 3 types de visualisations (ligne, aire, barres)
+- **Conditions détaillées** : humidité, vent, pression, visibilité
 - **Interface responsive** : grille adaptative sur tous écrans
 - **Animations fluides** : apparition séquentielle des cartes
 - **Cache intelligent** : prévisions mises en cache pour performance
@@ -169,11 +210,14 @@ L'application sera accessible sur `http://localhost:3000`
 - Variables CSS pour la cohérence visuelle
 - Adaptations glassmorphisme selon le thème
 
-### Internationalisation
-- Traductions complètes FR/EN (météo, interface, prévisions)
-- Détection automatique de la langue navigateur
-- Formatage des dates selon la locale
-- Persistance des préférences utilisateur
+### Internationalisation et UX
+- **Traductions complètes** FR/EN (météo, interface, prévisions, graphiques)
+- **Changement de langue instantané** (bug React.memo corrigé)
+- **Détection automatique** de la langue navigateur
+- **Formatage des dates** selon la locale
+- **Persistance des préférences** utilisateur
+- **Mise à jour automatique** toutes les 20 minutes avec indicateur visuel
+- **Installation PWA optimisée** avec possibilité de refus mémorisé
 
 ### Performance
 - Cache intelligent avec expiration (météo + prévisions)
@@ -202,16 +246,19 @@ WeatherGlass/
 │   │   │   ├── WeatherDisplay.js    # Météo actuelle
 │   │   │   ├── WeeklyForecast.js    # Prévisions 7 jours
 │   │   │   ├── ForecastCard.js      # Carte prévision quotidienne
+│   │   │   ├── WeatherChart.js      # Graphiques tendances météo
 │   │   │   ├── SearchInput.js       # Recherche de ville
 │   │   │   ├── ThemeToggle.js       # Basculeur de thème
 │   │   │   ├── LanguageToggle.js    # Sélecteur de langue
 │   │   │   ├── InstallPrompt.js     # Prompt d'installation PWA
+│   │   │   ├── DynamicBackground.js # Arrière-plans dynamiques
 │   │   │   └── OfflineIndicator.js  # Indicateur hors ligne
 │   │   ├── hooks/           # Hooks personnalisés
 │   │   │   ├── useTranslation.js    # Gestion i18n
 │   │   │   ├── useTheme.js          # Gestion des thèmes
 │   │   │   ├── useGeolocation.js    # Géolocalisation
 │   │   │   ├── usePWA.js            # Fonctionnalités PWA
+│   │   │   ├── useAutoRefresh.js    # Mise à jour automatique
 │   │   │   └── useWeatherBackground.js # Arrière-plans dynamiques
 │   │   ├── locales/         # Fichiers de traduction
 │   │   │   ├── fr.json              # Traductions françaises
@@ -266,7 +313,11 @@ Si vous trouvez un bug, merci de créer une issue avec :
 ## 💡 Roadmap
 
 - [x] **Prévisions météo sur 7 jours** ✅ *Implémenté*
-- [ ] Graphiques des tendances météo avec Chart.js
+- [x] **Graphiques des tendances météo avec Chart.js** ✅ *Implémenté*
+- [x] **Mise à jour automatique des données** ✅ *Implémenté*
+- [x] **Correction changement de langue instantané** ✅ *Implémenté*
+- [x] **Icônes PWA personnalisées WeatherGlass** ✅ *Implémenté*
+- [x] **Prompt PWA avec option de refus** ✅ *Implémenté*
 - [ ] Notifications push pour les alertes météo
 - [ ] Widget personnalisable pour l'écran d'accueil
 - [ ] Mode sombre automatique selon l'heure

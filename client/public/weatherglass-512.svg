@@ -1,0 +1,49 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with WeatherGlass gradient -->
+  <circle cx="256" cy="256" r="236" fill="url(#bgGradient)" stroke="url(#borderGrad)" stroke-width="20"/>
+  
+  <!-- Sun (main weather element) -->
+  <circle cx="214" cy="192" r="64" fill="#FCD34D" opacity="0.95"/>
+  
+  <!-- Sun rays -->
+  <g stroke="#FCD34D" stroke-width="16" stroke-linecap="round" opacity="0.8">
+    <line x1="214" y1="86" x2="214" y2="128"/>
+    <line x1="214" y1="256" x2="214" y2="298"/>
+    <line x1="342" y1="192" x2="300" y2="192"/>
+    <line x1="86" y1="192" x2="128" y2="192"/>
+    <line x1="301.23" y1="125.77" x2="271.09" y2="155.91"/>
+    <line x1="156.91" y1="271.09" x2="126.77" y2="301.23"/>
+    <line x1="301.23" y1="258.23" x2="271.09" y2="228.09"/>
+    <line x1="156.91" y1="112.91" x2="126.77" y2="82.77"/>
+  </g>
+  
+  <!-- Glass cloud -->
+  <ellipse cx="278" cy="299" rx="107" ry="64" fill="rgba(255,255,255,0.85)" opacity="0.9"/>
+  <ellipse cx="235" cy="278" rx="64" ry="43" fill="rgba(255,255,255,0.95)" opacity="0.7"/>
+  
+  <!-- Glassmorphism shine -->
+  <ellipse cx="192" cy="171" rx="43" ry="128" fill="url(#shine)" opacity="0.3"/>
+  
+  <!-- WeatherGlass logo "W" -->
+  <text x="256" y="448" font-family="Arial, sans-serif" font-size="128" font-weight="bold" text-anchor="middle" fill="rgba(255,255,255,0.8)">W</text>
+  
+  <defs>
+    <!-- Background gradient (WeatherGlass colors) -->
+    <radialGradient id="bgGradient" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#60A5FA" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#1E293B" stop-opacity="0.95"/>
+    </radialGradient>
+    
+    <!-- Border gradient -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.6)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.2)"/>
+    </linearGradient>
+    
+    <!-- Shine effect -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+  </defs>
+</svg>
