@@ -1,7 +1,24 @@
 
 # WeatherGlass ⚡
 
-**WeatherGlass** est une application météo progressive moderne alliant design glassmorphisme élégant, support bilingue (FR/EN) et fonctionnalités PWA complètes.
+<div align="center">
+
+![WeatherGlass Logo](./client/public/favicon.ico)
+
+**Une application météo progressive moderne avec design glassmorphisme élégant**
+
+[![Déploiement](https://github.com/kevinbdx35/WeatherGlass/actions/workflows/deploy.yml/badge.svg)](https://github.com/kevinbdx35/WeatherGlass/actions/workflows/deploy.yml)
+[![Demo Live](https://img.shields.io/badge/Demo-Live-success?style=flat&logo=github)](https://kevinbdx35.github.io/WeatherGlass)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)]()
+
+[🌐 **Demo Live**](https://kevinbdx35.github.io/WeatherGlass) | [📖 **Documentation**](#documentation) | [🚀 **Installation**](#installation)
+
+</div>
+
+---
+
+**WeatherGlass** est une Progressive Web App météorologique moderne qui allie design glassmorphisme sophistiqué, prévisions sur 7 jours, support bilingue (FR/EN) et fonctionnalités PWA complètes.
 
 ## ✨ Fonctionnalités
 
@@ -15,6 +32,21 @@
 - ⚡ **Cache intelligent** pour les performances optimales
 - 🎭 **Animations fluides** et interface responsive
 - 📊 **Métriques détaillées** (humidité, vent, pression, visibilité)
+
+## 🎥 **Aperçu**
+
+<div align="center">
+
+### 🖥️ **Interface Bureau**
+![Demo Desktop](https://via.placeholder.com/800x500/1e293b/60a5fa?text=WeatherGlass+Desktop+Demo)
+
+### 📱 **Interface Mobile**
+<img src="https://via.placeholder.com/300x600/1e293b/60a5fa?text=WeatherGlass+Mobile" alt="Demo Mobile" width="300">
+
+### 🌙 **Mode Sombre & Glassmorphisme**
+![Glassmorphism Demo](https://via.placeholder.com/800x400/000000/ffffff?text=Glassmorphism+Design)
+
+</div>
 
 ## 📱 Fonctionnalités PWA
 
@@ -41,6 +73,17 @@
 - OpenWeatherMap (données météo)
 - Unsplash (arrière-plans dynamiques)
 - Geolocation API (position utilisateur)
+
+**Déploiement & DevOps:**
+- GitHub Actions (CI/CD automatique)
+- GitHub Pages (hébergement)
+- Service Worker (cache et offline)
+
+**Design & UX:**
+- Glassmorphism (effets de verre)
+- Responsive Design (mobile-first)
+- Animations CSS fluides
+- Thèmes adaptatifs (clair/sombre)
 
 ## 🚀 Installation et Utilisation
 
@@ -97,6 +140,19 @@ node index.js
 ```
 
 L'application sera accessible sur `http://localhost:3000`
+
+## 🌍 **Demo en Ligne**
+
+🔗 **URL de Production** : [https://kevinbdx35.github.io/WeatherGlass](https://kevinbdx35.github.io/WeatherGlass)
+
+### **Fonctionnalités Testables :**
+- ✅ Recherche de villes par nom
+- ✅ Géolocalisation automatique  
+- ✅ Basculement thème clair/sombre
+- ✅ Changement de langue FR/EN
+- ✅ Installation PWA (bouton dans le navigateur)
+- ✅ Mode hors ligne (coupez votre connexion)
+- ✅ Prévisions sur 7 jours avec animations
 
 ## 🌟 Fonctionnalités Avancées
 

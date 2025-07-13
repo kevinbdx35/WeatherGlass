@@ -1,0 +1,64 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with glassmorphism -->
+  <rect width="64" height="64" rx="16" fill="url(#background)"/>
+  
+  <!-- Glass overlay -->
+  <rect width="64" height="64" rx="16" fill="url(#glassOverlay)" opacity="0.3"/>
+  
+  <!-- Weather elements -->
+  <g transform="translate(16, 16)">
+    <!-- Sun -->
+    <circle cx="16" cy="12" r="8" fill="#FCD34D" opacity="0.9"/>
+    
+    <!-- Sun rays -->
+    <g stroke="#FCD34D" stroke-width="2" stroke-linecap="round" opacity="0.7">
+      <line x1="16" y1="0" x2="16" y2="4"/>
+      <line x1="16" y1="20" x2="16" y2="24"/>
+      <line x1="24" y1="12" x2="28" y2="12"/>
+      <line x1="4" y1="12" x2="8" y2="12"/>
+      <line x1="22.24" y1="5.76" x2="24.66" y2="3.34"/>
+      <line x1="7.34" y1="20.66" x2="9.76" y2="18.24"/>
+      <line x1="22.24" y1="18.24" x2="24.66" y2="20.66"/>
+      <line x1="7.34" y1="3.34" x2="9.76" y2="5.76"/>
+    </g>
+    
+    <!-- Cloud with glass effect -->
+    <ellipse cx="16" cy="22" rx="12" ry="6" fill="url(#cloud)" opacity="0.85"/>
+    <ellipse cx="12" cy="20" rx="8" ry="4" fill="url(#cloudHighlight)" opacity="0.6"/>
+  </g>
+  
+  <!-- Glass reflection -->
+  <ellipse cx="20" cy="16" rx="8" ry="24" fill="url(#reflection)" opacity="0.4"/>
+  
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="background">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </radialGradient>
+    
+    <!-- Glass overlay -->
+    <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.1)"/>
+    </linearGradient>
+    
+    <!-- Cloud gradient -->
+    <radialGradient id="cloud">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.7)"/>
+    </radialGradient>
+    
+    <!-- Cloud highlight -->
+    <radialGradient id="cloudHighlight">
+      <stop offset="0%" stop-color="rgba(255,255,255,1)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.3)"/>
+    </radialGradient>
+    
+    <!-- Glass reflection -->
+    <linearGradient id="reflection" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.8)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+  </defs>
+</svg>
