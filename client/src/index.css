@@ -798,16 +798,13 @@ h1{
     padding: 1.5rem;
   }
   
-  .background-attribution {
-    top: 1rem;
-    left: 1rem;
-    bottom: auto;
-    right: auto;
-    padding: 0.5rem 1rem;
+  .app-footer {
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .attribution-text {
     font-size: 0.75rem;
-    border-radius: 12px;
-    max-width: 250px;
-    z-index: 999;
   }
   
   .app-header {
@@ -1311,46 +1308,27 @@ h1{
   }
 }
 
-/* Attribution Unsplash avec glassmorphisme */
-.background-attribution {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
+/* Footer avec attribution Unsplash */
+.app-footer {
+  position: relative;
+  margin-top: 3rem;
+  padding: 1.5rem 2rem;
   background: var(--gradient-primary);
-  color: var(--text-color);
-  padding: 0.75rem 1.5rem;
-  border-radius: 16px;
-  font-size: 0.85rem;
+  border-top: 1px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  z-index: 1000;
-  opacity: 0.9;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  max-width: 300px;
+  z-index: 100;
 }
 
-.background-attribution::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--gradient-secondary);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.background-attribution:hover::before {
-  opacity: 1;
-}
-
-.background-attribution:hover {
-  opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: var(--glass-shadow-strong);
+.attribution-text {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .attribution-link {
@@ -1359,7 +1337,6 @@ h1{
   font-weight: 600;
   transition: all 0.3s ease;
   position: relative;
-  z-index: 1;
 }
 
 .attribution-link:hover {

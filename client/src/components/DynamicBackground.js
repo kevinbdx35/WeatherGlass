@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import useTranslation from '../hooks/useTranslation';
 
 const DynamicBackground = ({ 
-  currentBackground, 
-  attribution = true 
+  currentBackground
 }) => {
-  const { t } = useTranslation();
   const [displayedBackground, setDisplayedBackground] = useState(null);
   const [isChanging, setIsChanging] = useState(false);
 
@@ -33,30 +30,6 @@ const DynamicBackground = ({
             backgroundImage: `url(${displayedBackground.url})`,
           }}
         />
-      )}
-      
-      {/* Attribution Unsplash */}
-      {attribution && displayedBackground && displayedBackground.author && (
-        <div className="background-attribution">
-          {t('attribution.photoBy')}{' '}
-          <a 
-            href={displayedBackground.authorUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="attribution-link"
-          >
-            {displayedBackground.author}
-          </a>
-          {' '}{t('attribution.onUnsplash')}{' '}
-          <a 
-            href="https://unsplash.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="attribution-link"
-          >
-            Unsplash
-          </a>
-        </div>
       )}
     </>
   );

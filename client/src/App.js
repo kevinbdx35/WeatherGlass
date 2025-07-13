@@ -11,6 +11,7 @@ import InstallPrompt from './components/InstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import WeeklyForecast from './components/WeeklyForecast';
 import WeatherChart from './components/WeatherChart';
+import Footer from './components/Footer';
 import WeatherCache from './utils/weatherCache';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
@@ -240,7 +241,6 @@ function App() {
     <div className="app">
       <DynamicBackground
         currentBackground={currentBackground}
-        attribution={true}
       />
       <BackgroundParticles theme={theme} />
       
@@ -285,6 +285,8 @@ function App() {
           </>
         )}
       </div>
+      
+      <Footer />
     </div>
   );
 }
