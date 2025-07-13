@@ -288,7 +288,7 @@ function App() {
         )}
       </div>
       
-      <Footer />
+      <Footer currentBackground={currentBackground} />
     </div>
   );
 }

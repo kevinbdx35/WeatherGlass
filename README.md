@@ -29,6 +29,7 @@
 - 🌍 **Support bilingue** français/anglais avec traductions complètes
 - 📍 **Géolocalisation automatique** pour la météo locale
 - 🎨 **Design glassmorphisme** avec thèmes clair/sombre adaptatifs
+- 🌅 **Mode sombre automatique** selon l'heure (19h-7h sombre, 7h-19h clair)
 - 🖼️ **Arrière-plans dynamiques** adaptés à la météo (Unsplash)
 - 📱 **Progressive Web App** installable avec icônes personnalisées
 - ⚡ **Cache intelligent** pour les performances optimales
@@ -145,6 +146,15 @@ node index.js
 
 L'application sera accessible sur `http://localhost:3000`
 
+## 🆕 Nouveautés v1.2.0
+
+### 🌅 **Mode Sombre Automatique**
+- **Changement automatique** selon l'heure du jour
+- **Horaires optimisés** : mode sombre 19h-7h, clair 7h-19h
+- **3 modes disponibles** : Auto (par défaut), Clair, Sombre
+- **Indicateur visuel** en temps réel avec icône 🌙/☀️
+- **Vérification continue** : transition automatique toutes les minutes
+
 ## 🆕 Nouveautés v1.1.0
 
 ### 📊 **Graphiques de Tendances Météo**
@@ -192,6 +202,7 @@ L'application sera accessible sur `http://localhost:3000`
 - ✅ Graphiques de tendances météo interactifs
 - ✅ Mise à jour automatique avec indicateur 🔄
 - ✅ Prompt PWA dismissible (avec croix et "Plus tard")
+- ✅ Mode sombre automatique selon l'heure (19h-7h)
 
 ## 🌟 Fonctionnalités Avancées
 
@@ -204,11 +215,14 @@ L'application sera accessible sur `http://localhost:3000`
 - **Animations fluides** : apparition séquentielle des cartes
 - **Cache intelligent** : prévisions mises en cache pour performance
 
-### Gestion des Thèmes
-- Thème automatique selon les préférences système
-- Basculement manuel clair/sombre
-- Variables CSS pour la cohérence visuelle
-- Adaptations glassmorphisme selon le thème
+### Gestion des Thèmes Intelligente
+- **Mode automatique** selon l'heure : sombre 19h-7h, clair 7h-19h
+- **3 modes disponibles** : Auto, Clair, Sombre (cycle avec le bouton)
+- **Indicateur visuel** en mode automatique avec icône jour/nuit
+- **Vérification temps réel** : changement automatique toutes les minutes
+- **Basculement manuel** possible à tout moment
+- **Variables CSS** pour la cohérence visuelle
+- **Adaptations glassmorphisme** selon le thème
 
 ### Internationalisation et UX
 - **Traductions complètes** FR/EN (météo, interface, prévisions, graphiques)
@@ -252,6 +266,8 @@ WeatherGlass/
 │   │   │   ├── LanguageToggle.js    # Sélecteur de langue
 │   │   │   ├── InstallPrompt.js     # Prompt d'installation PWA
 │   │   │   ├── DynamicBackground.js # Arrière-plans dynamiques
+│   │   │   ├── AutoThemeIndicator.js # Indicateur mode automatique
+│   │   │   ├── Footer.js            # Footer avec attribution Unsplash
 │   │   │   └── OfflineIndicator.js  # Indicateur hors ligne
 │   │   ├── hooks/           # Hooks personnalisés
 │   │   │   ├── useTranslation.js    # Gestion i18n
@@ -264,7 +280,8 @@ WeatherGlass/
 │   │   │   ├── fr.json              # Traductions françaises
 │   │   │   └── en.json              # Traductions anglaises
 │   │   └── utils/           # Utilitaires
-│   │       └── weatherCache.js      # Système de cache
+│   │       ├── weatherCache.js      # Système de cache
+│   │       └── themeTestHelper.js   # Utilitaires test thème auto
 ├── server/                   # Backend Node.js
 └── README.md
 ```
@@ -318,9 +335,10 @@ Si vous trouvez un bug, merci de créer une issue avec :
 - [x] **Correction changement de langue instantané** ✅ *Implémenté*
 - [x] **Icônes PWA personnalisées WeatherGlass** ✅ *Implémenté*
 - [x] **Prompt PWA avec option de refus** ✅ *Implémenté*
+- [x] **Mode sombre automatique selon l'heure** ✅ *Implémenté*
+- [x] **Footer dédié pour attribution Unsplash** ✅ *Implémenté*
 - [ ] Notifications push pour les alertes météo
 - [ ] Widget personnalisable pour l'écran d'accueil
-- [ ] Mode sombre automatique selon l'heure
 - [ ] Support de plus de langues (ES, DE, IT)
 - [ ] Intégration avec d'autres sources météo
 - [ ] Radar météo interactif

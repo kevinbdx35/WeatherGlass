@@ -3,8 +3,12 @@ import { useState, useEffect, useCallback } from 'react';
 const useTheme = () => {
   // Mode peut être 'light', 'dark', ou 'auto'
   const [themeMode, setThemeMode] = useState(() => {
-    const savedTheme = localStorage.getItem('weather-app-theme');
-    return savedTheme || 'auto';
+    // Vérifier que localStorage est disponible (côté client)
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('weather-app-theme');
+      return savedTheme || 'light'; // Revenir à 'light' par défaut pour éviter les problèmes
+    }
+    return 'light';
   });
 
   // Fonction pour déterminer le thème selon l'heure
@@ -16,7 +20,8 @@ const useTheme = () => {
 
   // Thème effectif (résolu depuis le mode)
   const [effectiveTheme, setEffectiveTheme] = useState(() => {
-    if (themeMode === 'auto') {
+    // S'assurer que nous sommes côté client avant d'utiliser auto
+    if (typeof window !== 'undefined' && themeMode === 'auto') {
       return getThemeByTime();
     }
     return themeMode;
@@ -53,8 +58,11 @@ const useTheme = () => {
 
   // Appliquer le thème au DOM
   useEffect(() => {
-    localStorage.setItem('weather-app-theme', themeMode);
-    document.documentElement.setAttribute('data-theme', effectiveTheme);
+    // S'assurer qu'on est côté client
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('weather-app-theme', themeMode);
+      document.documentElement.setAttribute('data-theme', effectiveTheme);
+    }
   }, [themeMode, effectiveTheme]);
 
   // Fonction pour cycler entre les modes : auto -> light -> dark -> auto
