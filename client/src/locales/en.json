@@ -118,5 +118,33 @@
     "minTemperature": "Min Temperature",
     "windSpeed": "Wind Speed",
     "noData": "No forecast data available"
+  },
+  "dataQuality": {
+    "title": "Data Quality",
+    "source": "Source",
+    "oracleScore": "Oracle Score",
+    "confidence": "Confidence",
+    "strategy": "Strategy",
+    "lastUpdate": "Last update",
+    "warnings": "Warnings",
+    "errors": "Errors",
+    "dataValid": "Data validated",
+    "dataInvalid": "Data unreliable",
+    "confidenceDescription": "Source reliability",
+    "scoreTitle": "Quality score: {{score}}%",
+    "ariaLabel": "Data quality: {{source}}, score {{score}}%",
+    "justNow": "Just now",
+    "oneMinuteAgo": "1 minute ago",
+    "minutesAgo": "{{minutes}} minutes ago",
+    "oneHourAgo": "1 hour ago",
+    "hoursAgo": "{{hours}} hours ago",
+    "moreThanOneDay": "More than one day ago",
+    "moreWarnings": "more warnings",
+    "moreErrors": "more errors",
+    "strategies": {
+      "fallback": "Smart fallback",
+      "consensus": "Multi-source consensus",
+      "specialized": "Specialized source"
+    }
   }
 }

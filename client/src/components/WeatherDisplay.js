@@ -1,5 +1,6 @@
 import React from 'react';
 import WeatherIcon from './WeatherIcon';
+import DataQualityBadge from './DataQualityBadge';
 import useTranslation from '../hooks/useTranslation';
 
 const WeatherDisplay = ({ data }) => {
@@ -23,6 +24,9 @@ const WeatherDisplay = ({ data }) => {
 
   return (
     <div className="weather-container">
+      {/* Badge de qualité des données */}
+      <DataQualityBadge data={data} compact={true} className="weather-quality-badge" />
+      
       <div className="weather-main">
         <div className="location-info">
           <h2 className="city-name">{data.name}</h2>
