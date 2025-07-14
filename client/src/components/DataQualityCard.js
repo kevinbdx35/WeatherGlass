@@ -38,8 +38,12 @@ const DataQualityCard = ({ data, className = '' }) => {
 
   // Couleur de qualité
   const getQualityColor = (score, valid) => {
-    if (!valid || score < 0.7) return '#ef4444'; // Rouge
-    if (score < 0.9) return '#f59e0b'; // Orange
+    // Validation des types pour éviter les erreurs
+    const numericScore = typeof score === 'number' && isFinite(score) ? score : 0;
+    const booleanValid = typeof valid === 'boolean' ? valid : true;
+    
+    if (!booleanValid || numericScore < 0.7) return '#ef4444'; // Rouge
+    if (numericScore < 0.9) return '#f59e0b'; // Orange
     return '#22c55e'; // Vert
   };
 
@@ -47,14 +51,42 @@ const DataQualityCard = ({ data, className = '' }) => {
 
   // Icône de qualité
   const getQualityIcon = (score, valid) => {
-    if (!valid || score < 0.7) return '❌';
-    if (score < 0.9) return '⚠️';
+    // Validation des types pour éviter les erreurs
+    const numericScore = typeof score === 'number' && isFinite(score) ? score : 0;
+    const booleanValid = typeof valid === 'boolean' ? valid : true;
+    
+    if (!booleanValid || numericScore < 0.7) return '❌';
+    if (numericScore < 0.9) return '⚠️';
     return '✅';
   };
 
   const qualityIcon = getQualityIcon(oracleScore, isValid);
 
   // Formatage du temps
+  // Fonction utilitaire pour convertir n'importe quelle valeur en string sécurisée
+  const safeStringify = (value) => {
+    try {
+      if (value === null) return 'null';
+      if (value === undefined) return 'undefined';
+      if (typeof value === 'string') return value;
+      if (typeof value === 'number') return value.toString();
+      if (typeof value === 'boolean') return value.toString();
+      if (typeof value === 'symbol') return value.toString();
+      if (typeof value === 'function') return '[Function]';
+      if (typeof value === 'object') {
+        // Éviter les erreurs de sérialisation circulaire
+        try {
+          return JSON.stringify(value);
+        } catch (circularError) {
+          return '[Object with circular references]';
+        }
+      }
+      return String(value);
+    } catch (error) {
+      return '[Unserializable value]';
+    }
+  };
+
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
     const diffMs = now - timestamp;
@@ -111,14 +143,14 @@ const DataQualityCard = ({ data, className = '' }) => {
       <div className="consensus-sources">
         <div className="consensus-header">
           <span className="consensus-label">{t('dataQuality.consensusFrom')} {sources.length} {t('dataQuality.sources')}</span>
-          {agreement && (
+          {typeof agreement === 'number' && isFinite(agreement) && (
             <span className="consensus-agreement">
               {t('dataQuality.agreement')}: {Math.round(agreement * 100)}%
             </span>
           )}
         </div>
         <div className="consensus-sources-list">
-          {sources.map((sourceName, index) => {
+          {Array.isArray(sources) && sources.map((sourceName, index) => {
             const sourceDetails = sourceInfo[sourceName] || sourceInfo.unknown;
             return (
               <div key={index} className="consensus-source-item">
@@ -185,7 +217,7 @@ const DataQualityCard = ({ data, className = '' }) => {
             {qualityIcon}
           </span>
           <span className="quality-score" style={{ color: qualityColor }}>
-            {Math.round(oracleScore * 100)}%
+            {Math.round((typeof oracleScore === 'number' && isFinite(oracleScore) ? oracleScore : 0) * 100)}%
           </span>
         </div>
       </div>
@@ -199,12 +231,12 @@ const DataQualityCard = ({ data, className = '' }) => {
                 <div 
                   className="score-fill" 
                   style={{ 
-                    width: `${oracleScore * 100}%`, 
+                    width: `${(typeof oracleScore === 'number' && isFinite(oracleScore) ? oracleScore : 0) * 100}%`, 
                     backgroundColor: qualityColor 
                   }}
                 />
               </div>
-              <span className="score-text">{Math.round(oracleScore * 100)}%</span>
+              <span className="score-text">{Math.round((typeof oracleScore === 'number' && isFinite(oracleScore) ? oracleScore : 0) * 100)}%</span>
             </div>
           </div>
 
@@ -215,18 +247,18 @@ const DataQualityCard = ({ data, className = '' }) => {
                 <div 
                   className="score-fill" 
                   style={{ 
-                    width: `${confidence * 100}%`, 
-                    backgroundColor: confidence > 0.8 ? '#22c55e' : confidence > 0.6 ? '#f59e0b' : '#ef4444'
+                    width: `${(typeof confidence === 'number' && isFinite(confidence) ? confidence : 0) * 100}%`, 
+                    backgroundColor: (typeof confidence === 'number' && isFinite(confidence) && confidence > 0.8) ? '#22c55e' : (typeof confidence === 'number' && isFinite(confidence) && confidence > 0.6) ? '#f59e0b' : '#ef4444'
                   }}
                 />
               </div>
-              <span className="score-text">{Math.round(confidence * 100)}%</span>
+              <span className="score-text">{Math.round((typeof confidence === 'number' && isFinite(confidence) ? confidence : 0) * 100)}%</span>
             </div>
           </div>
 
           <div className="quality-metric">
             <span className="metric-label">{t('dataQuality.strategy')}</span>
-            <span className="metric-text">{t(`dataQuality.strategies.${strategy}`)}</span>
+            <span className="metric-text">{t(`dataQuality.strategies.${safeStringify(strategy)}`)}</span>
           </div>
 
           <div className="quality-metric">
@@ -252,7 +284,7 @@ const DataQualityCard = ({ data, className = '' }) => {
         </div>
 
         {/* Avertissements et erreurs */}
-        {warnings.length > 0 && (
+        {Array.isArray(warnings) && warnings.length > 0 && (
           <div className="alerts-section warnings">
             <h4>
               <span className="alert-icon">⚠️</span>
@@ -260,7 +292,12 @@ const DataQualityCard = ({ data, className = '' }) => {
             </h4>
             <ul className="alert-list">
               {warnings.slice(0, 3).map((warning, index) => (
-                <li key={index} className="alert-item">{warning}</li>
+                <li key={index} className="alert-item">
+                  {typeof warning === 'string' ? warning : 
+                   typeof warning === 'symbol' ? warning.toString() :
+                   typeof warning === 'object' ? JSON.stringify(warning) : 
+                   String(warning)}
+                </li>
               ))}
               {warnings.length > 3 && (
                 <li className="alert-more">
@@ -271,7 +308,7 @@ const DataQualityCard = ({ data, className = '' }) => {
           </div>
         )}
 
-        {errors.length > 0 && (
+        {Array.isArray(errors) && errors.length > 0 && (
           <div className="alerts-section errors">
             <h4>
               <span className="alert-icon">❌</span>
@@ -279,7 +316,12 @@ const DataQualityCard = ({ data, className = '' }) => {
             </h4>
             <ul className="alert-list">
               {errors.slice(0, 3).map((error, index) => (
-                <li key={index} className="alert-item">{error}</li>
+                <li key={index} className="alert-item">
+                  {typeof error === 'string' ? error : 
+                   typeof error === 'symbol' ? error.toString() :
+                   typeof error === 'object' ? JSON.stringify(error) : 
+                   String(error)}
+                </li>
               ))}
               {errors.length > 3 && (
                 <li className="alert-more">
