@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Layout, MainContent } from './layouts';
 import WeatherCache from './utils/weatherCache';
+import WeatherAggregator from './services/weatherAggregator';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
 import useWeatherBackground from './hooks/useWeatherBackground';
@@ -19,6 +20,47 @@ function App() {
   // Références et utilitaires
   const cache = useRef(new WeatherCache());
   const debounceTimer = useRef(null);
+  const weatherAggregator = useRef(null);
+  
+  // Initialiser l'agrégateur météo avec service legacy
+  useEffect(() => {
+    if (!weatherAggregator.current) {
+      weatherAggregator.current = new WeatherAggregator();
+      
+      // Injecter le service OpenWeatherMap existant comme fallback legacy
+      const legacyService = {
+        async getWeatherByCoords(lat, lon, language) {
+          const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+          const response = await axios.get(url);
+          return response.data;
+        },
+        async getWeatherByCity(cityName, language) {
+          const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+          const response = await axios.get(url);
+          return response.data;
+        },
+        async checkAvailability() {
+          try {
+            await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=6c340e80b8feccd3cda97f5924a86d8a`, { timeout: 5000 });
+            return true;
+          } catch {
+            return false;
+          }
+        },
+        getUsageStats() {
+          return {
+            name: 'OpenWeatherMap',
+            dailyQuota: 1000,
+            monthlyCost: 0,
+            isAvailable: true,
+            features: ['Current Weather', 'Forecasts', 'Global Coverage']
+          };
+        }
+      };
+      
+      weatherAggregator.current.setLegacyService(legacyService);
+    }
+  }, []);
   
   // Hooks personnalisés
   const { themeMode, theme, toggleTheme } = useTheme();
@@ -36,34 +78,44 @@ function App() {
     updateBackground
   } = useWeatherBackground();
 
-  // API calls - Logique métier
+  // API calls - Logique métier avec agrégation multi-sources
   const fetchWeatherByCoords = useCallback(async (lat, lon) => {
-    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+    if (!weatherAggregator.current) return;
+    
+    const cacheKey = `${lat},${lon}`;
+    const cachedData = cache.current.get(cacheKey);
+    const cachedForecast = cache.current.get(`forecast_${cacheKey}`);
+    
+    if (cachedData && cachedForecast) {
+      setData(cachedData);
+      setForecastData(cachedForecast);
+      setError('');
+      return;
+    }
 
     try {
-      const [currentResponse, forecastResponse] = await Promise.all([
-        axios.get(currentWeatherUrl),
-        axios.get(forecastUrl)
-      ]);
+      const weatherData = await weatherAggregator.current.getWeatherByCoords(lat, lon, language);
+      const forecastData = await weatherAggregator.current.getForecastData({ lat, lon }, language);
       
-      const weatherData = currentResponse.data;
-      const forecast = forecastResponse.data;
+      const dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
       
-      const dailyForecasts = processForecastData(forecast.list);
-      
-      cache.current.set(`${lat},${lon}`, weatherData);
-      cache.current.set(`forecast_${lat},${lon}`, dailyForecasts);
+      cache.current.set(cacheKey, weatherData);
+      cache.current.set(`forecast_${cacheKey}`, dailyForecasts);
       
       setData(weatherData);
       setForecastData(dailyForecasts);
       setError('');
+      
+      console.log(`Weather fetched using ${weatherData.aggregator?.usedSource || 'unknown'} source`);
     } catch (err) {
+      console.warn('All weather sources failed:', err.message);
       handleApiError(err);
     }
-  }, [language, t, handleApiError, processForecastData]);
+  }, [language]);
 
   const fetchWeatherData = useCallback(async (cityName) => {
+    if (!weatherAggregator.current) return;
+    
     const cachedData = cache.current.get(cityName);
     const cachedForecast = cache.current.get(`forecast_${cityName}`);
     
@@ -74,19 +126,11 @@ function App() {
       return;
     }
 
-    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
-
     try {
-      const [currentResponse, forecastResponse] = await Promise.all([
-        axios.get(currentWeatherUrl),
-        axios.get(forecastUrl)
-      ]);
+      const weatherData = await weatherAggregator.current.getWeatherByCity(cityName, language);
+      const forecastData = await weatherAggregator.current.getForecastData(cityName, language);
       
-      const weatherData = currentResponse.data;
-      const forecast = forecastResponse.data;
-      
-      const dailyForecasts = processForecastData(forecast.list);
+      const dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
       
       cache.current.set(cityName, weatherData);
       cache.current.set(`forecast_${cityName}`, dailyForecasts);
@@ -94,19 +138,24 @@ function App() {
       setData(weatherData);
       setForecastData(dailyForecasts);
       setError('');
+      
+      console.log(`Weather fetched using ${weatherData.aggregator?.usedSource || 'unknown'} source`);
     } catch (err) {
+      console.warn('All weather sources failed:', err.message);
       handleApiError(err);
     }
-  }, [language, t, handleApiError, processForecastData]);
+  }, [language]);
 
-  // Gestion des erreurs API
+  // Gestion des erreurs API avec multi-sources
   const handleApiError = useCallback((err) => {
-    if (err.response?.status === 404) {
+    if (err.message?.includes('City not found') || err.message?.includes('not found')) {
       setError(t('search.errors.cityNotFound'));
-    } else if (err.response?.status === 401) {
+    } else if (err.message?.includes('Invalid API key') || err.response?.status === 401) {
       setError(t('search.errors.authError'));
-    } else if (err.code === 'NETWORK_ERROR') {
+    } else if (err.code === 'NETWORK_ERROR' || err.message?.includes('Network Error')) {
       setError(t('search.errors.networkError'));
+    } else if (err.message?.includes('All weather services failed')) {
+      setError('Tous les services météo sont indisponibles. Veuillez réessayer plus tard.');
     } else {
       setError(t('common.error'));
     }
