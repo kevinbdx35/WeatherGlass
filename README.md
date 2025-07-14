@@ -10,7 +10,7 @@
 [![Déploiement](https://github.com/kevinbdx35/WeatherGlass/actions/workflows/deploy.yml/badge.svg)](https://github.com/kevinbdx35/WeatherGlass/actions/workflows/deploy.yml)
 [![Demo Live](https://img.shields.io/badge/Demo-Live-success?style=flat&logo=github)](https://kevinbdx35.github.io/WeatherGlass)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Version-2.1.0-brightgreen.svg)]()
 
 [🌐 **Demo Live**](https://kevinbdx35.github.io/WeatherGlass) | [📖 **Documentation**](#documentation) | [🚀 **Installation**](#installation)
 
@@ -154,6 +154,39 @@ node index.js
 
 L'application sera accessible sur `http://localhost:3000`
 
+## 🆕 Nouveautés v2.1.0
+
+### 🎨 **Refonte UI/UX Majeure**
+- **Interface modernisée** : Design épuré et professionnel
+- **Glassmorphisme optimisé** : Effets visuels plus subtils et élégants
+- **Typographie améliorée** : Hiérarchie visuelle claire avec polices optimisées
+- **Micro-interactions fluides** : Animations de 0.2s pour une réactivité optimale
+- **Palette de couleurs harmonisée** : Contraste et lisibilité améliorés
+
+### 📱 **Ergonomie Mobile Optimisée**
+- **Touch targets étendus** : 44px minimum pour une navigation tactile confortable
+- **Layout responsive revu** : Adaptation parfaite aux écrans mobiles
+- **Interface de recherche modernisée** : Input avec bouton clear et focus states
+- **Navigation intuitive** : Feedback visuel immédiat sur toutes les interactions
+
+### ⚡ **Expérience Utilisateur Améliorée**
+- **États de focus visuels** : Accessibilité keyboard améliorée
+- **Loading states subtils** : Indicateurs visuels non-intrusifs
+- **Transitions fluides** : Animations réduites pour plus de réactivité
+- **Feedback interactif** : Clear button, hover states, progress indicators
+
+### 🛡️ **Robustesse & Sécurité**
+- **Tests de sécurité critiques** : 12 tests de safety pour prévenir les crashes
+- **Gestion d'erreurs bulletproof** : Protection contre tous types d'erreurs JS
+- **Validation de types stricte** : Prévention des erreurs de runtime
+- **Build automatique sécurisé** : Tests de safety avant chaque build
+
+### ♿ **Accessibilité Renforcée**
+- **Focus visible** : Contours clairs pour navigation clavier
+- **Reduced motion** : Respect des préférences utilisateur
+- **Contraste optimisé** : Meilleure lisibilité en mode clair/sombre
+- **ARIA labels** : Support lecteurs d'écran amélioré
+
 ## 🆕 Nouveautés v2.0.0
 
 ### 🌍 **Système Multi-Sources Météo**
@@ -173,12 +206,12 @@ L'application sera accessible sur `http://localhost:3000`
 ### 🏗️ **Architecture Moderne**
 - **Layout system** avec séparation des préoccupations
 - **Services modulaires** pour chaque source météo
-- **Tests complets** : 65+ tests pour fiabilité maximale
+- **Tests complets** : 75+ tests pour fiabilité maximale
 - **Gestion d'erreurs robuste** avec messages contextuels
 - **Footer sticky** corrigé avec CSS flexbox
 
 ### 🧪 **Tests et Fiabilité**
-- **65 tests unitaires** et d'intégration passants
+- **75+ tests unitaires** et d'intégration passants
 - **Coverage critique** pour éviter les régressions de déploiement
 - **Tests de fallback** pour chaque source météo
 - **Mocking avancé** d'axios et des services externes
@@ -289,9 +322,11 @@ L'application sera accessible sur `http://localhost:3000`
 - **Appels API parallèles** optimisés avec Promise.allSettled
 - **Optimisations React** avancées (memo, callbacks, lazy loading)
 - **Compression et minification** avec tree shaking
-- **Tests de charge** : 65+ tests couvrant tous les cas d'erreur
+- **Tests de charge** : 75+ tests couvrant tous les cas d'erreur
+- **Tests de sécurité** : 12 tests critiques pour prévenir les crashes
 - **Monitoring proactif** : détection automatique des pannes de service
 - **Récupération d'erreur** : retry automatique avec backoff exponentiel
+- **UI/UX moderne** : Interface refaite avec micro-interactions fluides
 
 ### Accessibilité
 - Support clavier complet
@@ -419,7 +454,9 @@ Si vous trouvez un bug, merci de créer une issue avec :
 - [x] **Agrégation avec fallback automatique** ✅ *Implémenté v2.0.0*
 - [x] **Alertes officielles Météo France** ✅ *Implémenté v2.0.0*
 - [x] **Architecture moderne avec tests** ✅ *Implémenté v2.0.0*
-- [x] **65+ tests unitaires et d'intégration** ✅ *Implémenté v2.0.0*
+- [x] **75+ tests unitaires et d'intégration** ✅ *Implémenté v2.0.0*
+- [x] **Refonte UI/UX moderne et accessible** ✅ *Implémenté v2.1.0*
+- [x] **12 tests de sécurité critiques** ✅ *Implémenté v2.1.0*
 - [ ] Notifications push pour les alertes météo
 - [ ] Widget personnalisable pour l'écran d'accueil
 - [ ] Support de plus de langues (ES, DE, IT)
