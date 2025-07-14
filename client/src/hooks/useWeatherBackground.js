@@ -55,7 +55,7 @@ const useWeatherBackground = () => {
         scheduleSunTimers(sunData);
       }
     }
-  }, []);
+  }, [scheduleSunTimers]);
 
   // Programmer les timers pour les changements automatiques
   const scheduleSunTimers = useCallback((sunData) => {
@@ -69,23 +69,19 @@ const useWeatherBackground = () => {
     
     // Calculer le prochain événement solaire
     let nextEventTime = null;
-    let nextEventType = null;
     
     if (now < sunriseTime) {
       // Avant le lever du soleil
       nextEventTime = sunriseTime;
-      nextEventType = 'sunrise';
     } else if (now < sunsetTime) {
       // Entre lever et coucher du soleil
       nextEventTime = sunsetTime;
-      nextEventType = 'sunset';
     } else {
       // Après le coucher du soleil, programmer pour le lever du soleil du lendemain
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(6, 0, 0, 0); // Approximation pour le lendemain
       nextEventTime = tomorrow.getTime();
-      nextEventType = 'sunrise';
     }
     
     const delay = nextEventTime - now;
@@ -102,7 +98,7 @@ const useWeatherBackground = () => {
         }
       }, delay);
     }
-  }, []);
+  }, [updateBackground]);
 
   // Nettoyer les timeouts au démontage
   useEffect(() => {

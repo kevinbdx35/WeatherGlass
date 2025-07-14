@@ -142,13 +142,23 @@ h1{
 
 .app{
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   position: relative;
   color: var(--text-color);
   transition: color 0.3s ease;
   overflow-x: hidden;
+  overflow-y: hidden; /* Pas de scroll vertical sur desktop */
   display: flex;
   flex-direction: column;
+}
+
+/* Permettre le scroll sur mobile et tablettes */
+@media (max-width: 1023px) {
+  .app {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
 }
 
 /* Layout principal avec sticky footer */
@@ -157,6 +167,15 @@ h1{
   display: flex;
   flex-direction: column;
   min-height: 0; /* Pour éviter les problèmes de hauteur */
+  overflow: hidden; /* Pas de scroll sur desktop */
+}
+
+/* Permettre le scroll dans main-content sur mobile */
+@media (max-width: 1023px) {
+  .main-content {
+    overflow: visible;
+    min-height: auto;
+  }
 }
 
 /* Background statique de fallback */
@@ -752,11 +771,10 @@ h1{
 
 .container{
   max-width: 700px;
-  min-height: 700px;
+  height: 100%;
   margin: auto;
   padding: 1rem;
   position: relative;
-  top: 5%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -765,6 +783,32 @@ h1{
   animation: fadeIn 0.6s ease-out;
   flex: 1;
   gap: 1.5rem;
+  overflow-y: auto; /* Scroll interne sur desktop si nécessaire */
+}
+
+/* Content area pour le layout mobile */
+.weather-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* Sur mobile, revenir au comportement normal */
+@media (max-width: 1023px) {
+  .container {
+    height: auto;
+    min-height: 500px;
+    top: 2%;
+    overflow-y: visible;
+  }
+  
+  .weather-content {
+    overflow-y: visible;
+    height: auto;
+  }
 }
 
 @keyframes fadeIn {
@@ -2919,7 +2963,17 @@ html {
   max-width: 1600px;
   margin: 0 auto;
   padding: 2rem;
-  min-height: calc(100vh - 200px);
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sur mobile/tablette, permettre le scroll */
+@media (max-width: 1023px) {
+  .grid-container {
+    height: auto;
+    min-height: calc(100vh - 200px);
+    overflow: visible;
+  }
 }
 
 .grid-search {
@@ -2961,6 +3015,8 @@ html {
     gap: 2.5rem;
     max-width: 2000px;
     padding: 3rem;
+    height: 100%;
+    overflow: hidden;
   }
   
   .grid-quality {
@@ -2984,6 +3040,8 @@ html {
     gap: 2rem;
     max-width: 1600px;
     padding: 2rem;
+    height: 100%;
+    overflow: hidden;
   }
   
   .grid-quality {
@@ -3007,6 +3065,8 @@ html {
     gap: 1.5rem;
     max-width: 1200px;
     padding: 1.5rem;
+    height: 100%;
+    overflow: hidden;
   }
 }
 
@@ -3051,22 +3111,37 @@ html {
 .grid-container .weather-display {
   height: 100%;
   min-height: 450px;
+  overflow-y: auto;
 }
 
 .grid-container .weekly-forecast {
   height: 100%;
   min-height: 280px;
+  overflow-y: auto;
 }
 
 .grid-container .weather-chart-container {
   height: 100%;
   min-height: 350px;
   margin: 0; /* Réduire les marges dans le grid */
+  overflow-y: auto;
 }
 
 .grid-container .data-quality-card {
   height: 100%;
   min-height: 400px;
+  overflow-y: auto;
+}
+
+/* Sur mobile, désactiver les scrolls internes */
+@media (max-width: 1023px) {
+  .grid-container .weather-display,
+  .grid-container .weekly-forecast,
+  .grid-container .weather-chart-container,
+  .grid-container .data-quality-card {
+    overflow-y: visible;
+    height: auto;
+  }
 }
 
 /* Amélioration de la disposition des cartes de prévisions */
@@ -3097,6 +3172,8 @@ html {
     gap: 3rem;
     max-width: 2400px;
     padding: 3rem;
+    height: 100%;
+    overflow: hidden;
   }
   
   .grid-quality {

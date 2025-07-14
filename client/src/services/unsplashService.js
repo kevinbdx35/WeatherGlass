@@ -162,13 +162,14 @@ class UnsplashService {
 
   // Rechercher une image selon les conditions météo
   async searchWeatherImage(weatherCondition, city = '', sunData = null) {
+    // Extraire les données solaires si disponibles
+    const sunrise = sunData?.sunrise || null;
+    const sunset = sunData?.sunset || null;
+    const timezone = sunData?.timezone || 0;
+    
+    const timeOfDay = this.getTimeOfDay(sunrise, sunset, timezone);
+    
     try {
-      // Extraire les données solaires si disponibles
-      const sunrise = sunData?.sunrise || null;
-      const sunset = sunData?.sunset || null;
-      const timezone = sunData?.timezone || 0;
-      
-      const timeOfDay = this.getTimeOfDay(sunrise, sunset, timezone);
       const keywords = this.getWeatherKeywords(weatherCondition, timeOfDay);
       const searchQuery = city ? `${keywords} ${city}` : keywords;
       
