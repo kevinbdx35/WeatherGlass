@@ -5,6 +5,14 @@
     "locationLoading": "Géolocalisation...",
     "searchInProgress": "Recherche en cours...",
     "autoRefreshActive": "Mise à jour automatique activée (toutes les 20 min)",
+    "geolocation": {
+      "detecting": "Détection de votre position",
+      "allowAccess": "Veuillez autoriser l'accès à votre localisation pour obtenir la météo de votre région",
+      "errorTitle": "Géolocalisation indisponible",
+      "manualSearch": "Vous pouvez rechercher une ville manuellement.",
+      "retry": "Réessayer",
+      "manualMode": "Recherche manuelle"
+    },
     "errors": {
       "emptyInput": "Veuillez entrer une ville",
       "cityNotFound": "Ville non trouvée",

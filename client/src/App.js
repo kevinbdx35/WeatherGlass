@@ -116,6 +116,25 @@ function App() {
     }
   }, [geoError, setError]);
 
+  // Effet pour la géolocalisation automatique au lancement
+  useEffect(() => {
+    // Déclencher la géolocalisation automatiquement au premier chargement
+    // Seulement si on n'a pas déjà des données météo et que la géolocalisation est supportée
+    if (!data.name && isGeoSupported && !geoLocation && !geoLoading && !geoError) {
+      getCurrentLocation();
+    }
+  }, [data.name, isGeoSupported, geoLocation, geoLoading, geoError, getCurrentLocation]);
+
+  // Gestionnaires pour la géolocalisation d'erreur
+  const handleRetryGeolocation = useCallback(() => {
+    getCurrentLocation();
+  }, [getCurrentLocation]);
+
+  const handleSkipGeolocation = useCallback(() => {
+    // Simplement permettre à l'utilisateur de continuer sans géolocalisation
+    // L'interface SearchInput sera disponible pour la recherche manuelle
+  }, []);
+
   // Effet pour la mise à jour de l'arrière-plan
   useEffect(() => {
     if (data.weather?.[0] && data.name) {
@@ -147,7 +166,10 @@ function App() {
         searchError={currentError}
         onLocationClick={handleLocationClick}
         locationLoading={geoLoading}
+        locationError={geoError}
         isLocationSupported={isGeoSupported}
+        onRetryGeolocation={handleRetryGeolocation}
+        onSkipGeolocation={handleSkipGeolocation}
         weatherData={data}
         forecastData={forecastData}
         loading={isLoading}

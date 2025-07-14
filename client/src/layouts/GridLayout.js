@@ -5,6 +5,8 @@ import WeeklyForecast from '../components/WeeklyForecast';
 import WeatherChart from '../components/WeatherChart';
 import DataQualityCard from '../components/DataQualityCard';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import GeolocationLoading from '../components/GeolocationLoading';
+import GeolocationError from '../components/GeolocationError';
 
 /**
  * Layout en grille pour les grands écrans (≥1024px)
@@ -24,7 +26,10 @@ const GridLayout = ({
   searchError,
   onLocationClick,
   locationLoading,
+  locationError,
   isLocationSupported,
+  onRetryGeolocation,
+  onSkipGeolocation,
   
   // Weather data props
   weatherData,
@@ -47,7 +52,19 @@ const GridLayout = ({
         />
       </div>
       
-      {loading ? (
+      {locationError ? (
+        <div className="grid-loading">
+          <GeolocationError 
+            error={locationError}
+            onRetry={onRetryGeolocation}
+            onSkip={onSkipGeolocation}
+          />
+        </div>
+      ) : locationLoading && !weatherData.name ? (
+        <div className="grid-loading">
+          <GeolocationLoading />
+        </div>
+      ) : loading ? (
         <div className="grid-loading">
           <LoadingSkeleton />
         </div>

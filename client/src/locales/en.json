@@ -5,6 +5,14 @@
     "locationLoading": "Getting location...",
     "searchInProgress": "Searching...",
     "autoRefreshActive": "Auto-refresh enabled (every 20 min)",
+    "geolocation": {
+      "detecting": "Detecting your location",
+      "allowAccess": "Please allow location access to get weather for your area",
+      "errorTitle": "Geolocation unavailable",
+      "manualSearch": "You can search for a city manually.",
+      "retry": "Retry",
+      "manualMode": "Manual search"
+    },
     "errors": {
       "emptyInput": "Please enter a city",
       "cityNotFound": "City not found",

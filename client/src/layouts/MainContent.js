@@ -4,6 +4,8 @@ import WeatherDisplay from '../components/WeatherDisplay';
 import WeeklyForecast from '../components/WeeklyForecast';
 import WeatherChart from '../components/WeatherChart';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import GeolocationLoading from '../components/GeolocationLoading';
+import GeolocationError from '../components/GeolocationError';
 import GridLayout from './GridLayout';
 
 const MainContent = ({
@@ -15,7 +17,10 @@ const MainContent = ({
   searchError,
   onLocationClick,
   locationLoading,
+  locationError,
   isLocationSupported,
+  onRetryGeolocation,
+  onSkipGeolocation,
   
   // Weather data props
   weatherData,
@@ -47,7 +52,10 @@ const MainContent = ({
         searchError={searchError}
         onLocationClick={onLocationClick}
         locationLoading={locationLoading}
+        locationError={locationError}
         isLocationSupported={isLocationSupported}
+        onRetryGeolocation={onRetryGeolocation}
+        onSkipGeolocation={onSkipGeolocation}
         weatherData={weatherData}
         forecastData={forecastData}
         loading={loading}
@@ -70,7 +78,15 @@ const MainContent = ({
       />
       
       <div className="weather-content">
-        {loading ? (
+        {locationError ? (
+          <GeolocationError 
+            error={locationError}
+            onRetry={onRetryGeolocation}
+            onSkip={onSkipGeolocation}
+          />
+        ) : locationLoading && !weatherData.name ? (
+          <GeolocationLoading />
+        ) : loading ? (
           <LoadingSkeleton />
         ) : (
           <>
