@@ -499,13 +499,25 @@ class WeatherAggregator {
       { service: this.services.primary, name: 'primary' },
       { service: this.services.backup, name: 'backup' },
       { service: this.services.legacy, name: 'legacy' }
-    ];
+    ].filter(s => s.service); // Filtrer les services non disponibles
+
+    // Si aucun service n'est disponible, fallback vers la stratégie de fallback
+    if (sources.length === 0) {
+      console.warn('No services available for consensus, falling back to fallback strategy');
+      return await this.getFallbackWeather(lat, lon, language);
+    }
 
     const results = await Promise.allSettled(
-      sources.filter(s => s.service).map(async ({ service, name }) => {
-        this.usageStats.calls[name]++;
-        const data = await service.getWeatherByCoords(lat, lon, language);
-        return { data, source: name };
+      sources.map(async ({ service, name }) => {
+        try {
+          this.usageStats.calls[name]++;
+          const data = await service.getWeatherByCoords(lat, lon, language);
+          return { data, source: name };
+        } catch (error) {
+          this.usageStats.errors[name]++;
+          console.warn(`Service ${name} failed in consensus mode:`, error.message);
+          throw error;
+        }
       })
     );
 
@@ -514,7 +526,8 @@ class WeatherAggregator {
       .map(r => r.value);
 
     if (successful.length === 0) {
-      throw new Error('All weather services failed for consensus');
+      console.warn('All services failed in consensus mode, falling back to fallback strategy');
+      return await this.getFallbackWeather(lat, lon, language);
     }
 
     // Calculer consensus
