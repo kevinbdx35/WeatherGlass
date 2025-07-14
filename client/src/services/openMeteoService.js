@@ -44,7 +44,23 @@ class OpenMeteoService {
       };
 
       const response = await axios.get(url, { params });
-      return this.transformCurrentWeatherData(response.data, lat, lon);
+      const weatherData = this.transformCurrentWeatherData(response.data, lat, lon);
+      
+      // Essayer de récupérer le nom de la ville via géocodage inverse
+      try {
+        const cityName = await this.reverseGeocode(lat, lon);
+        if (cityName) {
+          weatherData.name = cityName.name;
+          if (cityName.country) {
+            weatherData.sys = { country: cityName.country };
+          }
+        }
+      } catch (reverseError) {
+        console.warn('Reverse geocoding failed:', reverseError.message);
+        // Garder le nom par défaut "Location"
+      }
+      
+      return weatherData;
     } catch (error) {
       console.warn('Open-Meteo API error:', error.message);
       throw new Error(`Open-Meteo: ${error.message}`);
@@ -58,10 +74,60 @@ class OpenMeteoService {
     try {
       // D'abord, géocoder la ville
       const coords = await this.geocodeCity(cityName);
-      return await this.getWeatherByCoords(coords.lat, coords.lon, language);
+      const weatherData = await this.getWeatherByCoords(coords.lat, coords.lon, language);
+      
+      // Remplacer le nom générique par le nom de la ville géocodée
+      weatherData.name = coords.name || cityName;
+      if (coords.country) {
+        weatherData.sys = { country: coords.country };
+      }
+      
+      return weatherData;
     } catch (error) {
       console.warn('Open-Meteo geocoding error:', error.message);
       throw new Error(`Open-Meteo geocoding: ${error.message}`);
+    }
+  }
+
+  /**
+   * Géocodage inverse pour obtenir le nom de la ville à partir des coordonnées
+   */
+  async reverseGeocode(lat, lon) {
+    try {
+      // Utiliser Nominatim (OpenStreetMap) pour le géocodage inverse gratuit
+      const url = 'https://nominatim.openstreetmap.org/reverse';
+      const params = {
+        format: 'json',
+        lat: lat,
+        lon: lon,
+        zoom: 10,
+        addressdetails: 1
+      };
+
+      const response = await axios.get(url, { 
+        params,
+        headers: {
+          'User-Agent': 'WeatherGlass/1.0 (https://github.com/kevinbdx35/WeatherGlass)'
+        }
+      });
+      
+      if (response.data && response.data.address) {
+        const address = response.data.address;
+        // Prioriser ville, puis village, puis suburb
+        const cityName = address.city || address.town || address.village || address.suburb || address.hamlet;
+        const country = address.country_code ? address.country_code.toUpperCase() : null;
+        
+        if (cityName) {
+          return {
+            name: cityName,
+            country: country
+          };
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      throw new Error(`Reverse geocoding failed: ${error.message}`);
     }
   }
 
