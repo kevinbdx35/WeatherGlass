@@ -191,3 +191,6 @@ client/build/
 
 # OS
 Thumbs.db
+
+# Development documentation (internal)
+CLAUDE.md
