@@ -4,6 +4,7 @@ import WeatherDisplay from '../components/WeatherDisplay';
 import WeeklyForecast from '../components/WeeklyForecast';
 import WeatherChart from '../components/WeatherChart';
 import DataQualityCard from '../components/DataQualityCard';
+import WeatherDetailsStack from '../components/WeatherDetailsStack';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import GeolocationLoading from '../components/GeolocationLoading';
 import GeolocationError from '../components/GeolocationError';
@@ -12,9 +13,11 @@ import GeolocationError from '../components/GeolocationError';
  * Layout en grille pour les grands écrans (≥1024px)
  * Organisation des composants météo en zones dédiées :
  * - Zone recherche (haut)
- * - Zone météo actuelle (principale)
+ * - Zone météo actuelle (principale gauche)
+ * - Zone détails météo empilés (droite haut)
  * - Zone prévisions 7 jours (sous la carte principale)
- * - Zone graphiques et qualité des données (bas)
+ * - Zone qualité des données (droite milieu)
+ * - Zone graphiques/tendances (droite bas)
  */
 const GridLayout = ({
   // Search props
@@ -74,22 +77,27 @@ const GridLayout = ({
             <WeatherDisplay data={weatherData} />
           </div>
           
+          {/* Détails météo empilés - droite haut */}
+          <div className="grid-details">
+            <WeatherDetailsStack data={weatherData} />
+          </div>
+          
           {/* Prévisions 7 jours - sous la carte principale */}
           <div className="grid-forecast">
             <WeeklyForecast forecastData={forecastData} />
           </div>
           
-          {/* Graphiques - zone bas gauche */}
+          {/* Carte de qualité des données - droite milieu */}
+          <div className="grid-quality">
+            <DataQualityCard data={weatherData} />
+          </div>
+          
+          {/* Graphiques/tendances - droite bas */}
           <div className="grid-charts">
             <WeatherChart 
               forecastData={forecastData} 
               currentData={weatherData} 
             />
-          </div>
-          
-          {/* Carte de qualité des données - zone bas droite */}
-          <div className="grid-quality">
-            <DataQualityCard data={weatherData} />
           </div>
         </>
       )}

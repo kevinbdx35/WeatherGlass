@@ -2955,10 +2955,11 @@ html {
   display: grid;
   grid-template-areas: 
     "search search search search"
-    "current current quality charts"
-    "forecast forecast quality charts";
+    "current current details details"
+    "forecast forecast quality quality"
+    "forecast forecast charts charts";
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  grid-template-rows: auto 1fr 1fr;
+  grid-template-rows: auto 1fr auto auto;
   gap: 2rem;
   max-width: 1600px;
   margin: 0 auto;
@@ -2988,14 +2989,16 @@ html {
   grid-area: forecast;
 }
 
+.grid-details {
+  grid-area: details;
+}
+
 .grid-quality {
   grid-area: quality;
-  grid-row: 2 / 4; /* Étend sur les lignes current et forecast */
 }
 
 .grid-charts {
   grid-area: charts;
-  grid-row: 2 / 4; /* Étend sur les lignes current et forecast */
 }
 
 .grid-loading {
@@ -3007,24 +3010,17 @@ html {
 @media (min-width: 1800px) {
   .grid-container {
     grid-template-areas: 
-      "search search search search search"
-      "current current quality charts charts"
-      "forecast forecast quality charts charts";
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
+      "search search search search search search"
+      "current current current details details details"
+      "forecast forecast forecast quality quality quality"
+      "forecast forecast forecast charts charts charts";
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto auto;
     gap: 2.5rem;
     max-width: 2000px;
     padding: 3rem;
     height: 100%;
     overflow: hidden;
-  }
-  
-  .grid-quality {
-    grid-row: 2 / 4; /* Étend sur current et forecast */
-  }
-  
-  .grid-charts {
-    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
@@ -3032,24 +3028,17 @@ html {
 @media (min-width: 1400px) and (max-width: 1799px) {
   .grid-container {
     grid-template-areas: 
-      "search search search search"
-      "current current quality charts"
-      "forecast forecast quality charts";
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
+      "search search search search search"
+      "current current current details details"
+      "forecast forecast forecast quality quality"
+      "forecast forecast forecast charts charts";
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto auto;
     gap: 2rem;
     max-width: 1600px;
     padding: 2rem;
     height: 100%;
     overflow: hidden;
-  }
-  
-  .grid-quality {
-    grid-row: 2 / 4; /* Étend sur current et forecast */
-  }
-  
-  .grid-charts {
-    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
@@ -3057,11 +3046,12 @@ html {
 @media (min-width: 1024px) and (max-width: 1399px) {
   .grid-container {
     grid-template-areas: 
-      "search search search"
-      "current current quality"
-      "forecast forecast charts";
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
+      "search search search search"
+      "current current details details"
+      "forecast forecast quality quality"
+      "forecast forecast charts charts";
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto auto;
     gap: 1.5rem;
     max-width: 1200px;
     padding: 1.5rem;
@@ -3122,15 +3112,102 @@ html {
 
 .grid-container .weather-chart-container {
   height: 100%;
-  min-height: 350px;
-  margin: 0; /* Réduire les marges dans le grid */
+  min-height: 200px; /* Plus petit pour s'adapter en bas */
+  margin: 0;
   overflow-y: auto;
 }
 
 .grid-container .data-quality-card {
   height: 100%;
-  min-height: 400px;
+  min-height: 200px; /* Plus petit pour s'adapter au milieu */
   overflow-y: auto;
+}
+
+/* Nouveau conteneur pour les détails météo empilés */
+.grid-container .weather-details-stack {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* === WEATHER DETAILS STACK === */
+.weather-details-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  padding: 1.5rem;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.detail-stack-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  min-height: 60px;
+}
+
+.detail-stack-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(4px);
+}
+
+.detail-stack-item.priority-high {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.detail-stack-item.priority-medium {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.detail-stack-item.priority-low {
+  background: rgba(255, 255, 255, 0.04);
+  opacity: 0.9;
+}
+
+.stack-item-icon {
+  font-size: 1.5rem;
+  min-width: 32px;
+  text-align: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.stack-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stack-item-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stack-item-value {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.detail-stack-item.priority-high .stack-item-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-color);
 }
 
 /* Sur mobile, désactiver les scrolls internes */
@@ -3138,9 +3215,34 @@ html {
   .grid-container .weather-display,
   .grid-container .weekly-forecast,
   .grid-container .weather-chart-container,
-  .grid-container .data-quality-card {
+  .grid-container .data-quality-card,
+  .grid-container .weather-details-stack {
     overflow-y: visible;
     height: auto;
+  }
+  
+  /* Adapter le WeatherDetailsStack pour mobile */
+  .weather-details-stack {
+    height: auto;
+    min-height: auto;
+  }
+  
+  .detail-stack-item {
+    min-height: 50px;
+    padding: 0.75rem;
+  }
+  
+  .stack-item-icon {
+    font-size: 1.25rem;
+    min-width: 28px;
+  }
+  
+  .stack-item-value {
+    font-size: 1rem;
+  }
+  
+  .detail-stack-item.priority-high .stack-item-value {
+    font-size: 1.1rem;
   }
 }
 
@@ -3164,24 +3266,17 @@ html {
 @media (min-width: 2000px) {
   .grid-container {
     grid-template-areas: 
-      "search search search search search search"
-      "current current current quality charts charts"
-      "forecast forecast forecast quality charts charts";
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
+      "search search search search search search search search"
+      "current current current current details details details details"
+      "forecast forecast forecast forecast quality quality quality quality"
+      "forecast forecast forecast forecast charts charts charts charts";
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto auto;
     gap: 3rem;
     max-width: 2400px;
     padding: 3rem;
     height: 100%;
     overflow: hidden;
-  }
-  
-  .grid-quality {
-    grid-row: 2 / 4; /* Étend sur current et forecast */
-  }
-  
-  .grid-charts {
-    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
