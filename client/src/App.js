@@ -137,11 +137,7 @@ function App() {
 
   // API calls - Logique métier avec agrégation multi-sources
   const fetchWeatherByCoords = useCallback(async (lat, lon) => {
-    console.log('🌍 fetchWeatherByCoords called with:', { lat, lon });
-    if (!weatherAggregator.current) {
-      console.log('❌ WeatherAggregator not initialized');
-      return;
-    }
+    if (!weatherAggregator.current) return;
     
     const cacheKey = `${lat},${lon}`;
     const cachedData = cache.current.get(cacheKey);
@@ -155,15 +151,29 @@ function App() {
     }
 
     try {
-      console.log('🚀 Calling aggregator.getWeatherByCoords...');
       const weatherData = await weatherAggregator.current.getWeatherByCoords(lat, lon, language);
-      console.log('📦 Weather data received:', weatherData);
       
       // Essayer d'obtenir les prévisions, avec fallback vers les données existantes si échec
       let dailyForecasts = [];
       try {
         const forecastData = await weatherAggregator.current.getForecastData({ lat, lon }, language);
-        dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
+        
+        // Transformer les données au format attendu par les composants
+        if (Array.isArray(forecastData)) {
+          dailyForecasts = forecastData.map(forecast => ({
+            date: new Date(forecast.dt * 1000), // Convertir timestamp en Date
+            maxTemp: forecast.main.temp_max,
+            minTemp: forecast.main.temp_min,
+            avgTemp: forecast.main.temp,
+            description: forecast.weather[0].description,
+            icon: forecast.weather[0].icon,
+            main: forecast.weather[0].main,
+            humidity: forecast.main.humidity || 50,
+            windSpeed: forecast.wind.speed || 0
+          }));
+        } else {
+          dailyForecasts = processForecastData(forecastData.list || []);
+        }
       } catch (forecastError) {
         console.warn('Forecast data unavailable, using weather data only');
         // Si les prévisions échouent, on continue avec juste les données météo actuelles
@@ -184,11 +194,7 @@ function App() {
   }, [language]);
 
   const fetchWeatherData = useCallback(async (cityName) => {
-    console.log('🏙️ fetchWeatherData called with:', cityName);
-    if (!weatherAggregator.current) {
-      console.log('❌ WeatherAggregator not initialized');
-      return;
-    }
+    if (!weatherAggregator.current) return;
     
     const cachedData = cache.current.get(cityName);
     const cachedForecast = cache.current.get(`forecast_${cityName}`);
@@ -207,7 +213,23 @@ function App() {
       let dailyForecasts = [];
       try {
         const forecastData = await weatherAggregator.current.getForecastData(cityName, language);
-        dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
+        
+        // Transformer les données au format attendu par les composants
+        if (Array.isArray(forecastData)) {
+          dailyForecasts = forecastData.map(forecast => ({
+            date: new Date(forecast.dt * 1000), // Convertir timestamp en Date
+            maxTemp: forecast.main.temp_max,
+            minTemp: forecast.main.temp_min,
+            avgTemp: forecast.main.temp,
+            description: forecast.weather[0].description,
+            icon: forecast.weather[0].icon,
+            main: forecast.weather[0].main,
+            humidity: forecast.main.humidity || 50,
+            windSpeed: forecast.wind.speed || 0
+          }));
+        } else {
+          dailyForecasts = processForecastData(forecastData.list || []);
+        }
       } catch (forecastError) {
         console.warn('Forecast data unavailable, using weather data only');
         // Si les prévisions échouent, on continue avec juste les données météo actuelles
