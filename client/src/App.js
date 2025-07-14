@@ -137,7 +137,11 @@ function App() {
 
   // API calls - Logique métier avec agrégation multi-sources
   const fetchWeatherByCoords = useCallback(async (lat, lon) => {
-    if (!weatherAggregator.current) return;
+    console.log('🌍 fetchWeatherByCoords called with:', { lat, lon });
+    if (!weatherAggregator.current) {
+      console.log('❌ WeatherAggregator not initialized');
+      return;
+    }
     
     const cacheKey = `${lat},${lon}`;
     const cachedData = cache.current.get(cacheKey);
@@ -151,7 +155,9 @@ function App() {
     }
 
     try {
+      console.log('🚀 Calling aggregator.getWeatherByCoords...');
       const weatherData = await weatherAggregator.current.getWeatherByCoords(lat, lon, language);
+      console.log('📦 Weather data received:', weatherData);
       
       // Essayer d'obtenir les prévisions, avec fallback vers les données existantes si échec
       let dailyForecasts = [];
@@ -178,7 +184,11 @@ function App() {
   }, [language]);
 
   const fetchWeatherData = useCallback(async (cityName) => {
-    if (!weatherAggregator.current) return;
+    console.log('🏙️ fetchWeatherData called with:', cityName);
+    if (!weatherAggregator.current) {
+      console.log('❌ WeatherAggregator not initialized');
+      return;
+    }
     
     const cachedData = cache.current.get(cityName);
     const cachedForecast = cache.current.get(`forecast_${cityName}`);

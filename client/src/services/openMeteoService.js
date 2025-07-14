@@ -105,15 +105,21 @@ class OpenMeteoService {
     const daily = data.daily;
 
     // Mapper les codes météo Open-Meteo vers OpenWeatherMap
-    const weatherCode = this.mapWeatherCode(current.weather_code);
+    let weatherCodeToUse = this.mapWeatherCode(current.weather_code);
+    
+    // Vérification de sécurité
+    if (!weatherCodeToUse) {
+      console.warn('Weather code mapping failed for:', current.weather_code);
+      weatherCodeToUse = { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' };
+    }
 
     return {
       coord: { lat, lon },
       weather: [{
-        id: weatherCode.id,
-        main: weatherCode.main,
-        description: weatherCode.description,
-        icon: weatherCode.icon
+        id: weatherCodeToUse.id,
+        main: weatherCodeToUse.main,
+        description: weatherCodeToUse.description,
+        icon: weatherCodeToUse.icon
       }],
       main: {
         temp: Math.round(current.temperature_2m),
@@ -152,7 +158,13 @@ class OpenMeteoService {
 
     for (let i = 0; i < Math.min(7, daily.time.length); i++) {
       const date = new Date(daily.time[i]);
-      const weatherCode = this.mapWeatherCode(daily.weather_code[i]);
+      let weatherCode = this.mapWeatherCode(daily.weather_code[i]);
+      
+      // Vérification de sécurité
+      if (!weatherCode) {
+        console.warn('Weather code mapping failed for forecast:', daily.weather_code[i]);
+        weatherCode = { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' };
+      }
 
       forecasts.push({
         dt: Math.floor(date.getTime() / 1000),
@@ -160,7 +172,8 @@ class OpenMeteoService {
         main: {
           temp: Math.round((daily.temperature_2m_max[i] + daily.temperature_2m_min[i]) / 2),
           temp_max: Math.round(daily.temperature_2m_max[i]),
-          temp_min: Math.round(daily.temperature_2m_min[i])
+          temp_min: Math.round(daily.temperature_2m_min[i]),
+          humidity: 60 // Valeur par défaut, Open-Meteo gratuit ne fournit pas l'humidité quotidienne
         },
         weather: [{
           id: weatherCode.id,
@@ -182,6 +195,11 @@ class OpenMeteoService {
    * Mapping des codes météo Open-Meteo vers format OpenWeatherMap
    */
   mapWeatherCode(code) {
+    if (code === undefined || code === null) {
+      console.warn('Weather code is undefined or null');
+      return null;
+    }
+    
     const weatherMap = {
       0: { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
       1: { id: 801, main: 'Clouds', description: 'mainly clear', icon: '01d' },

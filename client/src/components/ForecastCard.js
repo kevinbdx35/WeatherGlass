@@ -9,6 +9,11 @@ const ForecastCard = ({ forecast, isToday }) => {
       return t('forecast.today', 'Aujourd\'hui');
     }
     
+    // Vérifier si date est valide
+    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+      return 'Date invalide';
+    }
+    
     return date.toLocaleDateString(t('common.locale', 'fr-FR'), {
       weekday: 'short',
       month: 'short',

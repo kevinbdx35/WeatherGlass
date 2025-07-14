@@ -132,6 +132,33 @@ class WeatherAggregator {
   }
 
   /**
+   * Stratégie spécialisée : Choisir la meilleure source selon le contexte
+   */
+  async getSpecializedWeather(lat, lon, language) {
+    // Pour l'instant, utiliser la stratégie de fallback
+    // Peut être étendue avec de la logique plus sophistiquée
+    return await this.getFallbackWeather(lat, lon, language);
+  }
+
+  /**
+   * Stratégie spécialisée par ville
+   */
+  async getSpecializedWeatherByCity(cityName, language) {
+    // Pour l'instant, utiliser la stratégie de fallback
+    // Peut être étendue avec de la logique plus sophistiquée
+    return await this.getFallbackWeatherByCity(cityName, language);
+  }
+
+  /**
+   * Stratégie de consensus par ville
+   */
+  async getConsensusWeatherByCity(cityName, language) {
+    // Pour l'instant, utiliser la stratégie de fallback
+    // Peut être étendue avec de la logique de consensus
+    return await this.getFallbackWeatherByCity(cityName, language);
+  }
+
+  /**
    * Stratégie de fallback pour recherche par ville
    */
   async getFallbackWeatherByCity(cityName, language) {
@@ -368,7 +395,19 @@ class WeatherAggregator {
 
       // Open-Meteo inclut déjà les données de prévision dans raw_data
       if (weatherData.raw_data && weatherData.raw_data.daily) {
-        return this.services.primary.getForecastData(weatherData);
+        const rawForecasts = this.services.primary.getForecastData(weatherData);
+        // Transformer au format attendu par les composants
+        return rawForecasts.map(forecast => ({
+          date: new Date(forecast.dt * 1000), // Convertir timestamp en Date
+          maxTemp: forecast.main.temp_max,
+          minTemp: forecast.main.temp_min,
+          avgTemp: forecast.main.temp,
+          description: forecast.weather[0].description,
+          icon: forecast.weather[0].icon,
+          main: forecast.weather[0].main,
+          humidity: forecast.main.humidity || 50,
+          windSpeed: forecast.wind.speed || 0
+        }));
       }
 
       // Fallback si pas de données raw_data (autres services)
