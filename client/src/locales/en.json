@@ -145,6 +145,17 @@
       "fallback": "Smart fallback",
       "consensus": "Multi-source consensus",
       "specialized": "Specialized source"
-    }
+    },
+    "consensusMode": "Consensus Mode",
+    "consensusFrom": "Consensus from",
+    "sources": "sources",
+    "agreement": "Agreement",
+    "coherentData": "Coherent data across sources",
+    "incoherentData": "Discrepancies detected",
+    "variance": "Temperature variance",
+    "recommendedSource": "Recommended source",
+    "specializedMode": "Specialized Mode",
+    "geographicalContext": "Geographical context",
+    "selectionReason": "Source selection reason"
   }
 }

@@ -145,6 +145,17 @@
       "fallback": "Fallback intelligent",
       "consensus": "Consensus multi-sources",
       "specialized": "Source spécialisée"
-    }
+    },
+    "consensusMode": "Mode Consensus",
+    "consensusFrom": "Consensus de",
+    "sources": "sources",
+    "agreement": "Accord",
+    "coherentData": "Données cohérentes entre sources",
+    "incoherentData": "Écarts détectés",
+    "variance": "Variance de température",
+    "recommendedSource": "Source recommandée",
+    "specializedMode": "Mode Spécialisé",
+    "geographicalContext": "Contexte géographique",
+    "selectionReason": "Raison de sélection"
   }
 }

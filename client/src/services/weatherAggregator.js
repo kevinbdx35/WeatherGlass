@@ -19,7 +19,7 @@ class WeatherAggregator {
       legacy: null                         // OpenWeatherMap (sera injecté)
     };
     
-    this.strategy = 'fallback'; // 'fallback' | 'consensus' | 'specialized'
+    this.strategy = 'consensus'; // 'fallback' | 'consensus' | 'specialized'
     this.cache = new Map();
     this.oracle = new WeatherOracle(); // Oracle de validation
     this.usageStats = {
@@ -154,18 +154,241 @@ class WeatherAggregator {
    * Stratégie spécialisée : Choisir la meilleure source selon le contexte
    */
   async getSpecializedWeather(lat, lon, language) {
-    // Pour l'instant, utiliser la stratégie de fallback
-    // Peut être étendue avec de la logique plus sophistiquée
-    return await this.getFallbackWeather(lat, lon, language);
+    const cacheKey = `specialized_${lat}_${lon}_${language}`;
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey);
+    }
+
+    // Déterminer la source spécialisée basée sur le contexte géographique
+    const specializedSource = this.determineSpecializedSource(lat, lon);
+    
+    let data;
+    let usedSource = specializedSource.name;
+    
+    try {
+      console.log(`Using specialized source ${specializedSource.name} for coordinates ${lat}, ${lon}`);
+      this.usageStats.calls[specializedSource.name]++;
+      
+      data = await specializedSource.service.getWeatherByCoords(lat, lon, language);
+      
+      // Enrichir avec les alertes si en France
+      if (this.isInFrance(lat, lon)) {
+        try {
+          const alerts = await this.services.alerts.getWeatherAlerts();
+          data.alerts = alerts;
+          data.hasOfficialAlerts = alerts.length > 0;
+        } catch (alertError) {
+          console.warn('Failed to get alerts:', alertError.message);
+          data.alerts = [];
+          data.hasOfficialAlerts = false;
+        }
+      }
+      
+    } catch (error) {
+      console.warn(`Specialized source ${specializedSource.name} failed:`, error.message);
+      this.usageStats.errors[specializedSource.name]++;
+      
+      // Fallback vers le meilleur alternatif
+      const fallbackSource = this.getSpecializedFallback(specializedSource.name);
+      try {
+        console.log(`Falling back to ${fallbackSource.name}`);
+        this.usageStats.calls[fallbackSource.name]++;
+        data = await fallbackSource.service.getWeatherByCoords(lat, lon, language);
+        usedSource = fallbackSource.name;
+      } catch (fallbackError) {
+        this.usageStats.errors[fallbackSource.name]++;
+        throw new Error(`Specialized strategy failed: ${error.message}`);
+      }
+    }
+
+    // Validation Oracle des données
+    const validation = this.oracle.validateWeatherData(data, usedSource);
+    
+    // Ajouter métadonnées de source et validation
+    data.aggregator = {
+      strategy: 'specialized',
+      usedSource,
+      selectedReason: specializedSource.reason,
+      context: this.getGeographicalContext(lat, lon),
+      timestamp: new Date().toISOString(),
+      confidence: this.calculateConfidence(usedSource),
+      validation: {
+        isValid: validation.isValid,
+        score: validation.score,
+        warnings: validation.warnings,
+        errors: validation.errors
+      }
+    };
+
+    // Logger les problèmes de validation
+    if (!validation.isValid) {
+      console.warn(`Oracle validation failed for ${usedSource}:`, validation.errors);
+    }
+    if (validation.warnings.length > 0) {
+      console.warn(`Oracle warnings for ${usedSource}:`, validation.warnings);
+    }
+
+    this.cache.set(cacheKey, data);
+    return data;
   }
 
   /**
    * Stratégie spécialisée par ville
    */
   async getSpecializedWeatherByCity(cityName, language) {
-    // Pour l'instant, utiliser la stratégie de fallback
-    // Peut être étendue avec de la logique plus sophistiquée
+    // Obtenir d'abord les coordonnées pour déterminer la source spécialisée
+    const cacheKey = `specialized_city_${cityName}_${language}`;
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey);
+    }
+
+    try {
+      // Utiliser une source fiable pour obtenir les coordonnées
+      const locationData = await this.services.primary.getWeatherByCity(cityName, language);
+      if (locationData.coord) {
+        const result = await this.getSpecializedWeather(locationData.coord.lat, locationData.coord.lon, language);
+        this.cache.set(cacheKey, result);
+        return result;
+      }
+    } catch (error) {
+      console.warn('Failed to get coordinates for specialized strategy, using fallback');
+    }
+
+    // Fallback vers la stratégie normale si impossible d'obtenir les coordonnées
     return await this.getFallbackWeatherByCity(cityName, language);
+  }
+
+  /**
+   * Déterminer la source spécialisée basée sur le contexte géographique
+   */
+  determineSpecializedSource(lat, lon) {
+    // France métropolitaine : Priorité à Météo-France
+    if (this.isInFrance(lat, lon)) {
+      if (this.services.alerts) {
+        return {
+          service: this.services.alerts,
+          name: 'alerts',
+          reason: 'Official French meteorological service for French territory'
+        };
+      }
+    }
+
+    // Europe : Open-Meteo (service européen open-source)
+    if (this.isInEurope(lat, lon)) {
+      if (this.services.primary) {
+        return {
+          service: this.services.primary,
+          name: 'primary',
+          reason: 'European open-source weather service optimized for European data'
+        };
+      }
+    }
+
+    // Zones tropicales/cycloniques : WeatherAPI (meilleure couverture)
+    if (this.isInTropicalZone(lat, lon)) {
+      if (this.services.backup) {
+        return {
+          service: this.services.backup,
+          name: 'backup',
+          reason: 'Enhanced tropical weather data coverage'
+        };
+      }
+    }
+
+    // Zones polaires : OpenWeatherMap (données historiques)
+    if (this.isInPolarRegion(lat, lon)) {
+      if (this.services.legacy) {
+        return {
+          service: this.services.legacy,
+          name: 'legacy',
+          reason: 'Extensive historical data for polar regions'
+        };
+      }
+    }
+
+    // Par défaut : Open-Meteo
+    return {
+      service: this.services.primary,
+      name: 'primary',
+      reason: 'Default reliable weather service'
+    };
+  }
+
+  /**
+   * Obtenir la source de fallback spécialisée
+   */
+  getSpecializedFallback(failedSource) {
+    const fallbackMap = {
+      'alerts': { service: this.services.primary, name: 'primary' },
+      'primary': { service: this.services.backup, name: 'backup' },
+      'backup': { service: this.services.legacy, name: 'legacy' },
+      'legacy': { service: this.services.primary, name: 'primary' }
+    };
+
+    return fallbackMap[failedSource] || { service: this.services.primary, name: 'primary' };
+  }
+
+  /**
+   * Obtenir le contexte géographique
+   */
+  getGeographicalContext(lat, lon) {
+    const contexts = [];
+    
+    if (this.isInFrance(lat, lon)) contexts.push('France');
+    else if (this.isInEurope(lat, lon)) contexts.push('Europe');
+    
+    if (this.isInTropicalZone(lat, lon)) contexts.push('Tropical');
+    if (this.isInPolarRegion(lat, lon)) contexts.push('Polar');
+    if (this.isCoastal(lat, lon)) contexts.push('Coastal');
+    if (this.isMountainous(lat, lon)) contexts.push('Mountainous');
+    
+    return contexts.length > 0 ? contexts.join(', ') : 'Standard';
+  }
+
+  /**
+   * Vérifier si les coordonnées sont en Europe
+   */
+  isInEurope(lat, lon) {
+    return lat >= 35.0 && lat <= 71.0 && lon >= -25.0 && lon <= 45.0;
+  }
+
+  /**
+   * Vérifier si les coordonnées sont en zone tropicale
+   */
+  isInTropicalZone(lat, lon) {
+    return Math.abs(lat) <= 23.5; // Zone entre tropiques
+  }
+
+  /**
+   * Vérifier si les coordonnées sont en région polaire
+   */
+  isInPolarRegion(lat, lon) {
+    return Math.abs(lat) >= 60.0; // Au-delà du cercle polaire
+  }
+
+  /**
+   * Vérifier si les coordonnées sont côtières (approximation simple)
+   */
+  isCoastal(lat, lon) {
+    // Logique simplifiée - peut être améliorée avec des données géographiques
+    return false; // Placeholder pour une implémentation future
+  }
+
+  /**
+   * Vérifier si les coordonnées sont montagneuses (approximation simple)
+   */
+  isMountainous(lat, lon) {
+    // Zones montagneuses approximatives (Alpes, Pyrénées, etc.)
+    const mountainRanges = [
+      { latMin: 45.0, latMax: 47.0, lonMin: 6.0, lonMax: 11.0 }, // Alpes
+      { latMin: 42.5, latMax: 43.5, lonMin: -2.0, lonMax: 3.0 }, // Pyrénées
+      // Ajouter d'autres chaînes montagneuses selon les besoins
+    ];
+    
+    return mountainRanges.some(range => 
+      lat >= range.latMin && lat <= range.latMax && 
+      lon >= range.lonMin && lon <= range.lonMax
+    );
   }
 
   /**

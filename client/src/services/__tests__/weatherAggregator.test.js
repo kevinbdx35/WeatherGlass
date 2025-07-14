@@ -57,7 +57,7 @@ describe('WeatherAggregator', () => {
 
   describe('constructor', () => {
     it('should initialize with correct default strategy', () => {
-      expect(aggregator.strategy).toBe('fallback');
+      expect(aggregator.strategy).toBe('consensus');
     });
 
     it('should initialize usage stats', () => {
