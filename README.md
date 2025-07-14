@@ -156,6 +156,13 @@ L'application sera accessible sur `http://localhost:3000`
 
 ## 🆕 Nouveautés v2.1.0
 
+### 🎛️ **Layout Tableau de Bord Pro**
+- **Interface tableau de bord** : Layout professionnel sans scroll
+- **Viewport 100vh** : Tout le contenu visible en une seule vue
+- **Grid optimisé** : Proportions parfaites (40vh météo, 25vh prévisions, 25vh données)
+- **Réorganisation intelligente** : Données météo empilées à droite, prévisions centrales
+- **Zéro scroll** : Expérience immersive complète sur desktop
+
 ### 🎨 **Refonte UI/UX Majeure**
 - **Interface modernisée** : Design épuré et professionnel
 - **Glassmorphisme optimisé** : Effets visuels plus subtils et élégants
@@ -457,6 +464,8 @@ Si vous trouvez un bug, merci de créer une issue avec :
 - [x] **75+ tests unitaires et d'intégration** ✅ *Implémenté v2.0.0*
 - [x] **Refonte UI/UX moderne et accessible** ✅ *Implémenté v2.1.0*
 - [x] **12 tests de sécurité critiques** ✅ *Implémenté v2.1.0*
+- [x] **Layout tableau de bord professionnel** ✅ *Implémenté v2.1.0*
+- [x] **Interface 100vh sans scroll sur desktop** ✅ *Implémenté v2.1.0*
 - [ ] Notifications push pour les alertes météo
 - [ ] Widget personnalisable pour l'écran d'accueil
 - [ ] Support de plus de langues (ES, DE, IT)
