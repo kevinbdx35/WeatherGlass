@@ -69,7 +69,8 @@ const WeatherDisplay = ({ data }) => {
       </div>
 
       <div className="weather-details">
-        <div className="detail-card feels-like">
+        {/* Niveau 1: Données prioritaires - Température ressentie */}
+        <div className="detail-card feels-like priority-high">
           <div className="card-icon">🌡️</div>
           <div className="card-content">
             {data.main && data.main.feels_like && (
@@ -81,7 +82,8 @@ const WeatherDisplay = ({ data }) => {
           </div>
         </div>
         
-        <div className="detail-card humidity">
+        {/* Niveau 1: Données prioritaires - Humidité */}
+        <div className="detail-card humidity priority-high">
           <div className="card-icon">💧</div>
           <div className="card-content">
             {data.main && (
@@ -93,7 +95,8 @@ const WeatherDisplay = ({ data }) => {
           </div>
         </div>
         
-        <div className="detail-card wind">
+        {/* Niveau 2: Données importantes - Vent */}
+        <div className="detail-card wind priority-medium">
           <div className="card-icon">💨</div>
           <div className="card-content">
             {data.wind && data.wind.speed && (
@@ -112,8 +115,9 @@ const WeatherDisplay = ({ data }) => {
           </div>
         </div>
 
+        {/* Niveau 3: Données secondaires - Pression */}
         {data.main && (
-          <div className="detail-card pressure">
+          <div className="detail-card pressure priority-low compact">
             <div className="card-icon">🌊</div>
             <div className="card-content">
               <span className="card-value">
@@ -124,8 +128,9 @@ const WeatherDisplay = ({ data }) => {
           </div>
         )}
 
+        {/* Niveau 3: Données secondaires - Visibilité */}
         {data.visibility && (
-          <div className="detail-card visibility">
+          <div className="detail-card visibility priority-low compact">
             <div className="card-icon">👁️</div>
             <div className="card-content">
               <span className="card-value">
@@ -136,8 +141,9 @@ const WeatherDisplay = ({ data }) => {
           </div>
         )}
 
+        {/* Niveau 3: Données secondaires - Nuages */}
         {data.clouds && (
-          <div className="detail-card clouds">
+          <div className="detail-card clouds priority-low compact">
             <div className="card-icon">☁️</div>
             <div className="card-content">
               <span className="card-value">
