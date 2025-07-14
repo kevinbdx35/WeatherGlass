@@ -13,9 +13,8 @@ import GeolocationError from '../components/GeolocationError';
  * Organisation des composants météo en zones dédiées :
  * - Zone recherche (haut)
  * - Zone météo actuelle (principale)
- * - Zone prévisions 7 jours (droite)
- * - Zone graphiques (bas)
- * - Zone qualité des données (droite)
+ * - Zone prévisions 7 jours (sous la carte principale)
+ * - Zone graphiques et qualité des données (bas)
  */
 const GridLayout = ({
   // Search props
@@ -75,12 +74,12 @@ const GridLayout = ({
             <WeatherDisplay data={weatherData} />
           </div>
           
-          {/* Prévisions 7 jours - zone secondaire */}
+          {/* Prévisions 7 jours - sous la carte principale */}
           <div className="grid-forecast">
             <WeeklyForecast forecastData={forecastData} />
           </div>
           
-          {/* Graphiques - zone tertiaire */}
+          {/* Graphiques - zone bas gauche */}
           <div className="grid-charts">
             <WeatherChart 
               forecastData={forecastData} 
@@ -88,7 +87,7 @@ const GridLayout = ({
             />
           </div>
           
-          {/* Carte de qualité des données */}
+          {/* Carte de qualité des données - zone bas droite */}
           <div className="grid-quality">
             <DataQualityCard data={weatherData} />
           </div>

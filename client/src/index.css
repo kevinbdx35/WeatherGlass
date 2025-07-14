@@ -1385,6 +1385,12 @@ html {
   margin-top: 1.5rem;
 }
 
+/* Adaptation pour le grid layout */
+.grid-container .weather-details {
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
 /* Niveau 1: Cartes prioritaires (ressentie, humidité) */
 .weather-details .priority-high:nth-child(1) {
   grid-column: 1 / 3;
@@ -2905,10 +2911,11 @@ html {
   display: grid;
   grid-template-areas: 
     "search search search search"
-    "current current forecast quality"
+    "current current current quality"
+    "forecast forecast forecast quality"
     "charts charts charts charts";
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr auto auto;
   gap: 2rem;
   max-width: 1600px;
   margin: 0 auto;
@@ -2934,6 +2941,7 @@ html {
 
 .grid-quality {
   grid-area: quality;
+  grid-row: 2 / 4; /* Étend sur les lignes current et forecast */
 }
 
 .grid-loading {
@@ -2946,29 +2954,21 @@ html {
   .grid-container {
     grid-template-areas: 
       "search search search search search"
-      "current current forecast quality charts"
-      "current current forecast quality charts";
+      "current current current quality charts"
+      "forecast forecast forecast quality charts";
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
     gap: 2.5rem;
     max-width: 2000px;
     padding: 3rem;
   }
   
-  .grid-current-weather {
-    grid-row: 2 / 4;
-  }
-  
-  .grid-forecast {
-    grid-row: 2 / 4;
-  }
-  
   .grid-quality {
-    grid-row: 2 / 4;
+    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
   
   .grid-charts {
-    grid-row: 2 / 4;
+    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
@@ -2977,12 +2977,18 @@ html {
   .grid-container {
     grid-template-areas: 
       "search search search search"
-      "current current forecast quality"
+      "current current current quality"
+      "forecast forecast forecast quality"
       "charts charts charts charts";
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto auto;
     gap: 2rem;
     max-width: 1600px;
     padding: 2rem;
+  }
+  
+  .grid-quality {
+    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
@@ -2991,12 +2997,18 @@ html {
   .grid-container {
     grid-template-areas: 
       "search search search"
-      "current forecast quality"
+      "current current quality"
+      "forecast forecast quality"
       "charts charts charts";
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto 1fr auto auto;
     gap: 1.5rem;
     max-width: 1200px;
     padding: 1.5rem;
+  }
+  
+  .grid-quality {
+    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
@@ -3040,17 +3052,18 @@ html {
 /* Ajustements pour les composants dans le grid */
 .grid-container .weather-display {
   height: 100%;
-  min-height: 400px;
+  min-height: 450px;
 }
 
 .grid-container .weekly-forecast {
   height: 100%;
-  min-height: 400px;
+  min-height: 280px;
 }
 
 .grid-container .weather-chart-container {
   height: 100%;
-  min-height: 300px;
+  min-height: 350px;
+  margin: 0; /* Réduire les marges dans le grid */
 }
 
 .grid-container .data-quality-card {
@@ -3059,17 +3072,19 @@ html {
 }
 
 /* Amélioration de la disposition des cartes de prévisions */
-.grid-container .forecast-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  height: 100%;
-  overflow-y: auto;
+.grid-container .forecast-grid {
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.8rem;
 }
-
 .grid-container .forecast-card {
-  min-height: 45px;
-  flex-shrink: 0;
+  padding: 1rem 0.8rem;
+  min-height: auto;
+}
+.grid-container .forecast-icon {
+  font-size: 2rem;
+}
+.grid-container .forecast-date {
+  font-size: 0.85rem;
 }
 
 /* Optimisation pour les écrans très larges */
@@ -3077,11 +3092,21 @@ html {
   .grid-container {
     grid-template-areas: 
       "search search search search search search"
-      "current current forecast quality charts charts";
+      "current current current current quality charts"
+      "forecast forecast forecast forecast quality charts";
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
     gap: 3rem;
     max-width: 2400px;
     padding: 3rem;
+  }
+  
+  .grid-quality {
+    grid-row: 2 / 4; /* Étend sur current et forecast */
+  }
+  
+  .grid-charts {
+    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
