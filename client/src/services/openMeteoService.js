@@ -168,7 +168,7 @@ class OpenMeteoService {
    */
   transformCurrentWeatherData(data, lat, lon) {
     const current = data.current;
-    const daily = data.daily;
+    // const daily = data.daily; // Réservé pour usage futur
 
     // Mapper les codes météo Open-Meteo vers OpenWeatherMap
     let weatherCodeToUse = this.mapWeatherCode(current.weather_code);

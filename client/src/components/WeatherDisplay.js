@@ -3,23 +3,26 @@ import WeatherIcon from './WeatherIcon';
 import DataQualityBadge from './DataQualityBadge';
 import useTranslation from '../hooks/useTranslation';
 
+/**
+ * Composant d'affichage principal des données météo
+ * Inclut la température, les conditions et les détails météorologiques
+ * @param {Object} data - Données météo de l'API
+ */
 const WeatherDisplay = ({ data }) => {
   const { t } = useTranslation();
   
+  // Ne pas afficher si aucune donnée
   if (!data.name) return null;
 
+  /**
+   * Convertit les degrés en direction cardinale
+   * @param {number} degrees - Degrés de direction du vent
+   * @returns {string} Direction traduite (N, NE, E, etc.)
+   */
   const getWindDirection = (degrees) => {
     const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
     const direction = directions[Math.round(degrees / 45) % 8];
     return t(`weather.metrics.windDirection.${direction}`);
-  };
-
-  const getTimeOfDay = () => {
-    const hour = new Date().getHours();
-    if (hour >= 6 && hour < 12) return 'morning';
-    if (hour >= 12 && hour < 18) return 'afternoon';
-    if (hour >= 18 && hour < 22) return 'evening';
-    return 'night';
   };
 
   return (

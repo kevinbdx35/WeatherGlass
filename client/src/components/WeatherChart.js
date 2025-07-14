@@ -217,7 +217,7 @@ const WeatherChart = ({ forecastData, currentData }) => {
         }
       }
     }
-  }), [colors, chartType, t]);
+  }), [colors, chartType]); // t n'est pas utilisé dans les options
 
   if (!chartData) {
     return (

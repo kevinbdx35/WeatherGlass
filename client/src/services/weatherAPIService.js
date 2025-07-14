@@ -170,7 +170,7 @@ class WeatherAPIService {
     
     data.forecast.forecastday.forEach(day => {
       day.hour.forEach(hour => {
-        const date = new Date(hour.time);
+        // const date = new Date(hour.time); // Réservé pour usage futur
         
         forecasts.push({
           dt: hour.time_epoch,

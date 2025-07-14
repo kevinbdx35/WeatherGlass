@@ -51,7 +51,7 @@ const usePWA = () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, []);
+  }, [isDismissed]); // Ajouter isDismissed pour éviter le warning
 
   const installApp = async () => {
     if (!deferredPrompt) return false;

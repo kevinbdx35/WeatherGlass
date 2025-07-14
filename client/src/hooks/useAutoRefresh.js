@@ -1,5 +1,14 @@
 import { useEffect, useRef, useCallback } from 'react';
 
+/**
+ * Hook pour le rafraîchissement automatique des données
+ * Gère la visibilité de l'onglet et optimise les appels réseau
+ * @param {Object} config - Configuration du hook
+ * @param {Function} config.refreshFunction - Fonction à exécuter pour rafraîchir
+ * @param {number} config.interval - Intervalle en millisecondes (défaut: 30min)
+ * @param {boolean} config.enabled - Active/désactive l'auto-refresh
+ * @param {Array} config.dependencies - Dépendances pour redémarrer l'intervalle
+ */
 const useAutoRefresh = ({ 
   refreshFunction, 
   interval = 30 * 60 * 1000, // 30 minutes par défaut
@@ -81,7 +90,8 @@ const useAutoRefresh = ({
       clearCurrentInterval();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [startAutoRefresh, handleVisibilityChange, ...dependencies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startAutoRefresh, handleVisibilityChange, clearCurrentInterval, ...dependencies]);
 
   // Effet pour nettoyer lors du démontage
   useEffect(() => {

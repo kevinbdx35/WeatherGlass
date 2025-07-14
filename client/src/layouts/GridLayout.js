@@ -6,6 +6,15 @@ import WeatherChart from '../components/WeatherChart';
 import DataQualityCard from '../components/DataQualityCard';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 
+/**
+ * Layout en grille pour les grands écrans (≥1024px)
+ * Organisation des composants météo en zones dédiées :
+ * - Zone recherche (haut)
+ * - Zone météo actuelle (principale)
+ * - Zone prévisions 7 jours (droite)
+ * - Zone graphiques (bas)
+ * - Zone qualité des données (droite)
+ */
 const GridLayout = ({
   // Search props
   location,

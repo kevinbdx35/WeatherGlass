@@ -1,10 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
+/**
+ * Hook personnalisé pour la géolocalisation
+ * Gère la récupération de la position GPS de l'utilisateur
+ * @param {Function} t - Fonction de traduction
+ * @returns {Object} État et fonctions de géolocalisation
+ */
 const useGeolocation = (t) => {
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  /**
+   * Récupère la position actuelle de l'utilisateur
+   * Utilise l'API Geolocation du navigateur
+   */
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       setError(t ? t('search.errors.locationError') : 'Geolocation not supported');

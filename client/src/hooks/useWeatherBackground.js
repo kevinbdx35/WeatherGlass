@@ -48,9 +48,12 @@ const useWeatherBackground = () => {
 
   // Nettoyer les timeouts au démontage
   useEffect(() => {
+    const timeoutRef = transitionTimeoutRef;
     return () => {
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
+      // Copier la référence pour éviter les problèmes de concurrence
+      const currentTimeout = timeoutRef.current;
+      if (currentTimeout) {
+        clearTimeout(currentTimeout);
       }
     };
   }, []);

@@ -1,27 +1,19 @@
 import React from 'react';
 
+/**
+ * Composant d'icône météo SVG animée
+ * Affiche une icône personnalisée selon la condition météorologique
+ * @param {string} condition - Condition météo (Clear, Clouds, Rain, etc.)
+ * @param {number} size - Taille de l'icône en pixels
+ * @param {boolean} animated - Active/désactive les animations
+ */
 const WeatherIcon = ({ condition, size = 64, animated = true }) => {
-  const getWeatherIcon = (condition) => {
-    const iconMap = {
-      'Clear': '☀️',
-      'Clouds': '☁️',
-      'Rain': '🌧️',
-      'Drizzle': '🌦️',
-      'Thunderstorm': '⛈️',
-      'Snow': '❄️',
-      'Mist': '🌫️',
-      'Fog': '🌫️',
-      'Haze': '🌫️',
-      'Dust': '🌫️',
-      'Sand': '🌫️',
-      'Ash': '🌫️',
-      'Squall': '💨',
-      'Tornado': '🌪️'
-    };
-    
-    return iconMap[condition] || '🌤️';
-  };
 
+  /**
+   * Génère l'icône SVG correspondant à la condition météo
+   * @param {string} condition - Condition météorologique
+   * @returns {JSX.Element} Élément SVG animé
+   */
   const getSVGIcon = (condition) => {
     switch (condition) {
       case 'Clear':
