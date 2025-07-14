@@ -1466,7 +1466,20 @@ h1{
 }
 
 .kofi-container {
-  /* Le widget Ko-fi s'intègre automatiquement */
+  /* Bouton Ko-fi intégré au design */
+}
+
+.kofi-button {
+  background: var(--glass-bg-strong) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(var(--glass-blur)) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.kofi-button:hover {
+  background: var(--accent-color) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-strong) !important;
 }
 
 /* Responsive footer */

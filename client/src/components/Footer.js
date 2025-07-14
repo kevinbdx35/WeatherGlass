@@ -1,29 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import useTranslation from '../hooks/useTranslation';
 
 const Footer = ({ currentBackground }) => {
   const { t } = useTranslation();
-
-  // Charger le widget Ko-fi
-  useEffect(() => {
-    // Charger le script Ko-fi s'il n'est pas déjà chargé
-    if (!window.kofiwidget2) {
-      const script = document.createElement('script');
-      script.src = 'https://storage.ko-fi.com/cdn/widget/Widget_2.js';
-      script.async = true;
-      script.onload = () => {
-        if (window.kofiwidget2) {
-          window.kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'W7W61I0YBJ');
-          window.kofiwidget2.draw();
-        }
-      };
-      document.head.appendChild(script);
-    } else {
-      // Si le script est déjà chargé, initialiser directement
-      window.kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'W7W61I0YBJ');
-      window.kofiwidget2.draw();
-    }
-  }, []);
 
   // Toujours afficher le footer avec un contenu par défaut si pas d'attribution
   const showAttribution = currentBackground && currentBackground.author;
@@ -61,8 +40,28 @@ const Footer = ({ currentBackground }) => {
         </div>
         
         <div className="footer-right">
-          <div id="kofi-widget-container" className="kofi-container">
-            {/* Le widget Ko-fi sera inséré ici automatiquement */}
+          <div className="kofi-container">
+            <a 
+              href="https://ko-fi.com/W7W61I0YBJ" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="kofi-button"
+              style={{
+                backgroundColor: '#72a4f2',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              ☕ Support me on Ko-fi
+            </a>
           </div>
         </div>
       </div>
