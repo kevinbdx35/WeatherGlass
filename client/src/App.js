@@ -78,74 +78,6 @@ function App() {
     updateBackground
   } = useWeatherBackground();
 
-  // API calls - Logique métier avec agrégation multi-sources
-  const fetchWeatherByCoords = useCallback(async (lat, lon) => {
-    if (!weatherAggregator.current) return;
-    
-    const cacheKey = `${lat},${lon}`;
-    const cachedData = cache.current.get(cacheKey);
-    const cachedForecast = cache.current.get(`forecast_${cacheKey}`);
-    
-    if (cachedData && cachedForecast) {
-      setData(cachedData);
-      setForecastData(cachedForecast);
-      setError('');
-      return;
-    }
-
-    try {
-      const weatherData = await weatherAggregator.current.getWeatherByCoords(lat, lon, language);
-      const forecastData = await weatherAggregator.current.getForecastData({ lat, lon }, language);
-      
-      const dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
-      
-      cache.current.set(cacheKey, weatherData);
-      cache.current.set(`forecast_${cacheKey}`, dailyForecasts);
-      
-      setData(weatherData);
-      setForecastData(dailyForecasts);
-      setError('');
-      
-      console.log(`Weather fetched using ${weatherData.aggregator?.usedSource || 'unknown'} source`);
-    } catch (err) {
-      console.warn('All weather sources failed:', err.message);
-      handleApiError(err);
-    }
-  }, [language]);
-
-  const fetchWeatherData = useCallback(async (cityName) => {
-    if (!weatherAggregator.current) return;
-    
-    const cachedData = cache.current.get(cityName);
-    const cachedForecast = cache.current.get(`forecast_${cityName}`);
-    
-    if (cachedData && cachedForecast) {
-      setData(cachedData);
-      setForecastData(cachedForecast);
-      setError('');
-      return;
-    }
-
-    try {
-      const weatherData = await weatherAggregator.current.getWeatherByCity(cityName, language);
-      const forecastData = await weatherAggregator.current.getForecastData(cityName, language);
-      
-      const dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
-      
-      cache.current.set(cityName, weatherData);
-      cache.current.set(`forecast_${cityName}`, dailyForecasts);
-      
-      setData(weatherData);
-      setForecastData(dailyForecasts);
-      setError('');
-      
-      console.log(`Weather fetched using ${weatherData.aggregator?.usedSource || 'unknown'} source`);
-    } catch (err) {
-      console.warn('All weather sources failed:', err.message);
-      handleApiError(err);
-    }
-  }, [language]);
-
   // Gestion des erreurs API avec multi-sources
   const handleApiError = useCallback((err) => {
     if (err.message?.includes('City not found') || err.message?.includes('not found')) {
@@ -202,6 +134,88 @@ function App() {
       main: day.main
     }));
   }, []);
+
+  // API calls - Logique métier avec agrégation multi-sources
+  const fetchWeatherByCoords = useCallback(async (lat, lon) => {
+    if (!weatherAggregator.current) return;
+    
+    const cacheKey = `${lat},${lon}`;
+    const cachedData = cache.current.get(cacheKey);
+    const cachedForecast = cache.current.get(`forecast_${cacheKey}`);
+    
+    if (cachedData && cachedForecast) {
+      setData(cachedData);
+      setForecastData(cachedForecast);
+      setError('');
+      return;
+    }
+
+    try {
+      const weatherData = await weatherAggregator.current.getWeatherByCoords(lat, lon, language);
+      
+      // Essayer d'obtenir les prévisions, avec fallback vers les données existantes si échec
+      let dailyForecasts = [];
+      try {
+        const forecastData = await weatherAggregator.current.getForecastData({ lat, lon }, language);
+        dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
+      } catch (forecastError) {
+        console.warn('Forecast data unavailable, using weather data only');
+        // Si les prévisions échouent, on continue avec juste les données météo actuelles
+      }
+      
+      cache.current.set(cacheKey, weatherData);
+      cache.current.set(`forecast_${cacheKey}`, dailyForecasts);
+      
+      setData(weatherData);
+      setForecastData(dailyForecasts);
+      setError('');
+      
+      console.log(`Weather fetched using ${weatherData.aggregator?.usedSource || 'unknown'} source`);
+    } catch (err) {
+      console.warn('All weather sources failed:', err.message);
+      handleApiError(err);
+    }
+  }, [language]);
+
+  const fetchWeatherData = useCallback(async (cityName) => {
+    if (!weatherAggregator.current) return;
+    
+    const cachedData = cache.current.get(cityName);
+    const cachedForecast = cache.current.get(`forecast_${cityName}`);
+    
+    if (cachedData && cachedForecast) {
+      setData(cachedData);
+      setForecastData(cachedForecast);
+      setError('');
+      return;
+    }
+
+    try {
+      const weatherData = await weatherAggregator.current.getWeatherByCity(cityName, language);
+      
+      // Essayer d'obtenir les prévisions, avec fallback vers les données existantes si échec
+      let dailyForecasts = [];
+      try {
+        const forecastData = await weatherAggregator.current.getForecastData(cityName, language);
+        dailyForecasts = Array.isArray(forecastData) ? forecastData : processForecastData(forecastData.list || []);
+      } catch (forecastError) {
+        console.warn('Forecast data unavailable, using weather data only');
+        // Si les prévisions échouent, on continue avec juste les données météo actuelles
+      }
+      
+      cache.current.set(cityName, weatherData);
+      cache.current.set(`forecast_${cityName}`, dailyForecasts);
+      
+      setData(weatherData);
+      setForecastData(dailyForecasts);
+      setError('');
+      
+      console.log(`Weather fetched using ${weatherData.aggregator?.usedSource || 'unknown'} source`);
+    } catch (err) {
+      console.warn('All weather sources failed:', err.message);
+      handleApiError(err);
+    }
+  }, [language, handleApiError, processForecastData]);
 
   // Gestionnaires d'événements
   const searchLocation = useCallback((event) => {

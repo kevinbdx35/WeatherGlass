@@ -18,6 +18,7 @@ describe('WeatherAggregator', () => {
     mockPrimaryService = {
       getWeatherByCoords: jest.fn(),
       getWeatherByCity: jest.fn(),
+      getForecastData: jest.fn(),
       checkAvailability: jest.fn(),
       getUsageStats: jest.fn()
     };
@@ -26,6 +27,7 @@ describe('WeatherAggregator', () => {
       getWeatherByCoords: jest.fn(),
       getWeatherByCity: jest.fn(),
       getForecastByCity: jest.fn(),
+      getForecastByCoords: jest.fn(),
       checkAvailability: jest.fn(),
       getUsageStats: jest.fn()
     };
@@ -342,6 +344,75 @@ describe('WeatherAggregator', () => {
         alerts: false,
         legacy: true
       });
+    });
+  });
+
+  describe('getForecastData', () => {
+    it('should get forecast data from primary service with raw_data', async () => {
+      const mockWeatherData = {
+        main: { temp: 20 },
+        raw_data: {
+          daily: {
+            time: ['2024-01-01', '2024-01-02'],
+            weather_code: [0, 1],
+            temperature_2m_max: [25, 23],
+            temperature_2m_min: [15, 13],
+            precipitation_sum: [0, 2],
+            wind_speed_10m_max: [12, 14]
+          }
+        }
+      };
+      
+      mockPrimaryService.getWeatherByCoords.mockResolvedValueOnce(mockWeatherData);
+      mockPrimaryService.getForecastData.mockReturnValueOnce([
+        { date: new Date('2024-01-01'), maxTemp: 25, minTemp: 15 },
+        { date: new Date('2024-01-02'), maxTemp: 23, minTemp: 13 }
+      ]);
+
+      const result = await aggregator.getForecastData({ lat: 48.8566, lon: 2.3522 }, 'en');
+
+      expect(mockPrimaryService.getWeatherByCoords).toHaveBeenCalledWith(48.8566, 2.3522, 'en');
+      expect(mockPrimaryService.getForecastData).toHaveBeenCalledWith(mockWeatherData);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result).toHaveLength(2);
+    });
+
+    it('should fallback to backup service when primary fails', async () => {
+      mockPrimaryService.getWeatherByCoords.mockRejectedValueOnce(new Error('Primary failed'));
+      mockBackupService.getForecastByCoords.mockResolvedValueOnce([
+        { date: new Date('2024-01-01'), maxTemp: 22, minTemp: 12 }
+      ]);
+
+      const result = await aggregator.getForecastData({ lat: 48.8566, lon: 2.3522 }, 'en');
+
+      expect(mockBackupService.getForecastByCoords).toHaveBeenCalledWith(48.8566, 2.3522, 'en');
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle city name input', async () => {
+      const mockWeatherData = {
+        main: { temp: 18 },
+        raw_data: {
+          daily: {
+            time: ['2024-01-01'],
+            weather_code: [0],
+            temperature_2m_max: [22],
+            temperature_2m_min: [14],
+            precipitation_sum: [0],
+            wind_speed_10m_max: [10]
+          }
+        }
+      };
+      
+      mockPrimaryService.getWeatherByCity.mockResolvedValueOnce(mockWeatherData);
+      mockPrimaryService.getForecastData.mockReturnValueOnce([
+        { date: new Date('2024-01-01'), maxTemp: 22, minTemp: 14 }
+      ]);
+
+      const result = await aggregator.getForecastData('Paris', 'fr');
+
+      expect(mockPrimaryService.getWeatherByCity).toHaveBeenCalledWith('Paris', 'fr');
+      expect(result).toHaveLength(1);
     });
   });
 

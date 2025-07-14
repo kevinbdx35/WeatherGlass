@@ -33,7 +33,7 @@ const WeatherDisplay = ({ data }) => {
         
         <div className="temperature-display">
           <div className="temp-main">
-            {data.main && <span className="temp-value">{data.main.temp.toFixed()}</span>}
+            {data.main && data.main.temp && <span className="temp-value">{data.main.temp.toFixed()}</span>}
             <span className="temp-unit">°C</span>
           </div>
           
@@ -65,7 +65,7 @@ const WeatherDisplay = ({ data }) => {
         <div className="detail-card feels-like">
           <div className="card-icon">🌡️</div>
           <div className="card-content">
-            {data.main && (
+            {data.main && data.main.feels_like && (
               <span className="card-value">
                 {data.main.feels_like.toFixed()}{t('weather.units.temperature')}
               </span>
@@ -89,7 +89,7 @@ const WeatherDisplay = ({ data }) => {
         <div className="detail-card wind">
           <div className="card-icon">💨</div>
           <div className="card-content">
-            {data.wind && (
+            {data.wind && data.wind.speed && (
               <>
                 <span className="card-value">
                   {data.wind.speed.toFixed()} {t('weather.units.speed')}

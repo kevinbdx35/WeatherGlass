@@ -359,28 +359,92 @@ class WeatherAggregator {
       // Utiliser la source principale pour les prévisions
       this.usageStats.calls.primary++;
       
-      let forecastData;
+      let weatherData;
       if (typeof location === 'string') {
-        const weatherData = await this.services.primary.getWeatherByCity(location, language);
-        forecastData = this.services.primary.getForecastData(weatherData);
+        weatherData = await this.services.primary.getWeatherByCity(location, language);
       } else {
-        const weatherData = await this.services.primary.getWeatherByCoords(location.lat, location.lon, language);
-        forecastData = this.services.primary.getForecastData(weatherData);
+        weatherData = await this.services.primary.getWeatherByCoords(location.lat, location.lon, language);
       }
 
-      return forecastData;
+      // Open-Meteo inclut déjà les données de prévision dans raw_data
+      if (weatherData.raw_data && weatherData.raw_data.daily) {
+        return this.services.primary.getForecastData(weatherData);
+      }
+
+      // Fallback si pas de données raw_data (autres services)
+      throw new Error('No forecast data in primary response');
+      
     } catch (error) {
-      console.warn('Primary forecast failed, trying backup...');
+      console.warn('Primary forecast failed, trying backup...', error.message);
       this.usageStats.errors.primary++;
       
       try {
         this.usageStats.calls.backup++;
-        return await this.services.backup.getForecastByCity(location, language);
+        if (typeof location === 'string') {
+          return await this.services.backup.getForecastByCity(location, language);
+        } else {
+          return await this.services.backup.getForecastByCoords(location.lat, location.lon, language);
+        }
       } catch (backupError) {
         this.usageStats.errors.backup++;
+        
+        // Dernier recours avec le service legacy
+        try {
+          if (this.services.legacy && typeof location === 'string') {
+            const legacyUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${location.trim()}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
+            const response = await fetch(legacyUrl);
+            const data = await response.json();
+            return this.processLegacyForecastData(data.list || []);
+          }
+        } catch (legacyError) {
+          // Ignore legacy errors
+        }
+        
         throw new Error('All forecast services failed');
       }
     }
+  }
+
+  /**
+   * Traiter les données de prévision legacy (OpenWeatherMap)
+   */
+  processLegacyForecastData(forecastList) {
+    const dailyData = {};
+    
+    forecastList.forEach(item => {
+      const date = new Date(item.dt * 1000);
+      const dayKey = date.toDateString();
+      
+      if (!dailyData[dayKey]) {
+        dailyData[dayKey] = {
+          date: date,
+          temps: [],
+          conditions: [],
+          humidity: [],
+          wind: [],
+          icon: item.weather[0].icon,
+          description: item.weather[0].description,
+          main: item.weather[0].main
+        };
+      }
+      
+      dailyData[dayKey].temps.push(item.main.temp);
+      dailyData[dayKey].conditions.push(item.weather[0]);
+      dailyData[dayKey].humidity.push(item.main.humidity);
+      dailyData[dayKey].wind.push(item.wind.speed);
+    });
+    
+    return Object.values(dailyData).slice(0, 7).map(day => ({
+      date: day.date,
+      maxTemp: Math.round(Math.max(...day.temps)),
+      minTemp: Math.round(Math.min(...day.temps)),
+      avgTemp: Math.round(day.temps.reduce((a, b) => a + b, 0) / day.temps.length),
+      humidity: Math.round(day.humidity.reduce((a, b) => a + b, 0) / day.humidity.length),
+      windSpeed: Math.round(day.wind.reduce((a, b) => a + b, 0) / day.wind.length),
+      icon: day.icon,
+      description: day.description,
+      main: day.main
+    }));
   }
 
   /**
