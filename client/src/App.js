@@ -145,12 +145,13 @@ function App() {
       const sunData = data.sys ? {
         sunrise: data.sys.sunrise,
         sunset: data.sys.sunset,
-        timezone: data.timezone
+        timezone: data.timezone,
+        latitude: data.coord?.lat || null // Ajouter la latitude pour déterminer l'hémisphère
       } : null;
       
       updateBackground(weatherCondition, city, sunData);
     }
-  }, [data.weather, data.name, data.sys, data.timezone, updateBackground]);
+  }, [data.weather, data.name, data.sys, data.timezone, data.coord, updateBackground]);
 
   // États dérivés
   const isLoading = weatherLoading || geoLoading;
