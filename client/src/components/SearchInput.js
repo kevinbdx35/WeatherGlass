@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LocationButton from './LocationButton';
 import useTranslation from '../hooks/useTranslation';
 
@@ -13,19 +13,34 @@ const SearchInput = ({
   isLocationSupported
 }) => {
   const { t } = useTranslation();
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
     <div className="search">
-      <div className="search-container">
-        <input
-          value={location}
-          onChange={(event) => setLocation(event.target.value)}
-          onKeyPress={onKeyPress}
-          placeholder={t('search.placeholder')}
-          type="text"
-          disabled={loading}
-          className="search-input"
-        />
+      <div className={`search-container ${isFocused ? 'focused' : ''}`}>
+        <div className="search-input-wrapper">
+          <input
+            value={location}
+            onChange={(event) => setLocation(event.target.value)}
+            onKeyPress={onKeyPress}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder={t('search.placeholder')}
+            type="text"
+            disabled={loading}
+            className="search-input"
+          />
+          {location && (
+            <button
+              className="clear-button"
+              onClick={() => setLocation('')}
+              disabled={loading}
+              type="button"
+            >
+              ×
+            </button>
+          )}
+        </div>
         <LocationButton
           onLocationClick={onLocationClick}
           loading={locationLoading}
@@ -34,11 +49,17 @@ const SearchInput = ({
         />
       </div>
       {(loading || locationLoading) && (
-        <p className="loading">
+        <div className="search-status loading">
+          <span className="status-icon">⏳</span>
           {locationLoading ? t('search.locationLoading') : t('search.searchInProgress')}
-        </p>
+        </div>
       )}
-      {error && <p className="error">{error}</p>}
+      {error && (
+        <div className="search-status error">
+          <span className="status-icon">⚠️</span>
+          {error}
+        </div>
+      )}
     </div>
   );
 };
