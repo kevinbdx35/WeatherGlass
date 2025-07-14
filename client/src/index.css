@@ -2911,11 +2911,10 @@ html {
   display: grid;
   grid-template-areas: 
     "search search search search"
-    "current current current quality"
-    "forecast forecast forecast quality"
-    "charts charts charts charts";
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: auto 1fr auto auto;
+    "current current quality charts"
+    "forecast forecast quality charts";
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
   gap: 2rem;
   max-width: 1600px;
   margin: 0 auto;
@@ -2935,12 +2934,13 @@ html {
   grid-area: forecast;
 }
 
-.grid-charts {
-  grid-area: charts;
-}
-
 .grid-quality {
   grid-area: quality;
+  grid-row: 2 / 4; /* Étend sur les lignes current et forecast */
+}
+
+.grid-charts {
+  grid-area: charts;
   grid-row: 2 / 4; /* Étend sur les lignes current et forecast */
 }
 
@@ -2954,10 +2954,10 @@ html {
   .grid-container {
     grid-template-areas: 
       "search search search search search"
-      "current current current quality charts"
-      "forecast forecast forecast quality charts";
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
+      "current current quality charts charts"
+      "forecast forecast quality charts charts";
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
     gap: 2.5rem;
     max-width: 2000px;
     padding: 3rem;
@@ -2977,17 +2977,20 @@ html {
   .grid-container {
     grid-template-areas: 
       "search search search search"
-      "current current current quality"
-      "forecast forecast forecast quality"
-      "charts charts charts charts";
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr auto auto;
+      "current current quality charts"
+      "forecast forecast quality charts";
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
     gap: 2rem;
     max-width: 1600px;
     padding: 2rem;
   }
   
   .grid-quality {
+    grid-row: 2 / 4; /* Étend sur current et forecast */
+  }
+  
+  .grid-charts {
     grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
@@ -2998,17 +3001,12 @@ html {
     grid-template-areas: 
       "search search search"
       "current current quality"
-      "forecast forecast quality"
-      "charts charts charts";
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto 1fr auto auto;
+      "forecast forecast charts";
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
     gap: 1.5rem;
     max-width: 1200px;
     padding: 1.5rem;
-  }
-  
-  .grid-quality {
-    grid-row: 2 / 4; /* Étend sur current et forecast */
   }
 }
 
@@ -3092,10 +3090,10 @@ html {
   .grid-container {
     grid-template-areas: 
       "search search search search search search"
-      "current current current current quality charts"
-      "forecast forecast forecast forecast quality charts";
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
+      "current current current quality charts charts"
+      "forecast forecast forecast quality charts charts";
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
     gap: 3rem;
     max-width: 2400px;
     padding: 3rem;
