@@ -140,9 +140,17 @@ function App() {
     if (data.weather?.[0] && data.name) {
       const weatherCondition = data.weather[0].main;
       const city = data.name;
-      updateBackground(weatherCondition, city);
+      
+      // Préparer les données solaires si disponibles
+      const sunData = data.sys ? {
+        sunrise: data.sys.sunrise,
+        sunset: data.sys.sunset,
+        timezone: data.timezone
+      } : null;
+      
+      updateBackground(weatherCondition, city, sunData);
     }
-  }, [data.weather, data.name, updateBackground]);
+  }, [data.weather, data.name, data.sys, data.timezone, updateBackground]);
 
   // États dérivés
   const isLoading = weatherLoading || geoLoading;

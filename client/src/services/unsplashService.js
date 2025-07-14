@@ -7,42 +7,172 @@ class UnsplashService {
     this.cacheTTL = 60 * 60 * 1000; // 1 heure
   }
 
-  // Mapper les conditions météo vers des mots-clés de recherche
+  // Mapper les conditions météo vers des mots-clés de recherche en fonction de l'heure
   getWeatherKeywords(weatherCondition, timeOfDay = 'day') {
     const keywordMap = {
-      'Clear': timeOfDay === 'night' ? 'clear night sky stars' : 'sunny blue sky',
-      'Clouds': 'cloudy sky overcast',
-      'Rain': 'rain storm weather',
-      'Drizzle': 'light rain drizzle',
-      'Thunderstorm': 'thunderstorm lightning storm',
-      'Snow': 'snow winter snowy',
-      'Mist': 'misty fog morning',
-      'Fog': 'fog misty weather',
-      'Haze': 'hazy atmosphere',
-      'Dust': 'dusty atmosphere',
-      'Sand': 'sandstorm desert',
-      'Ash': 'volcanic ash',
-      'Squall': 'windy storm',
-      'Tornado': 'tornado storm'
+      'Clear': {
+        'day': 'sunny clear blue sky sunshine bright',
+        'night': 'clear night sky stars starry night',
+        'sunrise': 'sunrise clear sky golden hour morning',
+        'sunset': 'sunset clear sky golden hour evening'
+      },
+      'Clouds': {
+        'day': 'cloudy overcast gray sky daytime',
+        'night': 'cloudy night overcast dark sky',
+        'sunrise': 'cloudy sunrise morning overcast',
+        'sunset': 'cloudy sunset evening overcast'
+      },
+      'Rain': {
+        'day': 'rain rainy day storm raindrops',
+        'night': 'rain night storm dark rainy',
+        'sunrise': 'rain morning storm wet',
+        'sunset': 'rain evening storm wet'
+      },
+      'Drizzle': {
+        'day': 'light rain drizzle mist day',
+        'night': 'drizzle night light rain mist',
+        'sunrise': 'morning drizzle light rain',
+        'sunset': 'evening drizzle light rain'
+      },
+      'Thunderstorm': {
+        'day': 'thunderstorm lightning storm dramatic',
+        'night': 'night thunderstorm lightning dark storm',
+        'sunrise': 'morning thunderstorm lightning',
+        'sunset': 'evening thunderstorm lightning'
+      },
+      'Snow': {
+        'day': 'snow winter snowy white day',
+        'night': 'snow night winter snowy dark',
+        'sunrise': 'snow sunrise winter morning',
+        'sunset': 'snow sunset winter evening'
+      },
+      'Mist': {
+        'day': 'misty fog morning day atmospheric',
+        'night': 'misty night fog atmospheric',
+        'sunrise': 'morning mist fog sunrise',
+        'sunset': 'evening mist fog sunset'
+      },
+      'Fog': {
+        'day': 'fog misty weather day atmospheric',
+        'night': 'fog night misty dark atmospheric',
+        'sunrise': 'morning fog misty sunrise',
+        'sunset': 'evening fog misty sunset'
+      },
+      'Haze': {
+        'day': 'hazy atmosphere day soft light',
+        'night': 'hazy night atmosphere soft',
+        'sunrise': 'hazy sunrise morning atmospheric',
+        'sunset': 'hazy sunset evening atmospheric'
+      },
+      'Dust': {
+        'day': 'dusty atmosphere day hazy',
+        'night': 'dusty night atmosphere',
+        'sunrise': 'dusty sunrise morning',
+        'sunset': 'dusty sunset evening'
+      },
+      'Sand': {
+        'day': 'sandstorm desert day',
+        'night': 'sandstorm desert night',
+        'sunrise': 'desert sunrise sandstorm',
+        'sunset': 'desert sunset sandstorm'
+      },
+      'Ash': {
+        'day': 'volcanic ash day atmospheric',
+        'night': 'volcanic ash night dark',
+        'sunrise': 'volcanic ash sunrise',
+        'sunset': 'volcanic ash sunset'
+      },
+      'Squall': {
+        'day': 'windy storm day dramatic',
+        'night': 'windy storm night dark',
+        'sunrise': 'windy storm sunrise',
+        'sunset': 'windy storm sunset'
+      },
+      'Tornado': {
+        'day': 'tornado storm day dramatic',
+        'night': 'tornado storm night dark',
+        'sunrise': 'tornado storm sunrise',
+        'sunset': 'tornado storm sunset'
+      }
     };
 
-    return keywordMap[weatherCondition] || 'nature weather';
+    const weatherKeywords = keywordMap[weatherCondition];
+    if (weatherKeywords && weatherKeywords[timeOfDay]) {
+      return weatherKeywords[timeOfDay];
+    }
+    
+    // Fallback vers 'day' si timeOfDay spécifique non trouvé
+    return weatherKeywords?.day || 'nature weather';
   }
 
-  // Déterminer si c'est le jour ou la nuit
-  getTimeOfDay() {
-    const hour = new Date().getHours();
-    return (hour >= 6 && hour < 20) ? 'day' : 'night';
+  // Déterminer l'heure de la journée avec plus de précision
+  getTimeOfDay(sunrise = null, sunset = null, timezone = 0) {
+    const now = new Date();
+    const currentTime = now.getTime();
+    
+    // Si on a les données de lever/coucher du soleil, les utiliser
+    if (sunrise && sunset) {
+      const sunriseTime = (sunrise + timezone) * 1000; // Convertir en millisecondes et ajuster timezone
+      const sunsetTime = (sunset + timezone) * 1000;
+      
+      // Calculer les périodes de transition (1h avant/après lever/coucher)
+      const sunriseTransition = 60 * 60 * 1000; // 1 heure en millisecondes
+      const sunsetTransition = 60 * 60 * 1000;
+      
+      // Période de lever de soleil (1h avant et après)
+      if (currentTime >= (sunriseTime - sunriseTransition) && currentTime <= (sunriseTime + sunriseTransition)) {
+        return 'sunrise';
+      }
+      
+      // Période de coucher de soleil (1h avant et après)
+      if (currentTime >= (sunsetTime - sunsetTransition) && currentTime <= (sunsetTime + sunsetTransition)) {
+        return 'sunset';
+      }
+      
+      // Jour (entre lever et coucher du soleil)
+      if (currentTime > (sunriseTime + sunriseTransition) && currentTime < (sunsetTime - sunsetTransition)) {
+        return 'day';
+      }
+      
+      // Nuit (le reste du temps)
+      return 'night';
+    }
+    
+    // Fallback vers la logique d'heure simple si pas de données solaires
+    const hour = now.getHours();
+    
+    // Lever de soleil approximatif (6h-8h)
+    if (hour >= 6 && hour < 8) {
+      return 'sunrise';
+    }
+    
+    // Coucher de soleil approximatif (18h-20h)
+    if (hour >= 18 && hour < 20) {
+      return 'sunset';
+    }
+    
+    // Jour (8h-18h)
+    if (hour >= 8 && hour < 18) {
+      return 'day';
+    }
+    
+    // Nuit (20h-6h)
+    return 'night';
   }
 
   // Rechercher une image selon les conditions météo
-  async searchWeatherImage(weatherCondition, city = '') {
+  async searchWeatherImage(weatherCondition, city = '', sunData = null) {
     try {
-      const timeOfDay = this.getTimeOfDay();
+      // Extraire les données solaires si disponibles
+      const sunrise = sunData?.sunrise || null;
+      const sunset = sunData?.sunset || null;
+      const timezone = sunData?.timezone || 0;
+      
+      const timeOfDay = this.getTimeOfDay(sunrise, sunset, timezone);
       const keywords = this.getWeatherKeywords(weatherCondition, timeOfDay);
       const searchQuery = city ? `${keywords} ${city}` : keywords;
       
-      // Vérifier le cache
+      // Vérifier le cache (inclure timeOfDay dans la clé pour différencier jour/nuit/sunrise/sunset)
       const cacheKey = `${weatherCondition}_${timeOfDay}_${city}`;
       const cached = this.cache.get(cacheKey);
       
@@ -53,7 +183,7 @@ class UnsplashService {
       // Si pas de clé API, retourner une image par défaut
       if (!this.accessKey) {
         console.warn('Clé API Unsplash manquante. Utilisation des images de fallback.');
-        return this.getFallbackImage(weatherCondition);
+        return this.getFallbackImage(weatherCondition, timeOfDay);
       }
 
       const response = await fetch(
@@ -87,27 +217,60 @@ class UnsplashService {
 
         return imageData;
       } else {
-        return this.getFallbackImage(weatherCondition);
+        return this.getFallbackImage(weatherCondition, timeOfDay);
       }
     } catch (error) {
       console.warn('Erreur lors de la récupération de l\'image Unsplash:', error);
-      return this.getFallbackImage(weatherCondition);
+      return this.getFallbackImage(weatherCondition, timeOfDay);
     }
   }
 
-  // Images de fallback en cas d'erreur
-  getFallbackImage(weatherCondition) {
+  // Images de fallback en cas d'erreur avec support jour/nuit
+  getFallbackImage(weatherCondition, timeOfDay = 'day') {
     const fallbackImages = {
-      'Clear': 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-      'Clouds': 'https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-      'Rain': 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-      'Thunderstorm': 'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-      'Snow': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-      'Mist': 'https://images.unsplash.com/photo-1487621167305-5d248087c724?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+      'Clear': {
+        'day': 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'night': 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunrise': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunset': 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+      },
+      'Clouds': {
+        'day': 'https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'night': 'https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunrise': 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunset': 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+      },
+      'Rain': {
+        'day': 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'night': 'https://images.unsplash.com/photo-1433863448220-78aaa064ff47?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunrise': 'https://images.unsplash.com/photo-1493314894560-5c412a56c17c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunset': 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+      },
+      'Thunderstorm': {
+        'day': 'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'night': 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunrise': 'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunset': 'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+      },
+      'Snow': {
+        'day': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'night': 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunrise': 'https://images.unsplash.com/photo-1551524164-6cf2ac357f45?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunset': 'https://images.unsplash.com/photo-1551524164-687a55dd1126?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+      },
+      'Mist': {
+        'day': 'https://images.unsplash.com/photo-1487621167305-5d248087c724?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'night': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunrise': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'sunset': 'https://images.unsplash.com/photo-1487621167305-5d248087c724?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+      }
     };
 
+    const weatherImages = fallbackImages[weatherCondition] || fallbackImages['Clear'];
+    const selectedUrl = weatherImages[timeOfDay] || weatherImages['day'];
+
     return {
-      url: fallbackImages[weatherCondition] || fallbackImages['Clear'],
+      url: selectedUrl,
       author: 'Unsplash',
       authorUrl: 'https://unsplash.com',
       downloadUrl: null
