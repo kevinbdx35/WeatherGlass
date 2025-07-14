@@ -14,17 +14,6 @@ const WeatherDisplay = ({ data }) => {
   // Ne pas afficher si aucune donnée
   if (!data.name) return null;
 
-  /**
-   * Convertit les degrés en direction cardinale
-   * @param {number} degrees - Degrés de direction du vent
-   * @returns {string} Direction traduite (N, NE, E, etc.)
-   */
-  const getWindDirection = (degrees) => {
-    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-    const direction = directions[Math.round(degrees / 45) % 8];
-    return t(`weather.metrics.windDirection.${direction}`);
-  };
-
   return (
     <div className="weather-container">
       {/* Badge de qualité des données */}
@@ -66,93 +55,6 @@ const WeatherDisplay = ({ data }) => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="weather-details">
-        {/* Niveau 1: Données prioritaires - Température ressentie */}
-        <div className="detail-card feels-like priority-high">
-          <div className="card-icon">🌡️</div>
-          <div className="card-content">
-            {data.main && data.main.feels_like && (
-              <span className="card-value">
-                {data.main.feels_like.toFixed()}{t('weather.units.temperature')}
-              </span>
-            )}
-            <span className="card-label">{t('weather.metrics.feelsLike')}</span>
-          </div>
-        </div>
-        
-        {/* Niveau 1: Données prioritaires - Humidité */}
-        <div className="detail-card humidity priority-high">
-          <div className="card-icon">💧</div>
-          <div className="card-content">
-            {data.main && (
-              <span className="card-value">
-                {data.main.humidity}{t('weather.units.percentage')}
-              </span>
-            )}
-            <span className="card-label">{t('weather.metrics.humidity')}</span>
-          </div>
-        </div>
-        
-        {/* Niveau 2: Données importantes - Vent */}
-        <div className="detail-card wind priority-medium">
-          <div className="card-icon">💨</div>
-          <div className="card-content">
-            {data.wind && data.wind.speed && (
-              <>
-                <span className="card-value">
-                  {data.wind.speed.toFixed()} {t('weather.units.speed')}
-                </span>
-                {data.wind.deg && (
-                  <span className="wind-direction">
-                    {getWindDirection(data.wind.deg)}
-                  </span>
-                )}
-              </>
-            )}
-            <span className="card-label">{t('weather.metrics.wind')}</span>
-          </div>
-        </div>
-
-        {/* Niveau 3: Données secondaires - Pression */}
-        {data.main && (
-          <div className="detail-card pressure priority-low compact">
-            <div className="card-icon">🌊</div>
-            <div className="card-content">
-              <span className="card-value">
-                {data.main.pressure} {t('weather.units.pressure')}
-              </span>
-              <span className="card-label">{t('weather.metrics.pressure')}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Niveau 3: Données secondaires - Visibilité */}
-        {data.visibility && (
-          <div className="detail-card visibility priority-low compact">
-            <div className="card-icon">👁️</div>
-            <div className="card-content">
-              <span className="card-value">
-                {(data.visibility / 1000).toFixed(1)} {t('weather.units.distance')}
-              </span>
-              <span className="card-label">{t('weather.metrics.visibility')}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Niveau 3: Données secondaires - Nuages */}
-        {data.clouds && (
-          <div className="detail-card clouds priority-low compact">
-            <div className="card-icon">☁️</div>
-            <div className="card-content">
-              <span className="card-value">
-                {data.clouds.all}{t('weather.units.percentage')}
-              </span>
-              <span className="card-label">{t('weather.metrics.clouds')}</span>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
