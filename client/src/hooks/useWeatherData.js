@@ -216,6 +216,24 @@ const useWeatherData = (language, t) => {
     }
   }, [language, processForecastData, handleApiError]);
 
+  /**
+   * Change la stratégie d'agrégation des données météo
+   * @param {string} newStrategy - 'fallback' | 'consensus' | 'specialized'
+   */
+  const setStrategy = useCallback((newStrategy) => {
+    if (weatherAggregator.current) {
+      weatherAggregator.current.setStrategy(newStrategy);
+      console.log(`Weather strategy changed to: ${newStrategy}`);
+    }
+  }, []);
+
+  /**
+   * Obtient la stratégie actuelle
+   */
+  const getStrategy = useCallback(() => {
+    return weatherAggregator.current?.strategy || 'fallback';
+  }, []);
+
   return {
     // États
     data,
@@ -227,7 +245,9 @@ const useWeatherData = (language, t) => {
     fetchWeatherByCoords,
     fetchWeatherByCity,
     setLoading,
-    setError
+    setError,
+    setStrategy,
+    getStrategy
   };
 };
 

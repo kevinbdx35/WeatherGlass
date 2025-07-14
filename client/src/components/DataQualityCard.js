@@ -138,10 +138,10 @@ const DataQualityCard = ({ data, className = '' }) => {
                 {multiSourceValidation.isCoherent ? t('dataQuality.coherentData') : t('dataQuality.incoherentData')}
               </span>
             </div>
-            {multiSourceValidation.variance && (
+            {multiSourceValidation.variance && multiSourceValidation.variance.temperature && typeof multiSourceValidation.variance.temperature === 'number' && (
               <div className="consensus-variance">
                 <span className="variance-label">{t('dataQuality.variance')}:</span>
-                <span className="variance-value">{multiSourceValidation.variance.toFixed(2)}°C</span>
+                <span className="variance-value">{multiSourceValidation.variance.temperature.toFixed(2)}°C</span>
               </div>
             )}
             {multiSourceValidation.recommendedSource && (

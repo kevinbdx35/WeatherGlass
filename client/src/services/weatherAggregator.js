@@ -19,7 +19,7 @@ class WeatherAggregator {
       legacy: null                         // OpenWeatherMap (sera injecté)
     };
     
-    this.strategy = 'consensus'; // 'fallback' | 'consensus' | 'specialized'
+    this.strategy = 'fallback'; // 'fallback' | 'consensus' | 'specialized'
     this.cache = new Map();
     this.oracle = new WeatherOracle(); // Oracle de validation
     this.usageStats = {
