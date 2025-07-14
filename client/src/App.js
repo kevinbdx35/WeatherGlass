@@ -1,18 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import axios from 'axios';
-import SearchInput from './components/SearchInput';
-import WeatherDisplay from './components/WeatherDisplay';
-import ThemeToggle from './components/ThemeToggle';
-import LanguageToggle from './components/LanguageToggle';
-import LoadingSkeleton from './components/LoadingSkeleton';
-import BackgroundParticles from './components/BackgroundParticles';
-import DynamicBackground from './components/DynamicBackground';
-import InstallPrompt from './components/InstallPrompt';
-import OfflineIndicator from './components/OfflineIndicator';
-import WeeklyForecast from './components/WeeklyForecast';
-import WeatherChart from './components/WeatherChart';
-import Footer from './components/Footer';
-import AutoThemeIndicator from './components/AutoThemeIndicator';
+import { Layout, MainContent } from './layouts';
 import WeatherCache from './utils/weatherCache';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
@@ -21,15 +9,18 @@ import useTranslation from './hooks/useTranslation';
 import useAutoRefresh from './hooks/useAutoRefresh';
 
 function App() {
+  // État principal de l'application
   const [data, setData] = useState({});
   const [forecastData, setForecastData] = useState([]);
   const [location, setLocation] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
+  // Références et utilitaires
   const cache = useRef(new WeatherCache());
   const debounceTimer = useRef(null);
   
+  // Hooks personnalisés
   const { themeMode, theme, toggleTheme } = useTheme();
   const { t, language } = useTranslation();
   const { 
@@ -42,10 +33,10 @@ function App() {
   
   const {
     currentBackground,
-    updateBackground,
-    loading: backgroundLoading
+    updateBackground
   } = useWeatherBackground();
 
+  // API calls - Logique métier
   const fetchWeatherByCoords = useCallback(async (lat, lon) => {
     const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=${language}&appid=6c340e80b8feccd3cda97f5924a86d8a&units=metric`;
@@ -59,7 +50,6 @@ function App() {
       const weatherData = currentResponse.data;
       const forecast = forecastResponse.data;
       
-      // Process forecast data to get daily forecasts
       const dailyForecasts = processForecastData(forecast.list);
       
       cache.current.set(`${lat},${lon}`, weatherData);
@@ -69,19 +59,9 @@ function App() {
       setForecastData(dailyForecasts);
       setError('');
     } catch (err) {
-      if (err.response?.status === 404) {
-        setError(t('search.errors.cityNotFound'));
-      } else if (err.response?.status === 401) {
-        setError(t('search.errors.authError'));
-      } else if (err.code === 'NETWORK_ERROR') {
-        setError(t('search.errors.networkError'));
-      } else {
-        setError(t('common.error'));
-      }
-      setData({});
-      setForecastData([]);
+      handleApiError(err);
     }
-  }, [language, t]);
+  }, [language, t, handleApiError, processForecastData]);
 
   const fetchWeatherData = useCallback(async (cityName) => {
     const cachedData = cache.current.get(cityName);
@@ -106,7 +86,6 @@ function App() {
       const weatherData = currentResponse.data;
       const forecast = forecastResponse.data;
       
-      // Process forecast data to get daily forecasts
       const dailyForecasts = processForecastData(forecast.list);
       
       cache.current.set(cityName, weatherData);
@@ -116,22 +95,27 @@ function App() {
       setForecastData(dailyForecasts);
       setError('');
     } catch (err) {
-      if (err.response?.status === 404) {
-        setError(t('search.errors.cityNotFound'));
-      } else if (err.response?.status === 401) {
-        setError(t('search.errors.authError'));
-      } else if (err.code === 'NETWORK_ERROR') {
-        setError(t('search.errors.networkError'));
-      } else {
-        setError(t('common.error'));
-      }
-      setData({});
-      setForecastData([]);
+      handleApiError(err);
     }
-  }, [language, t]);
+  }, [language, t, handleApiError, processForecastData]);
 
-  // Utility function to process forecast data
-  const processForecastData = (forecastList) => {
+  // Gestion des erreurs API
+  const handleApiError = useCallback((err) => {
+    if (err.response?.status === 404) {
+      setError(t('search.errors.cityNotFound'));
+    } else if (err.response?.status === 401) {
+      setError(t('search.errors.authError'));
+    } else if (err.code === 'NETWORK_ERROR') {
+      setError(t('search.errors.networkError'));
+    } else {
+      setError(t('common.error'));
+    }
+    setData({});
+    setForecastData([]);
+  }, [t]);
+
+  // Traitement des données de prévision
+  const processForecastData = useCallback((forecastList) => {
     const dailyData = {};
     
     forecastList.forEach(item => {
@@ -157,7 +141,6 @@ function App() {
       dailyData[dayKey].wind.push(item.wind.speed);
     });
     
-    // Convert to array and calculate daily averages
     return Object.values(dailyData).slice(0, 7).map(day => ({
       date: day.date,
       maxTemp: Math.round(Math.max(...day.temps)),
@@ -169,9 +152,10 @@ function App() {
       description: day.description,
       main: day.main
     }));
-  };
+  }, []);
 
-  const searchLocation = (event) => {
+  // Gestionnaires d'événements
+  const searchLocation = useCallback((event) => {
     if (event.key === 'Enter') {
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
@@ -190,12 +174,29 @@ function App() {
         setLocation('');
       });
     }
-  };
+  }, [location, fetchWeatherData, t]);
 
   const handleLocationClick = useCallback(() => {
     getCurrentLocation();
   }, [getCurrentLocation]);
 
+  // Auto-refresh
+  const autoRefreshWeather = useCallback(() => {
+    if (geoLocation) {
+      fetchWeatherByCoords(geoLocation.latitude, geoLocation.longitude);
+    } else if (data.name) {
+      fetchWeatherData(data.name);
+    }
+  }, [geoLocation, data.name, fetchWeatherByCoords, fetchWeatherData]);
+
+  const { forceRefresh } = useAutoRefresh({
+    refreshFunction: autoRefreshWeather,
+    interval: 20 * 60 * 1000, // 20 minutes
+    enabled: !!(data.name || geoLocation),
+    dependencies: [data.name, geoLocation]
+  });
+
+  // Effets
   useEffect(() => {
     if (geoLocation) {
       setLoading(true);
@@ -210,7 +211,6 @@ function App() {
     }
   }, [geoError]);
 
-  // Mettre à jour le background quand les données météo changent
   useEffect(() => {
     if (data.weather && data.weather[0] && data.name) {
       const weatherCondition = data.weather[0].main;
@@ -219,77 +219,33 @@ function App() {
     }
   }, [data.weather, data.name, updateBackground]);
 
-  // Fonction de rafraîchissement automatique
-  const autoRefreshWeather = useCallback(() => {
-    if (geoLocation) {
-      // Actualiser avec la géolocalisation
-      fetchWeatherByCoords(geoLocation.latitude, geoLocation.longitude);
-    } else if (data.name) {
-      // Actualiser avec la dernière ville recherchée
-      fetchWeatherData(data.name);
-    }
-  }, [geoLocation, data.name, fetchWeatherByCoords, fetchWeatherData]);
-
-  // Auto-refresh toutes les 20 minutes si on a des données météo
-  const { forceRefresh } = useAutoRefresh({
-    refreshFunction: autoRefreshWeather,
-    interval: 20 * 60 * 1000, // 20 minutes
-    enabled: !!(data.name || geoLocation),
-    dependencies: [data.name, geoLocation]
-  });
+  // État global pour le layout
+  const isLoading = loading || geoLoading;
+  const hasWeatherData = data.name || geoLocation;
 
   return (
-    <div className="app">
-      <DynamicBackground
-        currentBackground={currentBackground}
-      />
-      <BackgroundParticles theme={theme} />
-      
-      <OfflineIndicator />
-      <InstallPrompt />
-      <AutoThemeIndicator themeMode={themeMode} theme={theme} />
-      
-      <div className="app-header">
-        <div className="header-controls">
-          <LanguageToggle />
-          <ThemeToggle themeMode={themeMode} theme={theme} onToggle={toggleTheme} />
-          {(data.name || geoLocation) && (
-            <div 
-              className="auto-refresh-indicator"
-              title={t('search.autoRefreshActive')}
-              onClick={forceRefresh}
-            >
-              🔄
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <SearchInput
+    <Layout
+      theme={theme}
+      themeMode={themeMode}
+      onThemeToggle={toggleTheme}
+      currentBackground={currentBackground}
+      autoRefresh={forceRefresh}
+      showAutoRefresh={hasWeatherData}
+    >
+      <MainContent
         location={location}
         setLocation={setLocation}
-        onKeyPress={searchLocation}
-        loading={loading}
-        error={error}
+        onSearchKeyPress={searchLocation}
+        searchLoading={loading}
+        searchError={error}
         onLocationClick={handleLocationClick}
         locationLoading={geoLoading}
         isLocationSupported={isGeoSupported}
+        weatherData={data}
+        forecastData={forecastData}
+        loading={isLoading}
       />
-      
-      <div className="container">
-        {(loading || geoLoading) ? (
-          <LoadingSkeleton />
-        ) : (
-          <>
-            <WeatherDisplay data={data} />
-            <WeeklyForecast forecastData={forecastData} />
-            <WeatherChart forecastData={forecastData} currentData={data} />
-          </>
-        )}
-      </div>
-      
-      <Footer currentBackground={currentBackground} />
-    </div>
+    </Layout>
   );
 }
 

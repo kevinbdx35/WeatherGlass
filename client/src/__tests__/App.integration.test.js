@@ -83,6 +83,12 @@ jest.mock('../components/DynamicBackground', () => {
   };
 });
 
+jest.mock('../components/LoadingSkeleton', () => {
+  return function MockLoadingSkeleton() {
+    return <div data-testid="loading-skeleton">Loading...</div>;
+  };
+});
+
 describe('App Integration Tests', () => {
   const mockWeatherResponse = {
     data: {
