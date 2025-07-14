@@ -1,6 +1,7 @@
 import OpenMeteoService from './openMeteoService';
 import WeatherAPIService from './weatherAPIService';
 import MeteoFranceService from './meteoFranceService';
+import WeatherOracle from './weatherOracle';
 
 /**
  * Agrégateur de sources météo gratuites
@@ -20,6 +21,7 @@ class WeatherAggregator {
     
     this.strategy = 'fallback'; // 'fallback' | 'consensus' | 'specialized'
     this.cache = new Map();
+    this.oracle = new WeatherOracle(); // Oracle de validation
     this.usageStats = {
       calls: { primary: 0, backup: 0, alerts: 0, legacy: 0 },
       errors: { primary: 0, backup: 0, alerts: 0, legacy: 0 },
@@ -110,13 +112,30 @@ class WeatherAggregator {
           }
         }
 
-        // Ajouter métadonnées de source
+        // Validation Oracle des données
+        const validation = this.oracle.validateWeatherData(data, name);
+        
+        // Ajouter métadonnées de source et validation
         data.aggregator = {
           strategy: 'fallback',
           usedSource: name,
           timestamp: new Date().toISOString(),
-          confidence: this.calculateConfidence(name)
+          confidence: this.calculateConfidence(name),
+          validation: {
+            isValid: validation.isValid,
+            score: validation.score,
+            warnings: validation.warnings,
+            errors: validation.errors
+          }
         };
+
+        // Logger les problèmes de validation
+        if (!validation.isValid) {
+          console.warn(`Oracle validation failed for ${name}:`, validation.errors);
+        }
+        if (validation.warnings.length > 0) {
+          console.warn(`Oracle warnings for ${name}:`, validation.warnings);
+        }
 
         this.cache.set(cacheKey, data);
         return data;
@@ -207,12 +226,29 @@ class WeatherAggregator {
           }
         }
 
+        // Validation Oracle des données
+        const validation = this.oracle.validateWeatherData(data, name);
+        
         data.aggregator = {
           strategy: 'fallback',
           usedSource: name,
           timestamp: new Date().toISOString(),
-          confidence: this.calculateConfidence(name)
+          confidence: this.calculateConfidence(name),
+          validation: {
+            isValid: validation.isValid,
+            score: validation.score,
+            warnings: validation.warnings,
+            errors: validation.errors
+          }
         };
+
+        // Logger les problèmes de validation
+        if (!validation.isValid) {
+          console.warn(`Oracle validation failed for ${name}:`, validation.errors);
+        }
+        if (validation.warnings.length > 0) {
+          console.warn(`Oracle warnings for ${name}:`, validation.warnings);
+        }
 
         this.cache.set(cacheKey, data);
         return data;
@@ -272,13 +308,29 @@ class WeatherAggregator {
       }
     }
 
+    // Validation Oracle multi-sources
+    const sourcesForOracle = successful.map(s => ({ name: s.source, data: s.data }));
+    const multiSourceValidation = this.oracle.compareMultipleSources(sourcesForOracle);
+
     consensus.aggregator = {
       strategy: 'consensus',
       sources: successful.map(s => s.source),
       agreement: this.calculateAgreement(successful),
       timestamp: new Date().toISOString(),
-      confidence: this.calculateConsensusConfidence(successful)
+      confidence: this.calculateConsensusConfidence(successful),
+      multiSourceValidation: {
+        isCoherent: multiSourceValidation.isCoherent,
+        variance: multiSourceValidation.variance,
+        discrepancies: multiSourceValidation.discrepancies,
+        recommendedSource: multiSourceValidation.recommendedSource?.name,
+        confidence: multiSourceValidation.confidence
+      }
     };
+
+    // Logger les incohérences multi-sources
+    if (!multiSourceValidation.isCoherent) {
+      console.warn('Multi-source discrepancies detected:', multiSourceValidation.discrepancies);
+    }
 
     this.cache.set(cacheKey, consensus);
     return consensus;
@@ -487,7 +539,7 @@ class WeatherAggregator {
   }
 
   /**
-   * Obtenir les statistiques d'usage
+   * Obtenir les statistiques d'usage avec Oracle
    */
   getUsageStats() {
     return {
@@ -495,6 +547,7 @@ class WeatherAggregator {
       daily_calls: this.usageStats.calls,
       daily_errors: this.usageStats.errors,
       cache_size: this.cache.size,
+      oracle_stats: this.oracle.getStats(),
       services: Object.keys(this.services)
         .filter(key => this.services[key])
         .map(key => ({
@@ -502,6 +555,13 @@ class WeatherAggregator {
           ...this.services[key].getUsageStats()
         }))
     };
+  }
+
+  /**
+   * Obtenir les métriques de qualité Oracle
+   */
+  getQualityMetrics() {
+    return this.oracle.getStats();
   }
 
   /**
