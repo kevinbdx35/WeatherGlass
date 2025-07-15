@@ -41,7 +41,7 @@ const GridLayout = ({
   return (
     <div className="grid-container">
       {/* Barre de recherche - toujours en haut */}
-      <div className="grid-search">
+      <div className="search-section">
         <SearchInput
           location={location}
           setLocation={setLocation}
@@ -73,27 +73,27 @@ const GridLayout = ({
       ) : (
         <>
           {/* Météo actuelle - zone principale */}
-          <div className="grid-current-weather">
+          <div className="weather-display">
             <WeatherDisplay data={weatherData} />
           </div>
           
           {/* Détails météo empilés - droite haut */}
-          <div className="grid-details">
+          <div className="weather-details-stack">
             <WeatherDetailsStack data={weatherData} />
           </div>
           
           {/* Prévisions 7 jours - sous la carte principale */}
-          <div className="grid-forecast">
+          <div className="weekly-forecast">
             <WeeklyForecast forecastData={forecastData} />
           </div>
           
           {/* Carte de qualité des données - droite milieu */}
-          <div className="grid-quality">
+          <div className="data-quality-card">
             <DataQualityCard data={weatherData} />
           </div>
           
           {/* Graphiques/tendances - droite bas */}
-          <div className="grid-charts">
+          <div className="weather-chart-container">
             <WeatherChart 
               forecastData={forecastData} 
               currentData={weatherData} 

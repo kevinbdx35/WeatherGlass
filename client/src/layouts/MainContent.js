@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import ScreenCaptureLayout from './ScreenCaptureLayout';
+import GridLayout from './GridLayout';
+import WeatherDisplay from '../components/WeatherDisplay';
+import WeeklyForecast from '../components/WeeklyForecast';
+import SearchInput from '../components/SearchInput';
+import LocationButton from '../components/LocationButton';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import GeolocationLoading from '../components/GeolocationLoading';
+import GeolocationError from '../components/GeolocationError';
 
 const MainContent = ({
   // Search props
@@ -34,11 +41,68 @@ const MainContent = ({
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Utiliser le layout screen capture pour tous les écrans
+  // Utiliser le layout en grille pour les grands écrans
+  if (useGridLayout) {
+    return (
+      <GridLayout
+        location={location}
+        setLocation={setLocation}
+        onSearchKeyPress={onSearchKeyPress}
+        searchLoading={searchLoading}
+        searchError={searchError}
+        onLocationClick={onLocationClick}
+        locationLoading={locationLoading}
+        locationError={locationError}
+        isLocationSupported={isLocationSupported}
+        onRetryGeolocation={onRetryGeolocation}
+        onSkipGeolocation={onSkipGeolocation}
+        weatherData={weatherData}
+        forecastData={forecastData}
+        loading={loading}
+      />
+    );
+  }
+
+  // Layout mobile simple
   return (
-    <ScreenCaptureLayout
-      weatherData={weatherData}
-    />
+    <div className="mobile-layout">
+      {/* Section de recherche */}
+      <div className="search-section">
+        {!isLocationSupported ? (
+          <GeolocationError
+            onRetry={onRetryGeolocation}
+            onSkip={onSkipGeolocation}
+          />
+        ) : locationLoading ? (
+          <GeolocationLoading />
+        ) : (
+          <>
+            <SearchInput
+              location={location}
+              setLocation={setLocation}
+              onKeyPress={onSearchKeyPress}
+              loading={searchLoading}
+              error={searchError}
+            />
+            <LocationButton
+              onClick={onLocationClick}
+              loading={locationLoading}
+              error={locationError}
+            />
+          </>
+        )}
+      </div>
+
+      {/* Contenu météo */}
+      {loading ? (
+        <LoadingSkeleton />
+      ) : weatherData ? (
+        <>
+          <WeatherDisplay data={weatherData} />
+          {forecastData && <WeeklyForecast data={forecastData} />}
+        </>
+      ) : null}
+    </div>
   );
 };
 
