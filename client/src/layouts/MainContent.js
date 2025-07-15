@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SearchInput from '../components/SearchInput';
-import WeatherDisplay from '../components/WeatherDisplay';
-import WeeklyForecast from '../components/WeeklyForecast';
-import WeatherChart from '../components/WeatherChart';
-import LoadingSkeleton from '../components/LoadingSkeleton';
-import GeolocationLoading from '../components/GeolocationLoading';
-import GeolocationError from '../components/GeolocationError';
-import GridLayout from './GridLayout';
+import SimpleLayout from './SimpleLayout';
 
 const MainContent = ({
   // Search props
@@ -41,10 +34,10 @@ const MainContent = ({
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Utiliser le layout en grille pour les grands écrans
+  // Utiliser le layout simple pour les grands écrans
   if (useGridLayout) {
     return (
-      <GridLayout
+      <SimpleLayout
         location={location}
         setLocation={setLocation}
         onSearchKeyPress={onSearchKeyPress}
@@ -57,49 +50,28 @@ const MainContent = ({
         onRetryGeolocation={onRetryGeolocation}
         onSkipGeolocation={onSkipGeolocation}
         weatherData={weatherData}
-        forecastData={forecastData}
         loading={loading}
       />
     );
   }
 
-  // Layout classique pour les petits écrans
+  // Layout simple pour les petits écrans aussi
   return (
-    <div className="container">
-      <SearchInput
-        location={location}
-        setLocation={setLocation}
-        onKeyPress={onSearchKeyPress}
-        loading={searchLoading}
-        error={searchError}
-        onLocationClick={onLocationClick}
-        locationLoading={locationLoading}
-        isLocationSupported={isLocationSupported}
-      />
-      
-      <div className="weather-content">
-        {locationError ? (
-          <GeolocationError 
-            error={locationError}
-            onRetry={onRetryGeolocation}
-            onSkip={onSkipGeolocation}
-          />
-        ) : locationLoading && !weatherData.name ? (
-          <GeolocationLoading />
-        ) : loading ? (
-          <LoadingSkeleton />
-        ) : (
-          <>
-            <WeatherDisplay data={weatherData} />
-            <WeeklyForecast forecastData={forecastData} />
-            <WeatherChart 
-              forecastData={forecastData} 
-              currentData={weatherData} 
-            />
-          </>
-        )}
-      </div>
-    </div>
+    <SimpleLayout
+      location={location}
+      setLocation={setLocation}
+      onSearchKeyPress={onSearchKeyPress}
+      searchLoading={searchLoading}
+      searchError={searchError}
+      onLocationClick={onLocationClick}
+      locationLoading={locationLoading}
+      locationError={locationError}
+      isLocationSupported={isLocationSupported}
+      onRetryGeolocation={onRetryGeolocation}
+      onSkipGeolocation={onSkipGeolocation}
+      weatherData={weatherData}
+      loading={loading}
+    />
   );
 };
 

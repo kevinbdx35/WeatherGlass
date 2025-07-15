@@ -5,6 +5,7 @@
     "locationLoading": "Géolocalisation...",
     "searchInProgress": "Recherche en cours...",
     "autoRefreshActive": "Mise à jour automatique activée (toutes les 20 min)",
+    "clear": "Effacer",
     "geolocation": {
       "detecting": "Détection de votre position",
       "allowAccess": "Veuillez autoriser l'accès à votre localisation pour obtenir la météo de votre région",

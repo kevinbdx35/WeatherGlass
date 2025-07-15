@@ -5,6 +5,7 @@
     "locationLoading": "Getting location...",
     "searchInProgress": "Searching...",
     "autoRefreshActive": "Auto-refresh enabled (every 20 min)",
+    "clear": "Clear",
     "geolocation": {
       "detecting": "Detecting your location",
       "allowAccess": "Please allow location access to get weather for your area",
