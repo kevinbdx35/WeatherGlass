@@ -3084,7 +3084,7 @@ html {
 /* === STYLES COMPOSANTS INDIVIDUELS === */
 /* Contenu de la carte des détails météo - pas de style carte */
 
-.weather-details-card .details-title {
+.weather-details-content .details-title {
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--text-color);
@@ -3092,13 +3092,13 @@ html {
   text-align: center;
 }
 
-.weather-details-card .details-grid {
+.weather-details-content .details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.weather-details-card .detail-item {
+.weather-details-content .detail-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -3108,7 +3108,7 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.weather-details-card .detail-icon {
+.weather-details-content .detail-icon {
   font-size: 1.5rem;
   width: 2rem;
   height: 2rem;
@@ -3118,12 +3118,12 @@ html {
   flex-shrink: 0;
 }
 
-.weather-details-card .detail-content {
+.weather-details-content .detail-content {
   flex: 1;
   min-width: 0;
 }
 
-.weather-details-card .detail-label {
+.weather-details-content .detail-label {
   font-size: 0.8rem;
   color: var(--text-secondary);
   margin-bottom: 0.25rem;
@@ -3132,7 +3132,7 @@ html {
   text-overflow: ellipsis;
 }
 
-.weather-details-card .detail-value {
+.weather-details-content .detail-value {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-color);

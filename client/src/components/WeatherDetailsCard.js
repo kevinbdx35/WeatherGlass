@@ -10,7 +10,7 @@ const WeatherDetailsCard = ({ data }) => {
 
   if (!data || !data.main) {
     return (
-      <div className="weather-details-card">
+      <div className="weather-details-content">
         <h3 className="details-title">{t('weather.details', 'Détails météo')}</h3>
         <div className="details-loading">
           {t('common.loading', 'Chargement...')}
@@ -43,7 +43,7 @@ const WeatherDetailsCard = ({ data }) => {
   ];
 
   return (
-    <div className="weather-details-card">
+    <div className="weather-details-content">
       <h3 className="details-title">{t('weather.details', 'Détails météo')}</h3>
       <div className="details-grid">
         {details.map((detail, index) => (
