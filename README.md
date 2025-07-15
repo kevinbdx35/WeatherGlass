@@ -429,6 +429,7 @@ PORT=3001
 ## 👨‍💻 Auteur
 
 - [@kevin b.](https://github.com/kevinbdx35)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W61I0YBJ)
 
 ## 🤝 Contribution
 
