@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Layout, MainContent } from './layouts';
+import AppLoadingScreen from './components/AppLoadingScreen';
 import useGeolocation from './hooks/useGeolocation';
 import useTheme from './hooks/useTheme';
 import useWeatherBackground from './hooks/useWeatherBackground';
 import useTranslation from './hooks/useTranslation';
 import useAutoRefresh from './hooks/useAutoRefresh';
 import useWeatherData from './hooks/useWeatherData';
+import useAppLoading from './hooks/useAppLoading';
 
 /**
  * Composant principal de l'application WeatherGlass
@@ -19,6 +21,7 @@ function App() {
   // Hooks personnalisés
   const { themeMode, theme, toggleTheme } = useTheme();
   const { t, language } = useTranslation();
+  const { isLoading, loadingStep, finishLoading, setStep } = useAppLoading();
   
   // Hook pour la géolocalisation
   const { 
@@ -43,6 +46,41 @@ function App() {
     setLoading,
     setError
   } = useWeatherData(language, t);
+  
+  // Synchroniser les étapes de chargement avec les hooks
+  useEffect(() => {
+    if (geoLoading) {
+      setStep('location');
+    }
+  }, [geoLoading, setStep]);
+  
+  useEffect(() => {
+    if (weatherLoading) {
+      setStep('weather');
+    }
+  }, [weatherLoading, setStep]);
+  
+  useEffect(() => {
+    if (forecastData) {
+      setStep('forecast');
+    }
+  }, [forecastData, setStep]);
+  
+  useEffect(() => {
+    if (currentBackground) {
+      setStep('background');
+    }
+  }, [currentBackground, setStep]);
+  
+  // Terminer le chargement quand tout est prêt
+  useEffect(() => {
+    if (data && !weatherLoading && !geoLoading && currentBackground) {
+      // Délai pour permettre une transition fluide
+      setTimeout(() => {
+        finishLoading();
+      }, 800);
+    }
+  }, [data, weatherLoading, geoLoading, currentBackground, finishLoading]);
 
   /**
    * Gestionnaire de recherche par touche Entrée
@@ -154,9 +192,14 @@ function App() {
   }, [data.weather, data.name, data.sys, data.timezone, data.coord, updateBackground]);
 
   // États dérivés
-  const isLoading = weatherLoading || geoLoading;
+  const isWeatherLoading = weatherLoading || geoLoading;
   const currentError = weatherError || '';
   const hasWeatherData = data.name || geoLocation;
+
+  // Afficher l'écran de chargement si nécessaire
+  if (isLoading) {
+    return <AppLoadingScreen loadingStep={loadingStep} />;
+  }
 
   return (
     <Layout
@@ -181,7 +224,7 @@ function App() {
         onSkipGeolocation={handleSkipGeolocation}
         weatherData={data}
         forecastData={forecastData}
-        loading={isLoading}
+        loading={isWeatherLoading}
       />
     </Layout>
   );

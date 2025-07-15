@@ -166,5 +166,15 @@
     "specializedMode": "Mode Spécialisé",
     "geographicalContext": "Contexte géographique",
     "selectionReason": "Raison de sélection"
+  },
+  "loading": {
+    "initializing": "Initialisation de WeatherGlass",
+    "location": "Détection de votre position",
+    "weather": "Récupération des données météo",
+    "forecast": "Chargement des prévisions",
+    "background": "Préparation de l'interface",
+    "default": "Chargement en cours",
+    "tagline": "Votre météo en temps réel",
+    "hint": "Préparation de votre expérience météo personnalisée"
   }
 }
