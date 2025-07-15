@@ -17,6 +17,7 @@
 </div>
 
 ---
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W61I0YBJ)
 
 **WeatherGlass** est une Progressive Web App météorologique moderne qui allie design glassmorphisme sophistiqué, prévisions sur 7 jours, support bilingue (FR/EN) et fonctionnalités PWA complètes.
 
