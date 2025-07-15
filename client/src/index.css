@@ -3026,14 +3026,14 @@ html {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* === WEATHER ANALYTICS DASHBOARD === */
+/* === DASHBOARD 2 COLONNES === */
 .grid-container {
   display: grid;
   grid-template-areas: 
-    "search search search"
-    "current forecast quality"
-    "charts charts charts";
-  grid-template-columns: 1fr 2fr 1fr;
+    "search search search search"
+    "current current details quality"
+    "forecast forecast charts charts";
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto 1fr 1fr;
   gap: clamp(0.75rem, 1.5vh, 1.5rem);
   width: 100vw;
@@ -3056,6 +3056,10 @@ html {
 
 .weekly-forecast {
   grid-area: forecast;
+}
+
+.weather-details-card {
+  grid-area: details;
 }
 
 .data-quality-card {
@@ -3152,12 +3156,84 @@ html {
   z-index: -1;
 }
 
+/* Carte des détails météo */
+.weather-details-card {
+  background: var(--glass-bg-strong);
+  border: 2px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  backdrop-filter: blur(var(--glass-blur-strong));
+  box-shadow: var(--glass-shadow-strong);
+  overflow: hidden;
+}
+
+.weather-details-card .details-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.weather-details-card .details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.weather-details-card .detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.weather-details-card .detail-icon {
+  font-size: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.weather-details-card .detail-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.weather-details-card .detail-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.weather-details-card .detail-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Améliorer les bordures */
 .grid-container .weather-display {
   border: 2px solid rgba(255, 255, 255, 0.25);
 }
 
 .grid-container .weekly-forecast {
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.grid-container .weather-details-card {
   border: 2px solid rgba(255, 255, 255, 0.25);
 }
 
@@ -3172,6 +3248,7 @@ html {
 /* Améliorer les textes */
 .grid-container .weather-display *,
 .grid-container .weekly-forecast *,
+.grid-container .weather-details-card *,
 .grid-container .data-quality-card *,
 .grid-container .weather-chart-container * {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -3185,10 +3262,11 @@ html {
       "search"
       "current"
       "forecast"
+      "details"
       "quality"
       "charts";
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto;
     gap: 1rem;
     padding: 1rem;
     height: auto;
