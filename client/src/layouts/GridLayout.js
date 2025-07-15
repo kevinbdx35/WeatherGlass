@@ -4,20 +4,18 @@ import WeatherDisplay from '../components/WeatherDisplay';
 import WeeklyForecast from '../components/WeeklyForecast';
 import WeatherChart from '../components/WeatherChart';
 import DataQualityCard from '../components/DataQualityCard';
-import WeatherDetailsStack from '../components/WeatherDetailsStack';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import GeolocationLoading from '../components/GeolocationLoading';
 import GeolocationError from '../components/GeolocationError';
 
 /**
- * Layout en grille pour les grands écrans (≥1024px)
+ * Weather Analytics Dashboard - Layout optimisé (≥1024px)
  * Organisation des composants météo en zones dédiées :
- * - Zone recherche (haut)
- * - Zone météo actuelle (principale gauche)
- * - Zone détails météo empilés (droite haut)
- * - Zone prévisions 7 jours (sous la carte principale)
- * - Zone qualité des données (droite milieu)
- * - Zone graphiques/tendances (droite bas)
+ * - Barre de recherche (haut, pleine largeur)
+ * - Météo actuelle (gauche, 1fr)
+ * - Prévisions 7 jours (centre, 2fr - zone principale)
+ * - Qualité des données (droite, 1fr - compacte)
+ * - Graphiques tendances (bas, pleine largeur)
  */
 const GridLayout = ({
   // Search props
@@ -72,27 +70,22 @@ const GridLayout = ({
         </div>
       ) : (
         <>
-          {/* Météo actuelle - zone principale */}
+          {/* Météo actuelle - zone gauche */}
           <div className="weather-display">
             <WeatherDisplay data={weatherData} />
           </div>
           
-          {/* Détails météo empilés - droite haut */}
-          <div className="weather-details-stack">
-            <WeatherDetailsStack data={weatherData} />
-          </div>
-          
-          {/* Prévisions 7 jours - sous la carte principale */}
+          {/* Prévisions 7 jours - zone centrale principale */}
           <div className="weekly-forecast">
             <WeeklyForecast forecastData={forecastData} />
           </div>
           
-          {/* Carte de qualité des données - droite milieu */}
+          {/* Qualité des données - zone droite compacte */}
           <div className="data-quality-card">
             <DataQualityCard data={weatherData} />
           </div>
           
-          {/* Graphiques/tendances - droite bas */}
+          {/* Graphiques/tendances - zone bas pleine largeur */}
           <div className="weather-chart-container">
             <WeatherChart 
               forecastData={forecastData} 

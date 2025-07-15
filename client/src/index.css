@@ -3026,16 +3026,15 @@ html {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* === LAYOUT REORGANISE === */
+/* === WEATHER ANALYTICS DASHBOARD === */
 .grid-container {
   display: grid;
   grid-template-areas: 
     "search search search"
-    "current current details"
-    "forecast forecast details"
-    "quality charts charts";
-  grid-template-columns: 1.5fr 1.5fr 1fr;
-  grid-template-rows: auto 1fr 1fr 0.8fr;
+    "current forecast quality"
+    "charts charts charts";
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
   gap: clamp(0.75rem, 1.5vh, 1.5rem);
   width: 100vw;
   height: 100vh;
@@ -3059,16 +3058,73 @@ html {
   grid-area: forecast;
 }
 
-.weather-details-stack {
-  grid-area: details;
-}
-
 .data-quality-card {
   grid-area: quality;
 }
 
 .weather-chart-container {
   grid-area: charts;
+}
+
+/* === OPTIMISATIONS DASHBOARD === */
+/* Prévisions 7 jours - zone centrale optimisée */
+.weekly-forecast {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+}
+
+.weekly-forecast .forecast-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.weekly-forecast .forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* Qualité des données - format compact */
+.data-quality-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+}
+
+/* Graphiques - pleine largeur optimisée */
+.weather-chart-container {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+}
+
+/* Météo actuelle - format compact */
+.weather-display {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
 }
 
 /* === RESPONSIVE === */
@@ -3079,11 +3135,10 @@ html {
       "search"
       "current"
       "forecast"
-      "details"
       "quality"
       "charts";
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
     gap: 1rem;
     padding: 1rem;
     height: auto;
