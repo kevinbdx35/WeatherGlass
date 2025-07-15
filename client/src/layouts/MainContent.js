@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SimpleLayout from './SimpleLayout';
+import ScreenCaptureLayout from './ScreenCaptureLayout';
 
 const MainContent = ({
   // Search props
@@ -34,43 +34,10 @@ const MainContent = ({
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Utiliser le layout simple pour les grands écrans
-  if (useGridLayout) {
-    return (
-      <SimpleLayout
-        location={location}
-        setLocation={setLocation}
-        onSearchKeyPress={onSearchKeyPress}
-        searchLoading={searchLoading}
-        searchError={searchError}
-        onLocationClick={onLocationClick}
-        locationLoading={locationLoading}
-        locationError={locationError}
-        isLocationSupported={isLocationSupported}
-        onRetryGeolocation={onRetryGeolocation}
-        onSkipGeolocation={onSkipGeolocation}
-        weatherData={weatherData}
-        loading={loading}
-      />
-    );
-  }
-
-  // Layout simple pour les petits écrans aussi
+  // Utiliser le layout screen capture pour tous les écrans
   return (
-    <SimpleLayout
-      location={location}
-      setLocation={setLocation}
-      onSearchKeyPress={onSearchKeyPress}
-      searchLoading={searchLoading}
-      searchError={searchError}
-      onLocationClick={onLocationClick}
-      locationLoading={locationLoading}
-      locationError={locationError}
-      isLocationSupported={isLocationSupported}
-      onRetryGeolocation={onRetryGeolocation}
-      onSkipGeolocation={onSkipGeolocation}
+    <ScreenCaptureLayout
       weatherData={weatherData}
-      loading={loading}
     />
   );
 };
