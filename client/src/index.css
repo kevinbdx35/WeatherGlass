@@ -3069,12 +3069,12 @@ html {
 /* === OPTIMISATIONS DASHBOARD === */
 /* Prévisions 7 jours - zone centrale optimisée */
 .weekly-forecast {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  border: 2px solid var(--glass-border);
   border-radius: 20px;
   padding: 1.5rem;
-  backdrop-filter: blur(var(--glass-blur));
-  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  box-shadow: var(--glass-shadow-strong);
   overflow: hidden;
 }
 
@@ -3096,35 +3096,85 @@ html {
 
 /* Qualité des données - format compact */
 .data-quality-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  border: 2px solid var(--glass-border);
   border-radius: 16px;
   padding: 1.25rem;
-  backdrop-filter: blur(var(--glass-blur));
-  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  box-shadow: var(--glass-shadow-strong);
   overflow: hidden;
 }
 
 /* Graphiques - pleine largeur optimisée */
 .weather-chart-container {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  border: 2px solid var(--glass-border);
   border-radius: 20px;
   padding: 1.5rem;
-  backdrop-filter: blur(var(--glass-blur));
-  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  box-shadow: var(--glass-shadow-strong);
   overflow: hidden;
 }
 
 /* Météo actuelle - format compact */
 .weather-display {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  border: 2px solid var(--glass-border);
   border-radius: 20px;
   padding: 1.5rem;
-  backdrop-filter: blur(var(--glass-blur));
-  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  box-shadow: var(--glass-shadow-strong);
   overflow: hidden;
+}
+
+/* === AMÉLIORATION VISIBILITÉ === */
+/* Renforcer la visibilité des cartes */
+.grid-container .weather-display,
+.grid-container .weekly-forecast,
+.grid-container .data-quality-card,
+.grid-container .weather-chart-container {
+  position: relative;
+  z-index: 1;
+}
+
+.grid-container .weather-display::before,
+.grid-container .weekly-forecast::before,
+.grid-container .data-quality-card::before,
+.grid-container .weather-chart-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+/* Améliorer les bordures */
+.grid-container .weather-display {
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.grid-container .weekly-forecast {
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.grid-container .data-quality-card {
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.grid-container .weather-chart-container {
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Améliorer les textes */
+.grid-container .weather-display *,
+.grid-container .weekly-forecast *,
+.grid-container .data-quality-card *,
+.grid-container .weather-chart-container * {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* === RESPONSIVE === */
